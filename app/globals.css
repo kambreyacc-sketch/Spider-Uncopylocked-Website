@@ -580,3 +580,14 @@ html{scroll-behavior:auto!important;scroll-padding-top:72px}
 .rq-empty-icon img{display:block;width:29px;height:29px;object-fit:contain;filter:invert(1)}
 .home-empty-orb img{width:29px;height:29px;object-fit:contain;filter:invert(1)}
 .home-empty-game img{width:28px;height:28px;object-fit:contain;filter:invert(1)}
+
+/* Discord sign-in and signed-in account chip */
+.market-nav-actions>a.market-nav-login{background:#5865f2!important;border-color:#5865f2!important;color:#fff!important;border-radius:9px!important;font-weight:700;box-shadow:0 5px 16px #5865f233;transition:transform .18s,background .18s}
+.market-nav-actions>a.market-nav-login:hover{background:#4752c4!important;transform:translateY(-1px)}
+.rq-profile-link{min-height:40px!important;max-width:280px!important;border-color:#48405f!important;background:#1b1726!important;border-radius:10px!important;color:#f5f0ff!important;gap:9px!important}
+.rq-profile-link>svg:first-child{color:#a99bff;flex:none}
+.rq-profile-image{width:30px!important;height:30px!important;border-radius:50%;object-fit:cover;flex:none}
+.rq-account-label{display:flex;flex-direction:column;min-width:0;gap:2px;font-size:11px;line-height:1.2}
+.rq-account-label b{font-weight:700;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rq-account-label small{font-size:9px;color:#b8adc9;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:720px){.rq-account-label{display:none}.rq-profile-link{width:auto!important}.rq-profile-image{width:28px!important;height:28px!important}}
