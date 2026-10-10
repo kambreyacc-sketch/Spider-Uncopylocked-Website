@@ -28,7 +28,7 @@ function ListingCard({ listing }: { listing:Listing }) {
       <div className="rq-metrics"><span><i/> {listing.currentPlayers ?? 0} CCU</span><span>{(listing.peakPlayers ?? 0).toLocaleString()} Peak CCU</span></div>
       <div className="rq-chart" aria-hidden="true">{Array.from({length:32},(_,i)=><i key={i} style={{height:(7+((i*19+listing.title.length*7)%23))+"px"}}/>)}</div>
       <div className="rq-price-row"><div><strong>{listing.price.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0})}</strong><small>Current offer</small></div><div className="rq-revenue"><strong>{listing.monthlyRevenue ? "$"+listing.monthlyRevenue.toLocaleString() : "—"}</strong><small>Monthly revenue</small></div></div>
-      <Link className="rq-offer-button" href={"/listing/"+listing.id}><MessageSquare size={15}/> Make offer</Link>
+      <Link className="rq-offer-button" href={"/listing/"+listing.id}><MessageSquare size={15}/> View listing & contact seller</Link>
       <div className="rq-listing-foot"><span><Activity size={13}/> {listing.visits ? (listing.visits/1e6).toFixed(1)+"M" : "—"} visits</span><span><Heart size={13}/> {listing.favorites?.toLocaleString() ?? "—"}</span><span><Check size={13}/> {listing.likesPercent ? listing.likesPercent+"%" : "—"}</span></div>
     </div>
   </article>;
