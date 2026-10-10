@@ -53,7 +53,7 @@ export default function HomePage() {
 
     <section className="spx-section spx-membership" id="membership">
       <div className="spx-section-heading"><div><span className="spx-kicker">03 / ACCESS YOUR WAY</span><h2>Unlock your <em>next level.</em></h2></div><p>Membership tiers will unlock features from the server-side, so access is tied to verified entitlements—not just a hidden button.</p></div>
-      <div className="spx-tier-grid">{tiers.map(t => <article className="spx-tier" key={t.name}><div className="spx-tier-top"><span>{t.label}</span>{t.featured ?  : null}</div><h3>{t.name}</h3><div className="spx-tier-price">{t.price}</div><p>{t.description}</p><ul>{t.items.map(x => <li key={x}><Check size={14}/>{x}</li>)}</ul><a className={"spx-btn spx-btn-ghost"} href={t.href}>{t.action} <ArrowRight size={15}/></a></article>)}</div>
+      <div className="spx-tier-grid">{tiers.map(t => <article className="spx-tier" key={t.name}><div className="spx-tier-top"><span>{t.label}</span></div><h3>{t.name}</h3><div className="spx-tier-price">{t.price}</div><p>{t.description}</p><ul>{t.items.map(x => <li key={x}><Check size={14}/>{x}</li>)}</ul><a className={"spx-btn spx-btn-ghost"} href={t.href}>{t.action} <ArrowRight size={15}/></a></article>)}</div>
       <p className="spx-small-note"><LockKeyhole size={13}/> Aero checkout and entitlement verification are not live yet in this test design.</p>
     </section>
 
@@ -74,6 +74,6 @@ export default function HomePage() {
 
     <section className="spx-shop-cta"><div className="spx-shop-icon"><ShoppingBag size={22}/></div><div><span className="spx-kicker">07 / SHOP & MARKETPLACE</span><h2>Find resources. Sell your creations.</h2><p>The marketplace remains a section of Spider Uncopylocked—not the whole website.</p></div><div className="spx-shop-actions"><Link className="spx-btn spx-btn-primary" href="/marketplace">Browse marketplace <ArrowRight size={15}/></Link><Link className="spx-btn spx-btn-ghost" href="/resources/upload">Upload free asset <ArrowUpRight size={15}/></Link></div></section>
 
-    <footer className="spx-footer"><Link href="/" className="spx-brand"><span className="spx-logo"><img src={iconUrl} alt=""/></span><span>SPIDER <b>UNCOPYLOCKED</b><small>THE CREATOR PLATFORM</small></span></Link><span>BUILD BEYOND THE GAME.</span><div><Link href="/marketplace">Marketplace</Link><Link href="/resources/upload">Upload free asset</Link><Link href="/api/auth/discord/login">Discord login</Link></div><small>© 2026 Spider Uncopylocked · Test redesign</small></footer>
+    <footer className="spx-footer"><Link href="/" className="spx-brand"><span className="spx-logo spx-logo-text">SU</span><span>SPIDER <b>UNCOPYLOCKED</b><small>THE CREATOR PLATFORM</small></span></Link><span>BUILD BEYOND THE GAME.</span><div><Link href="/marketplace">Marketplace</Link><Link href="/resources/upload">Upload free asset</Link><Link href="/api/auth/discord/login">Discord login</Link></div><small>© 2026 Spider Uncopylocked · Test redesign</small></footer>
   </main>;
 }
