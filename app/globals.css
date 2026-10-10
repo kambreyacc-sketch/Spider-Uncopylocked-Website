@@ -199,3 +199,36 @@ button{font:inherit}
 .market-footer{border-top:1px solid #e9e5ef;padding:20px 0 23px;display:flex;align-items:center;justify-content:space-between;gap:15px;font:8px 'DM Mono',monospace;letter-spacing:.06em;color:#a29ba9}.market-footer-home{display:flex;align-items:center;gap:7px;color:#74628f}.market-footer-home:hover{color:#5334ad}
 @media(max-width:900px){.market-listing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.market-hero-stat{padding-right:0}.market-orbit{right:0}.market-sell-card{align-items:flex-start}.market-sell-right{min-width:145px}}
 @media(max-width:650px){.market-nav{height:68px}.market-nav nav{display:none}.market-nav-community{padding:10px}.market-nav-community svg:last-child{display:none}.market-hero-inner{width:calc(100% - 36px);padding-top:20px}.market-hero-row{grid-template-columns:1fr;gap:0;padding:40px 0 25px}.market-hero h1{font-size:54px}.market-hero-stat{min-height:190px;align-items:flex-start;padding:0 0 0 10px;margin-top:8px}.market-orbit{width:175px;height:175px;right:20px;top:0}.market-orbit-core{height:70px;width:70px;border-radius:20px}.market-hero-stat>strong{font-size:15px}.market-hero-stat>small{max-width:220px}.market-trust-row{gap:12px;flex-wrap:wrap;font-size:9px;padding-top:14px}.market-browse{padding-top:57px;padding-bottom:60px}.market-section-heading{align-items:flex-start;flex-direction:column;gap:14px}.market-section-heading h2{font-size:32px}.market-demo-pill{margin:0}.market-toolbar{flex-direction:column}.market-sort{justify-content:flex-start}.market-sort select{flex:1;max-width:none}.market-listing-grid{grid-template-columns:1fr}.market-listing-art{height:170px}.market-listing-body>p{min-height:unset}.market-sell{padding-bottom:60px}.market-sell-card{flex-direction:column;padding:22px;gap:15px}.market-sell-right{min-width:0}.market-footer{flex-direction:column;align-items:flex-start;line-height:1.7}.market-footer span{font-size:7px}}
+
+
+/* Spider dark marketplace theme: make the entire site dark, not just individual cards. */
+:root{color-scheme:dark;--ink:#f3f4fa;--muted:#9ca3b8;--line:#262a3b;--violet:#8b5cf6;--paper:#080b14;--dark:#080b14}
+html,body{background:#080b14!important;color:#f3f4fa!important}
+body{background:radial-gradient(ellipse at 78% 0%,#17132b 0%,#0b0e19 38%,#080b14 76%)!important}
+main{background:transparent!important}
+.navbar{border-color:#24283a!important;background:rgba(8,11,20,.92)!important}
+.navlinks,.nav-login{color:#c1c5d4!important}
+.navlinks a:hover,.nav-login:hover{color:#b8a2ff!important}
+.wordmark-light{color:#a8aec2!important}
+.wordmark small,.topline-right{color:#858ba2!important}
+.hero-grid div,.hero-grid div:first-child{border-color:#1c2132!important}
+.live-pill,.float-card{background:#111626!important;border-color:#2a3045!important;color:#e7e9f3!important}
+.float-card b,.hero-note strong{color:#f3f4fa!important}
+.float-card small,.hero-note p,.hero-sub{color:#a3abc0!important}
+.hero h1{color:#f7f7fc!important}
+.hero h1 span{color:#a995ff!important}
+.button-ghost{background:#111626!important;border-color:#34384c!important;color:#f3f4fa!important}
+.button-ghost:hover{background:#1a2032!important}
+.art-orbit{border-color:#343052!important}
+.orbit-two{border-color:#25283a!important}
+.orbit-three{border-color:#332d50!important}
+.ticker{background:#111525!important;border-color:#282c40!important;color:#d9d5f4!important}
+.section,.intro,.resource-section,.feature-section{color:#f3f4fa!important}
+.intro-copy p,.section-head>p,.feature-card p,.resource-card p{color:#a3abc0!important}
+.feature-section,.resource-section{background:transparent!important}
+.feature-card,.resource-card,.resource-item,.stat-card,.panel-card{background:#101525!important;border-color:#292e43!important;color:#f3f4fa!important}
+.feature-card h3,.resource-card h3,.resource-item h3{color:#f3f4fa!important}
+.section-label,.eyebrow,.feature-num{color:#aaa2d2!important}
+.text-link{color:#b8a2ff!important}
+footer,.footer{background:#080b14!important;border-color:#24283a!important;color:#a3abc0!important}
+@media(max-width:760px){.navbar{background:#080b14!important}.navlinks{background:#101525!important}}
