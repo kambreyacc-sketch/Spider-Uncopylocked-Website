@@ -30,7 +30,7 @@ export default function Home() {
       <div className="topline"><span><Sparkles size={13}/> THE NEXT CHAPTER OF SPIDER STUDIOS</span><span className="topline-right">CREATED FOR THE COMMUNITY <ArrowUpRight size={13}/></span></div>
       <header className="navbar shell">
         <Wordmark />
-        <nav className="navlinks"><Link href="#resources">Resources</Link><Link href="#features">Explore</Link><Link href="#membership">Membership</Link><Link href="#community">Community</Link></nav>
+        <nav className="navlinks"><Link href="/marketplace">Marketplace</Link><Link href="#resources">Resources</Link><Link href="#features">Explore</Link><Link href="#membership">Membership</Link><Link href="#community">Community</Link></nav>
         <div className="nav-actions"><Link className="nav-login" href="#dashboard">Sign in <ArrowUpRight size={14}/></Link><Link className="button button-small" href="#community">Join the network <ArrowRight size={15}/></Link></div>
         <button className="mobile-menu" aria-label="Open menu"><Menu size={23}/></button>
       </header>
@@ -41,7 +41,7 @@ export default function Home() {
           <div className="live-pill"><span className="live-dot"/> A NEW SPACE FOR CREATORS <span className="pill-version">V.01</span></div>
           <h1>MAKE SOMETHING<br/><span>UNFORGETTABLE.</span></h1>
           <p className="hero-sub">Your next idea deserves more than a blank page. Discover resources, connect with builders, and bring your Roblox experiences to life.</p>
-          <div className="hero-actions"><Link href="#resources" className="button">Explore resources <ArrowRight size={16}/></Link><Link href="#about" className="button button-ghost">Get to know us <ArrowUpRight size={16}/></Link></div>
+          <div className="hero-actions"><Link href="/marketplace" className="button">Explore marketplace <ArrowRight size={16}/></Link><Link href="#resources" className="button button-ghost">Explore resources <ArrowRight size={16}/></Link><Link href="#about" className="button button-ghost">Get to know us <ArrowUpRight size={16}/></Link></div>
           <div className="hero-note"><div className="avatar-stack"><span>S</span><span>U</span><span>+</span></div><p><strong>A community in the making</strong><br/>Built around the people who build.</p></div>
         </div>
         <div className="hero-art">
