@@ -498,3 +498,20 @@ body{background:#0b0b12;color:#ececf4}
 .market-footer-links{display:flex;gap:14px;flex-wrap:wrap}.market-footer-links a:hover{color:#c0b1ff}
 @media(max-width:800px){.legal-layout{grid-template-columns:1fr;gap:25px;padding-top:25px}.legal-sidebar{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}.legal-side-heading,.legal-side-help{grid-column:1/-1}.legal-side-help{margin-top:8px}.legal-document{max-width:none}.legal-back{margin-bottom:25px}}
 @media(max-width:520px){.legal-topbar{height:63px;padding:0 13px}.legal-brand{font-size:10px}.legal-brand img{width:29px;height:29px}.legal-top-actions{gap:11px;font-size:10px}.legal-sell{padding:8px!important}.legal-layout{width:calc(100% - 28px)}.legal-sidebar{grid-template-columns:1fr 1fr}.legal-sidebar>a{font-size:10px;padding:9px 7px;gap:6px}.legal-sidebar>a svg:last-child{display:none}.legal-section{grid-template-columns:24px 1fr;gap:9px}.legal-contact-box{align-items:flex-start;flex-direction:column}.contact-grid{grid-template-columns:1fr;width:calc(100% - 28px)}.legal-hero{width:calc(100% - 28px);padding-top:48px}.legal-bottom{align-items:flex-start;flex-direction:column}.market-footer-links{gap:10px}}
+
+
+/* Fix broken community CTA sizing and remove the laggy smooth-scroll behavior */
+html{scroll-behavior:auto!important;scroll-padding-top:72px}
+.market-nav-actions>a.market-nav-community{display:inline-flex!important;align-items:center;justify-content:center;flex-direction:row!important;gap:7px!important;width:auto!important;min-width:max-content!important;height:38px;padding:0 13px!important;white-space:nowrap;line-height:1;border:1px solid #453568;border-radius:7px;background:#1b1728!important;color:#d9ccff!important;box-sizing:border-box}
+.market-nav-actions>a.market-nav-community svg{display:block;flex:none;width:14px;height:14px}
+.market-nav-actions>a.market-nav-community svg:last-child{width:12px;height:12px}
+.market-nav-actions>a.market-nav-community:hover{background:#28203b!important;border-color:#6b54a0;color:#fff!important}
+.market-nav-actions>a.market-nav-login{display:inline-flex!important;align-items:center;justify-content:center;flex-direction:row!important;gap:7px;white-space:nowrap;height:38px;padding:0 13px!important}
+.market-nav.shell{position:relative!important;top:auto!important;z-index:10}
+.rq-topbar{position:relative!important;top:auto!important;z-index:2}
+.rq-sidebar{position:relative!important;top:auto!important;height:auto!important;align-self:stretch}
+.rq-app{align-items:stretch}
+.rq-main{min-width:0;flex:1}
+.rq-content{scroll-margin-top:18px}
+@media(max-width:900px){.market-nav.shell{gap:12px}.market-nav nav{gap:15px}.market-nav-actions{gap:7px}}
+@media(max-width:650px){.market-nav-actions>a.market-nav-community{display:none!important}.market-nav-actions>a.market-nav-login{height:35px;padding:0 10px!important;font-size:10px}}
