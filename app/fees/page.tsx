@@ -1,0 +1,7 @@
+import LegalPage from "../components/legal-page";
+export const metadata={title:"Fees & Payments | Spider Uncopylocked",description:"Current development-stage fee and payment information."};
+export default function Page(){return <LegalPage eyebrow="MARKETPLACE" title="Fees & Payments" updated="October 10, 2026" intro="Spider Uncopylocked is still being built. No transaction fee or payout promise is being made on this page." sections={[
+{title:"Current status",body:["Listing drafts and asking prices are not completed transactions. Payment processing, escrow, and seller payouts are not enabled by this page.","We will publish clear fees and payment terms before enabling a checkout flow."]},
+{title:"Before paying anyone",body:["Do not treat a listing draft, private message, or screenshot as proof that Spider has received or secured funds.","Never share passwords, verification codes, or account cookies. Review any future checkout page and its terms carefully."]},
+{title:"Future fee disclosures",body:["Before supported transactions launch, this page should explain any marketplace commission, payment processor fees, payout timing, refund rules, chargebacks, and applicable taxes.","For questions, contact spiderstudios137483@gmail.com."]}
+]}/>}
