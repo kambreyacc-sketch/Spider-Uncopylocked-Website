@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AppConvexProvider from "./convex-provider";
 
 export const metadata: Metadata = {
   title: "Spider Uncopylocked | Creator Resources",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><AppConvexProvider>{children}</AppConvexProvider></body>
     </html>
   );
 }
