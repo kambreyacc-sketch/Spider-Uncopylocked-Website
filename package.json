@@ -14,7 +14,8 @@
     "next": "^15.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.1.0"
+    "tailwindcss": "^4.1.0",
+    "convex": "^1.25.4"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
