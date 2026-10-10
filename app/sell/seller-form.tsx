@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import { AlertCircle, ArrowRight, Check, ImagePlus, Upload, X } from "lucide-react";
 
 const DRAFT_KEY = "spider-uncopylocked-listing-draft-v1";
-type Draft = { title:string; type:"Game"|"UGC Group"; robloxUrl:string; price:string; description:string; imageData:string; imageName:string };\ntype RobloxPreview = { imageUrl:string; universeId:number };\nconst robloxLogo = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Roblox_Logo.svg";
+type Draft = { title:string; type:"Game"|"UGC Group"; robloxUrl:string; price:string; description:string; imageData:string; imageName:string };
+type RobloxPreview = { imageUrl:string; universeId:number };
+const robloxLogo = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Roblox_Logo.svg";
 
 export default function SellerForm() {
   const [draft,setDraft] = useState<Draft>({title:"",type:"Game",robloxUrl:"",price:"",description:"",imageData:"",imageName:""});
   const [error,setError] = useState("");
-  const [saved,setSaved] = useState(false);\n  const [robloxPreview,setRobloxPreview] = useState<RobloxPreview|null>(null);\n  const [robloxPreviewStatus,setRobloxPreviewStatus] = useState("");
+  const [saved,setSaved] = useState(false);
+  const [robloxPreview,setRobloxPreview] = useState<RobloxPreview|null>(null);
+  const [robloxPreviewStatus,setRobloxPreviewStatus] = useState("");
   useEffect(()=>{ try { const raw=window.localStorage.getItem(DRAFT_KEY); if(raw) setDraft(JSON.parse(raw) as Draft); } catch {} },[]);
   function update<K extends keyof Draft>(key:K,value:Draft[K]) { setDraft(current=>({...current,[key]:value})); setSaved(false); if(key==="robloxUrl"){setRobloxPreview(null);setRobloxPreviewStatus("");} }
   async function loadRobloxPreview() {
