@@ -20,4 +20,18 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index("by_status_createdAt", ["status", "createdAt"])
     .index("by_seller", ["sellerRobloxId"]),
+  resources: defineTable({
+    title: v.string(),
+    description: v.string(),
+    category: v.union(v.literal("Model"), v.literal("Script"), v.literal("Template"), v.literal("Other")),
+    setup: v.optional(v.string()),
+    thumbnailStorageId: v.optional(v.id("_storage")),
+    fileStorageId: v.id("_storage"),
+    fileName: v.string(),
+    fileSize: v.number(),
+    creatorName: v.string(),
+    creatorDiscordId: v.optional(v.string()),
+    createdAt: v.number(),
+    status: v.union(v.literal("active"), v.literal("removed")),
+  }).index("by_status_createdAt", ["status", "createdAt"]),
 });
