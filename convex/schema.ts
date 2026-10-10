@@ -8,6 +8,7 @@ export default defineSchema({
     robloxUrl: v.string(),
     price: v.number(),
     description: v.string(),
+    imageStorageId: v.optional(v.id("_storage")),
     imageUrl: v.optional(v.string()),
     sellerRobloxId: v.string(),
     sellerName: v.string(),
