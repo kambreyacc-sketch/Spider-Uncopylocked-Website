@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { ArrowDownRight, ArrowRight, ArrowUpRight, Boxes, Check, Code2, Crown, Download, Gamepad2, LockKeyhole, MessageCircle, Shield, ShieldCheck, ShoppingBag, Users } from "lucide-react";
 
-const iconUrl = "data:image/webp;base64,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";
-
 const features = [
   { icon: Boxes, title: "Resource vault", tag: "MEMBERS", text: "A structured library for approved scripts, models, tutorials, and creator drops." },
   { icon: Gamepad2, title: "Game showcase", tag: "COMMUNITY", text: "A home for your games, updates, trailers, and official Roblox links." },
@@ -22,8 +20,8 @@ export const metadata = {
 export default function HomePage() {
   return <main className="spx">
     <header className="spx-nav">
-      <Link href="/" className="spx-brand"><span className="spx-logo"><img src={iconUrl} alt="" /></span><span>SPIDER <b>UNCOPYLOCKED</b><small>THE CREATOR PLATFORM</small></span></Link>
-      <nav className="spx-nav-links"><a href="#platform">Platform</a><a href="#membership">Memberships</a><a href="#games">Games</a><Link href="/marketplace">Marketplace</Link></nav>
+      <Link href="/" className="spx-brand"><span className="spx-logo spx-logo-text" aria-label="Spider Uncopylocked">SU</span><span>SPIDER <b>UNCOPYLOCKED</b><small>THE CREATOR PLATFORM</small></span></Link>
+      <nav className="spx-nav-links"><a href="#platform">Platform</a><a href="#membership">Memberships</a><a href="#games">Games</a><Link href="/marketplace">Marketplace</Link><Link href="/resources">Free assets</Link></nav>
       <div className="spx-nav-actions"><Link href="/api/auth/discord/login" className="spx-login"><MessageCircle size={15}/> Sign in with Discord <ArrowUpRight size={14}/></Link></div>
     </header>
 
@@ -38,7 +36,7 @@ export default function HomePage() {
       </div>
       <div className="spx-hero-visual">
         <div className="spx-orbit spx-orbit-a"/><div className="spx-orbit spx-orbit-b"/><div className="spx-orbit spx-orbit-c"/>
-        <div className="spx-core"><div className="spx-core-glow"/><img src={iconUrl} alt="Spider Uncopylocked logo"/><span>CREATE WITHOUT LIMITS</span></div>
+        <div className="spx-core"><div className="spx-core-glow"/><span className="spx-emblem-text">SU</span><span>CREATE WITHOUT LIMITS</span></div>
         <div className="spx-float spx-float-top"><span className="spx-float-icon"><Download size={17}/></span><span><b>Free resources</b><small>Templates & files</small></span><span className="spx-mini-pill">FREE</span></div>
         <div className="spx-float spx-float-bottom"><span className="spx-float-icon"><LockKeyhole size={17}/></span><span><b>Member vault</b><small>Access by entitlement</small></span><Shield size={15}/></div>
         <div className="spx-visual-caption">SPIDER PLATFORM / 001</div>
@@ -71,11 +69,11 @@ export default function HomePage() {
 
     <section className="spx-community">
       <div className="spx-community-copy"><span className="spx-kicker">06 / THE PEOPLE BEHIND SPIDER</span><h2>Built around the <em>community.</em></h2><p>Introduce yourself, share the story behind Spider Uncopylocked, and feature the real staff members who help run the server.</p><div className="spx-staff-grid"><article><span><Crown size={17}/></span><b>Owner</b><small>Platform owner</small></article><article><span><Shield size={17}/></span><b>Co-Owner</b><small>Community leadership</small></article><article><span><Users size={17}/></span><b>Management</b><small>Operations & team</small></article><article><span><ShieldCheck size={17}/></span><b>Staff team</b><small>Admins & contributors</small></article></div><p className="spx-small-note">Role cards are placeholders for your actual Discord-linked staff—no staff identities are invented.</p></div>
-      <div className="spx-community-card"><div className="spx-community-emblem"><img src={iconUrl} alt="Spider Uncopylocked"/></div><span className="spx-kicker">SPIDER UNCOPYLOCKED</span><h3>One hub. Every part of the creator journey.</h3><p>Community, resources, tools, and a place to share what you're building.</p><a href="#platform">Explore the platform <ArrowRight size={15}/></a></div>
+      <div className="spx-community-card"><div className="spx-community-emblem"><span className="spx-emblem-text">SU</span></div><span className="spx-kicker">SPIDER UNCOPYLOCKED</span><h3>One hub. Every part of the creator journey.</h3><p>Community, resources, tools, and a place to share what you're building.</p><a href="#platform">Explore the platform <ArrowRight size={15}/></a></div>
     </section>
 
-    <section className="spx-shop-cta"><div className="spx-shop-icon"><ShoppingBag size={22}/></div><div><span className="spx-kicker">07 / SHOP & MARKETPLACE</span><h2>Find resources. Sell your creations.</h2><p>The marketplace remains a section of Spider Uncopylocked—not the whole website.</p></div><div className="spx-shop-actions"><Link className="spx-btn spx-btn-primary" href="/marketplace">Browse marketplace <ArrowRight size={15}/></Link><Link className="spx-btn spx-btn-ghost" href="/sell">Creator tools <ArrowUpRight size={15}/></Link></div></section>
+    <section className="spx-shop-cta"><div className="spx-shop-icon"><ShoppingBag size={22}/></div><div><span className="spx-kicker">07 / SHOP & MARKETPLACE</span><h2>Find resources. Sell your creations.</h2><p>The marketplace remains a section of Spider Uncopylocked—not the whole website.</p></div><div className="spx-shop-actions"><Link className="spx-btn spx-btn-primary" href="/marketplace">Browse marketplace <ArrowRight size={15}/></Link><Link className="spx-btn spx-btn-ghost" href="/resources/upload">Upload free asset <ArrowUpRight size={15}/></Link></div></section>
 
-    <footer className="spx-footer"><Link href="/" className="spx-brand"><span className="spx-logo"><img src={iconUrl} alt=""/></span><span>SPIDER <b>UNCOPYLOCKED</b><small>THE CREATOR PLATFORM</small></span></Link><span>BUILD BEYOND THE GAME.</span><div><Link href="/marketplace">Marketplace</Link><Link href="/sell">Creator tools</Link><Link href="/api/auth/discord/login">Discord login</Link></div><small>© 2026 Spider Uncopylocked · Test redesign</small></footer>
+    <footer className="spx-footer"><Link href="/" className="spx-brand"><span className="spx-logo"><img src={iconUrl} alt=""/></span><span>SPIDER <b>UNCOPYLOCKED</b><small>THE CREATOR PLATFORM</small></span></Link><span>BUILD BEYOND THE GAME.</span><div><Link href="/marketplace">Marketplace</Link><Link href="/resources/upload">Upload free asset</Link><Link href="/api/auth/discord/login">Discord login</Link></div><small>© 2026 Spider Uncopylocked · Test redesign</small></footer>
   </main>;
 }
