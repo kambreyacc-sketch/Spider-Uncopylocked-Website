@@ -10,8 +10,8 @@ const features = [
 ];
 
 const tiers = [
-  { name: "VIP", label: "COMMUNITY ACCESS", price: "Roblox pass", description: "Unlock the designated VIP section after ownership is verified.", items: ["VIP-only website area", "Eligible community resources", "Roblox game-pass verification"], action: "View Roblox VIP pass", href: "https://www.roblox.com/game-pass/1759776349/VIP-SPIDER-UNCOPYLOCKED", featured: false },
-  { name: "Aero", label: "CREATOR MEMBERSHIP", price: "Coming soon", description: "A membership tier for exclusive creator resources and member perks.", items: ["Aero resource collection", "Member dashboard access", "New drops and release notes"], action: "Explore Aero", href: "#membership", featured: false },
+  { name: "VIP", label: "COMMUNITY ACCESS", price: "Roblox pass", description: "Unlock the designated VIP section after ownership is verified.", items: ["VIP-only website area", "Eligible community resources", "Roblox game-pass verification"], action: "View Roblox VIP pass", href: "https://www.roblox.com/game-pass/1759776349/VIP-SPIDER-UNCOPYLOCKED" },
+  { name: "Aero", label: "CREATOR MEMBERSHIP", price: "Coming soon", description: "A membership tier for exclusive creator resources and member perks.", items: ["Aero resource collection", "Member dashboard access", "New drops and release notes"], action: "Explore Aero", href: "#membership" },
 ];
 
 export const metadata = {
@@ -50,12 +50,12 @@ export default function HomePage() {
 
     <section className="spx-section spx-about" id="platform">
       <div className="spx-section-heading"><div><span className="spx-kicker">01 / THE PLATFORM</span><h2>Not just a marketplace.<br/><em>A creator ecosystem.</em></h2></div><p>Spider Uncopylocked brings your community, resources, memberships, and development tools together. The marketplace stays available—but it is one part of the bigger platform.</p></div>
-      <div className="spx-feature-grid">{features.map((f, i) => <article className={"spx-feature spx-feature-"+i} key={f.title}><div className="spx-feature-top"><span className="spx-feature-icon"><f.icon size={21}/></span><span>{f.tag}</span></div><h3>{f.title}</h3><p>{f.text}</p><a href={f.title === "Creator tools" ? "#spider-ai" : f.title === "Game showcase" ? "#games" : f.title === "Resource vault" ? "#resources" : "/marketplace"}>{f.title === "Shop & marketplace" ? "Browse listings" : "Explore feature"} <ArrowUpRight size={14}/></a><div className="spx-feature-index">0{i + 1}</div></article>)}</div>
+      <div className="spx-feature-grid">{features.map((f, i) => <article className={"spx-feature spx-feature-"+i} key={f.title}><div className="spx-feature-top"><span className="spx-feature-icon"><f.icon size={21}/></span><span>{f.tag}</span></div><h3>{f.title}</h3><p>{f.text}</p><a href={f.title === "Game showcase" ? "#games" : f.title === "Resource vault" ? "#resources" : "/marketplace"}>{f.title === "Shop & marketplace" ? "Browse listings" : "Explore feature"} <ArrowUpRight size={14}/></a><div className="spx-feature-index">0{i + 1}</div></article>)}</div>
     </section>
 
     <section className="spx-section spx-membership" id="membership">
       <div className="spx-section-heading"><div><span className="spx-kicker">03 / ACCESS YOUR WAY</span><h2>Unlock your <em>next level.</em></h2></div><p>Membership tiers will unlock features from the server-side, so access is tied to verified entitlements—not just a hidden button.</p></div>
-      <div className="spx-tier-grid">{tiers.map(t => <article className={"spx-tier "+(t.featured ? "spx-tier-featured" : "")} key={t.name}><div className="spx-tier-top"><span>{t.label}</span>{t.featured ? <span className="spx-tier-featured-label"><Sparkles size={12}/> MOST ADVANCED</span> : null}</div><h3>{t.name}</h3><div className="spx-tier-price">{t.price}</div><p>{t.description}</p><ul>{t.items.map(x => <li key={x}><Check size={14}/>{x}</li>)}</ul><a className={t.featured ? "spx-btn spx-btn-primary" : "spx-btn spx-btn-ghost"} href={t.href}>{t.action} <ArrowRight size={15}/></a></article>)}</div>
+      <div className="spx-tier-grid">{tiers.map(t => <article className="spx-tier" key={t.name}><div className="spx-tier-top"><span>{t.label}</span>{t.featured ?  : null}</div><h3>{t.name}</h3><div className="spx-tier-price">{t.price}</div><p>{t.description}</p><ul>{t.items.map(x => <li key={x}><Check size={14}/>{x}</li>)}</ul><a className={"spx-btn spx-btn-ghost"} href={t.href}>{t.action} <ArrowRight size={15}/></a></article>)}</div>
       <p className="spx-small-note"><LockKeyhole size={13}/> Aero checkout and entitlement verification are not live yet in this test design.</p>
     </section>
 
