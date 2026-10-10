@@ -17,7 +17,7 @@ export default function SellPage() {
     </header>
     <div className="sell-shell">
       <Link href="/marketplace" className="sell-back"><ArrowLeft size={15}/> Back to marketplace</Link>
-      <section className="sell-heading"><div><span className="sell-eyebrow">SELLER DASHBOARD / NEW LISTING</span><h1>Create a listing</h1><p>Add the details buyers need to evaluate your Roblox experience or UGC group.</p></div><div className="sell-step-count">STEP <b>1</b> OF <b>3</b></div></section>
+      <section className="sell-heading"><div><span className="sell-eyebrow">SELLER DASHBOARD / NEW LISTING</span><h1>Create a listing</h1><p>Add the details buyers need to evaluate your Roblox experience or UGC group.</p></div><div className="sell-step-count">NEW LISTING <b>·</b> DRAFT</div></section>
       <div className="sell-progress"><span /></div>
       <div className="sell-layout">
         <SellerForm />
