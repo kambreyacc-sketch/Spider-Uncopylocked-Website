@@ -32,16 +32,19 @@ export const submitListing = mutation({
     imageUrl: v.optional(v.string()),
     sellerRobloxId: v.string(),
     sellerName: v.string(),
+    contactDiscord: v.optional(v.string()),
+    contactEmail: v.optional(v.string()),
+    contactPhone: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     if (!args.title.trim() || args.title.length > 80) throw new Error("Enter a listing title under 80 characters.");
     if (!/^https?:\/\/(www\.)?roblox\.com\//i.test(args.robloxUrl)) throw new Error("Enter a valid Roblox URL.");
     if (!Number.isFinite(args.price) || args.price <= 0) throw new Error("Price must be greater than zero.");
     if (args.description.length > 2000) throw new Error("Description is too long.");
-    // Submissions are held for moderation and do not appear publicly until approved.
+    if (!(args.contactDiscord?.trim() || args.contactEmail?.trim() || args.contactPhone?.trim())) throw new Error("Add at least one contact method: Discord, email, or phone.");
     return await ctx.db.insert("listings", {
       ...args,
-      status: "pending",
+      status: "active",
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
