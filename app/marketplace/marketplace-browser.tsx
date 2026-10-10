@@ -1,11 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import { Activity, ArrowDownUp, ArrowRight, Bookmark, Check, ChevronDown, CircleHelp, Clock3, Compass, Flame, Gamepad2, Grid2X2, Heart, LayoutDashboard, ListFilter, MessageSquare, Search, Settings, ShieldCheck, ShoppingBag, SlidersHorizontal, Tag, Users, Wallet } from "lucide-react";
 import Link from "next/link";
 
 type Listing = { id:string; title:string; seller:string; price:number; type:"Game"|"UGC Group"; updatedAt:string; image?:string; currentPlayers?:number; peakPlayers?:number; visits?:number; favorites?:number; likesPercent?:number; monthlyRevenue?:number; status:"active"|"pending" };
-const listings: Listing[] = [];
+type BackendListing = { _id: string; title: string; sellerName: string; price: number; type: "Game"|"UGC Group"; createdAt: number; imageUrl?: string };
+
 
 const navGroups = [
   { label:"MARKETPLACE", items:[["Home", "home"],["Browse Listings","browse"]] },
@@ -37,7 +40,18 @@ export default function MarketplaceBrowser() {
   const [sort,setSort]=useState("trending");
   const [sidebar,setSidebar]=useState("Home");
   const [savedOnly,setSavedOnly]=useState(false);
-  const filtered=useMemo(()=>listings.filter(l=>l.type===(tab==="Games"?"Game":"UGC Group")&&l.title.toLowerCase().includes(query.toLowerCase())).sort((a,b)=>sort==="price-low"?a.price-b.price:sort==="price-high"?b.price-a.price:0),[tab,query,sort]);
+  const backendListings = useQuery(api.listings.publicListings, {});
+  const listings: Listing[] = (backendListings ?? []).map((row: BackendListing) => ({
+    id: row._id,
+    title: row.title,
+    seller: row.sellerName,
+    price: row.price,
+    type: row.type,
+    updatedAt: new Date(row.createdAt).toISOString(),
+    image: row.imageUrl,
+    status: "active",
+  }));
+  const filtered=useMemo(()=>listings.filter(l=>l.type===(tab==="Games"?"Game":"UGC Group")&&l.title.toLowerCase().includes(query.toLowerCase())).sort((a,b)=>sort==="price-low"?a.price-b.price:sort==="price-high"?b.price-a.price:0),[listings,tab,query,sort]);
   const groups=[...navGroups];
   return <div className="rq-app">
     <aside className="rq-sidebar">
