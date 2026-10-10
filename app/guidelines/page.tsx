@@ -1,0 +1,9 @@
+import LegalPage from "../components/legal-page";
+export const metadata={title:"Community Guidelines | Spider Uncopylocked",description:"Marketplace rules and standards for Spider Uncopylocked."};
+export default function Page(){return <LegalPage eyebrow="TRUST & SAFETY" title="Community Guidelines" updated="October 10, 2026" intro="These rules set the expected standard for listings and marketplace interactions." sections={[
+{title:"List only what you can legitimately sell",body:["Only submit assets you own or are authorized to represent. Never claim ownership you cannot demonstrate.","Do not upload stolen assets, misleading screenshots, fake analytics, or thumbnails that impersonate another creator."]},
+{title:"Be honest with buyers",body:["Describe exactly what is included, what is excluded, and any relevant limitations. Keep asking prices and supporting claims accurate.","Do not pressure users to send money or credentials through unofficial channels."]},
+{title:"Protect accounts",body:["Never request passwords, one-time codes, browser cookies, recovery codes, or session tokens.","Use Roblox’s official sign-in flow and follow its current rules for accounts, groups, and experience transfers."]},
+{title:"No abuse or scams",body:["Phishing, malware, threats, harassment, impersonation, spam, and attempts to bypass security checks are not allowed.","Do not use alternate accounts to evade restrictions or manipulate listings, offers, or reviews."]},
+{title:"Reporting concerns",body:["Send a concise report with the listing URL, relevant screenshots, and a description of the issue to spiderstudios137483@gmail.com. Do not include passwords or authentication secrets.","We may review reports and restrict content or accounts when appropriate. A report does not guarantee a particular outcome."]}
+]}/>}
