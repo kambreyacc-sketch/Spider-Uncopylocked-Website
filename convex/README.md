@@ -9,3 +9,6 @@
 ## Safety note
 
 Listings submitted through `submitListing` are created with status `pending`; they do not appear in public browsing until reviewed and set to `active`. Before enabling submissions from the public website, enforce a verified Roblox identity in the mutation using Convex auth or a server-verified Roblox session. Do not trust a seller ID supplied by the browser.
+
+
+Backend deployment is automated by the GitHub Actions workflow when files in `convex/` change on `main`.
