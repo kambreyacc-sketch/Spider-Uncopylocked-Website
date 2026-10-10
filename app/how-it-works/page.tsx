@@ -1,0 +1,9 @@
+import LegalPage from "../components/legal-page";
+export const metadata={title:"How It Works | Spider Uncopylocked",description:"How the Spider Uncopylocked marketplace is intended to work."};
+export default function Page(){return <LegalPage eyebrow="GETTING STARTED" title="How It Works" updated="October 10, 2026" intro="Spider is being developed to help creators discover and evaluate Roblox game and UGC group listings." sections={[
+{title:"1. Browse listings",body:["Explore available listings and review the seller’s description, asking price, and supporting details. Listings should not be treated as verified unless the site clearly marks them as verified."]},
+{title:"2. Sign in with Roblox",body:["Use the official Roblox authorization screen and review the permissions before approving. Spider should never ask you to type your Roblox password directly into a Spider form.","Signing in identifies an account; it does not by itself prove that an account owns every game or group it submits."]},
+{title:"3. Prepare a listing",body:["Choose whether you are listing a game or a UGC group, enter the public Roblox URL, add a price and description, and upload a thumbnail you have permission to use.","A locally saved draft is private to your browser and is not published. Public listing publication and permanent image storage are still being connected."]},
+{title:"4. Offers and transfers",body:["Do not assume offers, payment processing, escrow, ownership transfer assistance, or payouts are available until the website explicitly launches those features and publishes their terms."]},
+{title:"Need help?",body:["Email spiderstudios137483@gmail.com with the page URL and a description of the issue. Never include passwords or authentication secrets."]}
+]}/>}
