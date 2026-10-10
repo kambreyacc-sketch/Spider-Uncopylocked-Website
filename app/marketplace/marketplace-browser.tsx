@@ -41,7 +41,9 @@ export default function MarketplaceBrowser() {
   const [query,setQuery]=useState("");
   const [sort,setSort]=useState("trending");
   const [sidebar,setSidebar]=useState("Home");
-  const [savedOnly,setSavedOnly]=useState(false);\n  const [discordUser,setDiscordUser]=useState<{id:string;username:string;displayName:string;avatar:string}|null>(null);\n  useEffect(()=>{fetch("/api/auth/discord/me",{cache:"no-store"}).then(r=>r.json()).then(d=>setDiscordUser(d.user??null)).catch(()=>setDiscordUser(null));},[]);
+  const [savedOnly,setSavedOnly]=useState(false);
+  const [discordUser,setDiscordUser]=useState<{id:string;username:string;displayName:string;avatar:string}|null>(null);
+  useEffect(()=>{fetch("/api/auth/discord/me",{cache:"no-store"}).then(r=>r.json()).then(d=>setDiscordUser(d.user??null)).catch(()=>setDiscordUser(null));},[]);
   const backendListings = useQuery(api.listings.publicListings, {});
   const listings: Listing[] = (backendListings ?? []).map((row: BackendListing) => ({
     id: row._id,
