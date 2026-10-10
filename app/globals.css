@@ -515,3 +515,12 @@ html{scroll-behavior:auto!important;scroll-padding-top:72px}
 .rq-content{scroll-margin-top:18px}
 @media(max-width:900px){.market-nav.shell{gap:12px}.market-nav nav{gap:15px}.market-nav-actions{gap:7px}}
 @media(max-width:650px){.market-nav-actions>a.market-nav-community{display:none!important}.market-nav-actions>a.market-nav-login{height:35px;padding:0 10px!important;font-size:10px}}
+
+.sell-preview-card{overflow:hidden;border:1px solid #34313f;border-radius:9px;background:#101016}
+.sell-preview-image{display:block;width:100%;height:138px;object-fit:cover}
+.sell-preview-details{padding:13px;display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.sell-preview-type{font:9px 'DM Mono',monospace;color:#b5a4f9;text-transform:uppercase;letter-spacing:.08em;border:1px solid #403454;border-radius:4px;padding:4px 6px}
+.sell-preview-details>b{font-size:12px;color:#eeeaf8;overflow-wrap:anywhere}
+.sell-preview-details p{font-size:10px;line-height:1.65;color:#858292;margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.sell-preview-details>strong{font-size:14px;color:#d2c5ff}
+.sell-preview-card .sell-preview-sample{border:0;border-radius:0;height:120px}
