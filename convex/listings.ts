@@ -1,22 +1,26 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
-// Public visitors can browse only listings that have been reviewed and activated.
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => await ctx.storage.generateUploadUrl(),
+});
+
 export const publicListings = query({
-  args: {
-    type: v.optional(v.union(v.literal("Game"), v.literal("UGC Group"))),
-  },
+  args: { type: v.optional(v.union(v.literal("Game"), v.literal("UGC Group"))) },
   handler: async (ctx, args) => {
     const rows = await ctx.db.query("listings")
       .withIndex("by_status_createdAt", (q) => q.eq("status", "active"))
       .order("desc")
       .collect();
-    return args.type ? rows.filter((row) => row.type === args.type) : rows;
+    const filtered = args.type ? rows.filter((row) => row.type === args.type) : rows;
+    return await Promise.all(filtered.map(async (row) => ({
+      ...row,
+      imageUrl: row.imageStorageId ? await ctx.storage.getUrl(row.imageStorageId) : row.imageUrl,
+    })));
   },
 });
 
-// New submissions remain pending until an owner/moderator reviews them.
-// This endpoint must be protected with authenticated identity before enabling public submissions.
 export const submitListing = mutation({
   args: {
     title: v.string(),
@@ -24,6 +28,7 @@ export const submitListing = mutation({
     robloxUrl: v.string(),
     price: v.number(),
     description: v.string(),
+    imageStorageId: v.optional(v.id("_storage")),
     imageUrl: v.optional(v.string()),
     sellerRobloxId: v.string(),
     sellerName: v.string(),
@@ -33,6 +38,7 @@ export const submitListing = mutation({
     if (!/^https?:\/\/(www\.)?roblox\.com\//i.test(args.robloxUrl)) throw new Error("Enter a valid Roblox URL.");
     if (!Number.isFinite(args.price) || args.price <= 0) throw new Error("Price must be greater than zero.");
     if (args.description.length > 2000) throw new Error("Description is too long.");
+    // Submissions are held for moderation and do not appear publicly until approved.
     return await ctx.db.insert("listings", {
       ...args,
       status: "pending",
