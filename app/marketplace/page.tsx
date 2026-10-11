@@ -12,7 +12,7 @@ export const metadata = {
 export default function MarketplacePage() {
   return <main className="marketplace-page">
     <header className="market-nav shell">
-      <Link href="/marketplace" className="market-brand"><img className="market-brand-image" src="https://cdn.discordapp.com/icons/1411733652257374242/deec7fa3d9dc59fb5fa76a21fec3c6fb.webp?size=256" alt="" /><span>SPIDER <b>UNCOPYLOCKED</b><small>CREATOR MARKETPLACE</small></span></Link>
+      <Link href="/marketplace" className="market-brand"><span className="market-brand-image market-brand-mark" aria-hidden="true">SU</span><span>SPIDER <b>UNCOPYLOCKED</b><small>CREATOR MARKETPLACE</small></span></Link>
       <nav><Link href="/marketplace">Marketplace</Link><Link href="/marketplace#browse">Browse Listings</Link><Link href="/sell">Sell on Spider</Link></nav>
       <div className="market-nav-actions"><Link className="market-nav-community" href="https://discord.com/" target="_blank" rel="noreferrer"><Users size={15} /> Community <ArrowUpRight size={13} /></Link><Link className="market-nav-login" href="/api/auth/discord/login"><DiscordMark /> <span>Continue with Discord</span></Link></div>
     </header>
