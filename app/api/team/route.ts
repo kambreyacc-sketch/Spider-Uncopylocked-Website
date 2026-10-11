@@ -3,15 +3,23 @@ import teamConfig from "@/data/team-config.json";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 type ConfigMember={id:string;roles:string[];bio:string;nitro:boolean;bannerOverride?:string};
-type DiscordUser={id:string;username:string;global_name?:string|null;avatar?:string|null;banner?:string|null;accent_color?:number|null;public_flags?:number;flags?:number;discriminator?:string};
-type DiscordMember={joined_at?:string;nick?:string|null};
-type TeamProfile=ConfigMember & {username:string;displayName:string;avatarUrl:string;bannerUrl:string|null;accentColor:string|null;joinedAt:string|null;publicFlags:number;badges:{key:string;label:string;icon:string}[];guildNickname:string|null};
 const ROLE_ORDER=["Owners","Developer","Deputy Manager","Community Managers","Admins","Mods","Leakers"];
-let cache:{expires:number;payload:unknown}|null=null;
-const BADGES:[number,string,string][]=[
-[1,"Discord Staff","shield-check"],[2,"Partnered Server Owner","handshake"],[4,"HypeSquad Events","calendar"],[8,"Bug Hunter Level 1","bug"],[64,"House Bravery","swords"],[128,"House Brilliance","lightbulb"],[256,"House Balance","scale"],[512,"Early Supporter","heart"],[16384,"Bug Hunter Level 2","bug"],[131072,"Early Verified Bot Developer","bot"],[4194304,"Active Developer","code"]
-];
-function discordImage(id:string,hash?:string|null,size=256){if(!hash)return null;const ext=hash.startsWith("a_")?"gif":"png";return `https://cdn.discordapp.com/avatars/${id}/${hash}.${ext}?size=${size}`}
-function bannerImage(id:string,hash?:string|null){if(!hash)return null;const ext=hash.startsWith("a_")?"gif":"png";return `https://cdn.discordapp.com/banners/${id}/${hash}.${ext}?size=1024`}
-async function discordGet<T>(url:string,token:string):Promise<T|null>{const r=await fetch(url,{headers:{Authorization:`Bot ${token}`},cache:"no-store"});if(!r.ok){if(r.status===429)throw new Error("Discord rate limited the team request. Retry shortly.");return null}return await r.json() as T}
-export async function GET(){if(cache&&cache.expires>Date.now())return NextResponse.json(cache.payload,{headers:{"Cache-Control":"private, max-age=300","X-Team-Cache":"HIT"}});const token=process.env.DISCORD_BOT_TOKEN,guild=process.env.DISCORD_GUILD_ID;if(!token||!guild)return NextResponse.json({error:"Team directory is not configured yet. Set DISCORD_BOT_TOKEN and DISCORD_GUILD_ID in Vercel Environment Variables."},{status:503});try{const configs=teamConfig as ConfigMember[];const profiles:TeamProfile[]=[];for(let i=0;i<configs.length;i+=4){const batch=configs.slice(i,i+4);const results=await Promise.all(batch.map(async c=>{const [user,member]=await Promise.all([discordGet<DiscordUser>(`https://discord.com/api/v10/users/${c.id}`,token),discordGet<DiscordMember>(`https://discord.com/api/v10/guilds/${guild}/members/${c.id}`,token)]);if(!user)return null;const flags=user.public_flags??user.flags??0;return {...c,username:user.username,displayName:member?.nick||user.global_name||user.username,avatarUrl:discordImage(user.id,user.avatar)||`https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator||"0")%6}.png`,bannerUrl:c.bannerOverride||bannerImage(user.id,user.banner),accentColor:user.accent_color?("#"+user.accent_color.toString(16).padStart(6,"0")):null,joinedAt:member?.joined_at||null,publicFlags:flags,badges:BADGES.filter(([bit])=>(flags&bit)===bit).map(([,label,icon])=>({key:String(label),label,icon})),guildNickname:member?.nick||null} as TeamProfile}));profiles.push(...results.filter((x):x is TeamProfile=>Boolean(x)))}const payload={roles:ROLE_ORDER.map(role=>({name:role,people:profiles.filter(p=>p.roles.includes(role))})),updatedAt:new Date().toISOString(),count:profiles.length};cache={payload,expires:Date.now()+60*60*1000};return NextResponse.json(payload,{headers:{"Cache-Control":"private, max-age=300","X-Team-Cache":"MISS"}})}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Could not load the team."},{status:502})}}
+// The supplied Discord profile URLs contain IDs, but Discord does not expose the
+// full user profile or guild join date to an unauthenticated website request.
+// Return the configured roster without requiring a secret token so /team still works.
+export async function GET(){
+ const profiles=(teamConfig as ConfigMember[]).map((person)=>({
+  ...person,
+  username:`user-${person.id.slice(-4)}`,
+  displayName:`Discord User ${person.id.slice(-4)}`,
+  avatarUrl:"https://cdn.discordapp.com/embed/avatars/0.png",
+  bannerUrl:person.bannerOverride||null,
+  accentColor:null,
+  joinedAt:null,
+  publicFlags:0,
+  badges:[],
+  guildNickname:null
+ }));
+ const payload={roles:ROLE_ORDER.map(name=>({name,people:profiles.filter(p=>p.roles.includes(name))})),updatedAt:new Date().toISOString(),count:profiles.length,mode:"fallback"};
+ return NextResponse.json(payload,{headers:{"Cache-Control":"no-store"}});
+}
