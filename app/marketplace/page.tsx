@@ -10,7 +10,7 @@ export const metadata = {
 export default function MarketplacePage() {
   return <main className="spider-home marketplace-home">
     <header className="spider-nav">
-      <Link href="/" className="spider-wordmark"><span className="spider-logo">SU</span><span>SPIDER <b>UNCOPYLOCKED</b><small>FREE CREATOR RESOURCES</small></span></Link>
+      <Link href="/" className="spider-wordmark"><img className="spider-logo" src="/spider-uncopylocked-pfp.webp" alt="Spider Uncopylocked" /><span>SPIDER <b>UNCOPYLOCKED</b><small>FREE CREATOR RESOURCES</small></span></Link>
       <nav><Link href="/#assets">Assets & Templates</Link><Link className="spider-current-nav" href="/marketplace">Game Marketplace</Link><Link href="/settings">Settings</Link></nav>
       <div className="spider-nav-actions"><Link href="/resources/upload" className="spider-upload-nav"><UploadCloud size={16}/> Upload asset</Link><Link href="/api/auth/discord/login" className="spider-signin">Sign in with Discord <ArrowUpRight size={14}/></Link></div>
     </header>
