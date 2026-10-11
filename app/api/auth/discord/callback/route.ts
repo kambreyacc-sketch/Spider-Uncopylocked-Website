@@ -7,8 +7,9 @@ export async function GET(request:NextRequest){
  const url=new URL(request.url),code=url.searchParams.get("code"),state=url.searchParams.get("state");
  const jar=await cookies(),expected=jar.get("discord_oauth_state")?.value;
  const clientId=process.env.DISCORD_CLIENT_ID,clientSecret=process.env.DISCORD_CLIENT_SECRET,sessionSecret=process.env.SESSION_SECRET;
- const redirectUri=new URL("/api/auth/discord/callback",request.url).toString();
- const fail=(reason:string)=>{const r=NextResponse.redirect(new URL("/?auth_error="+encodeURIComponent(reason),request.url));r.cookies.delete("discord_oauth_state");return r};
+ const origin=process.env.NEXT_PUBLIC_SITE_URL||url.origin;
+ const redirectUri=process.env.DISCORD_REDIRECT_URI||new URL("/api/auth/discord/callback",origin).toString();
+ const fail=(reason:string)=>{const r=NextResponse.redirect(new URL("/auth/error?reason="+encodeURIComponent(reason),origin));r.cookies.delete("discord_oauth_state");return r};
  if(url.searchParams.has("error"))return fail("discord_denied");
  if(!code||!state||!expected||!equal(state,expected))return fail("invalid_discord_oauth_state");
  if(!clientId||!clientSecret||!sessionSecret)return fail("missing_server_configuration");
@@ -20,11 +21,11 @@ export async function GET(request:NextRequest){
   if(!profileRes.ok)return fail("discord_profile_fetch_failed");
   const p=await profileRes.json() as {id?:string;username?:string;global_name?:string;avatar?:string|null};
   if(!p.id||!p.username)return fail("discord_profile_missing");
-  const profile={id:p.id,username:p.username,displayName:p.global_name||p.username,avatar:p.avatar? "https://cdn.discordapp.com/avatars/"+p.id+"/"+p.avatar+".png":""};
+  const profile={id:p.id,username:p.username,displayName:p.global_name||p.username,avatar:p.avatar?"https://cdn.discordapp.com/avatars/"+p.id+"/"+p.avatar+".png":""};
   const payload=Buffer.from(JSON.stringify({provider:"discord",profile,issuedAt:Date.now()})).toString("base64url");
   const sig=createHmac("sha256",sessionSecret).update(payload).digest("base64url");
-  const response=NextResponse.redirect(new URL("/?login=discord_success",request.url));
-  response.cookies.set("spider_session",payload+"."+sig,{httpOnly:true,secure:request.nextUrl.protocol==="https:",sameSite:"lax",path:"/",maxAge:604800});
+  const response=NextResponse.redirect(new URL("/?login=discord_success",origin));
+  response.cookies.set("spider_session",payload+"."+sig,{httpOnly:true,secure:origin.startsWith("https:"),sameSite:"lax",path:"/",maxAge:604800});
   response.cookies.delete("discord_oauth_state");return response;
  }catch{return fail("discord_oauth_unavailable")}
 }
