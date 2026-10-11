@@ -793,7 +793,7 @@ body{margin:0}
 .team-name-line{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .team-name-line h3{font:600 15px 'Space Grotesk',sans-serif;margin:0;overflow-wrap:anywhere}
 .team-discord-badge{display:inline-flex;align-items:center;justify-content:center;color:#a5caff;background:#263b5a;border:1px solid #36547a;border-radius:5px;width:21px;height:19px}
-.team-nitro-badge{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 24px}.team-nitro-badge-image{display:block;width:24px;height:24px;flex:0 0 24px;overflow:visible;filter:drop-shadow(0 1px 3px #0008)}
+.team-nitro-badge{width:25px;height:25px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 25px;vertical-align:middle}.team-nitro-badge-image{display:block;width:25px;height:25px;flex:0 0 25px;overflow:visible;filter:drop-shadow(0 1px 2px #0008)}
 .team-role-pill{display:inline-flex;margin-top:7px;padding:4px 7px;border:1px solid #394456;background:#1b2534;color:#a9c9ff;border-radius:5px;font:10px 'DM Mono',monospace}
 .team-username{font-size:10px;color:#7f8999;margin-left:7px;overflow-wrap:anywhere}
 .team-meta{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:15px;padding:12px 0;border-top:1px solid #272b33;border-bottom:1px solid #272b33}
