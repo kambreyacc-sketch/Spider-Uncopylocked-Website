@@ -1,22 +1,21 @@
 import Link from "next/link";
-import { ArrowUpRight, Users } from "lucide-react";
-
-function DiscordMark() { return <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M19.7 5.3A18.8 18.8 0 0 0 15.1 3.9l-.6 1.2a17.2 17.2 0 0 0-5 0l-.6-1.2a18.8 18.8 0 0 0-4.6 1.4C1.4 9.6.6 13.8 1 18a18.8 18.8 0 0 0 5.7 2.9l1.2-1.9-1.9-.9.5-.4c3.7 1.7 7.7 1.7 11.4 0l.5.4-1.9.9 1.2 1.9a18.8 18.8 0 0 0 5.7-2.9c.5-4.9-.8-9.1-3.7-12.7ZM8.8 15.4c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.4 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>; }
 import MarketplaceBrowser from "./marketplace-browser";
+import { ArrowUpRight, UploadCloud } from "lucide-react";
 
 export const metadata = {
-  title: "Spider Uncopylocked — Roblox Marketplace",
-  description: "Browse Roblox game listings and creator resources on Spider Uncopylocked.",
+  title: "Spider Uncopylocked — Game Marketplace",
+  description: "Browse Roblox experiences and creator listings on Spider Uncopylocked.",
 };
 
 export default function MarketplacePage() {
-  return <main className="marketplace-page">
-    <header className="market-nav shell">
-      <Link href="/marketplace" className="market-brand"><span className="market-brand-image market-brand-mark" aria-hidden="true">SU</span><span>SPIDER <b>UNCOPYLOCKED</b><small>CREATOR MARKETPLACE</small></span></Link>
-      <nav><Link href="/">Home</Link><Link href="/marketplace#browse">Browse Listings</Link></nav>
-      <div className="market-nav-actions"><Link className="market-nav-community" href="https://discord.com/" target="_blank" rel="noreferrer"><Users size={15} /> Community <ArrowUpRight size={13} /></Link><Link className="market-nav-login" href="/api/auth/discord/login"><DiscordMark /> <span>Continue with Discord</span></Link></div>
+  return <main className="spider-home marketplace-home">
+    <header className="spider-nav">
+      <Link href="/" className="spider-wordmark"><span className="spider-logo">SU</span><span>SPIDER <b>UNCOPYLOCKED</b><small>FREE CREATOR RESOURCES</small></span></Link>
+      <nav><Link href="/#assets">Assets & Templates</Link><Link className="spider-current-nav" href="/marketplace">Game Marketplace</Link><Link href="/settings">Settings</Link></nav>
+      <div className="spider-nav-actions"><Link href="/resources/upload" className="spider-upload-nav"><UploadCloud size={16}/> Upload asset</Link><Link href="/api/auth/discord/login" className="spider-signin">Sign in with Discord <ArrowUpRight size={14}/></Link></div>
     </header>
+    <section className="marketplace-intro"><span className="spider-eyebrow">SPIDER / GAME MARKETPLACE</span><h1>Games and creator listings.</h1><p>Browse Roblox experiences, discover creators, and explore listings — all in the same Spider workspace.</p></section>
     <MarketplaceBrowser />
-    <footer className="market-footer shell"><span>© 2026 SPIDER UNCOPYLOCKED</span><span className="market-footer-links"><Link href="/marketplace">Marketplace</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/guidelines">Guidelines</Link><Link href="/fees">Fees</Link><Link href="/faq">FAQ</Link><Link href="/contact">Contact</Link><a href="mailto:spiderstudios137483@gmail.com">Support</a></span></footer>
+    <footer className="spider-footer"><span>© 2026 SPIDER UNCOPYLOCKED</span><span>One home for creator resources and game listings</span><span><Link href="/">Resources</Link><Link href="/guidelines">Guidelines</Link><Link href="/contact">Support</Link></span></footer>
   </main>;
 }
