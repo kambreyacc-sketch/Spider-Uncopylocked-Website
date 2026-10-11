@@ -692,3 +692,11 @@ body{margin:0}
 .marketplace-home .rq-how-steps article span{color:#c5c7cc!important}
 .marketplace-home .rq-footer{display:none!important}
 @media(max-width:720px){.marketplace-home .rq-content{padding:12px 14px 34px!important}.marketplace-intro{padding:27px 16px 16px}}
+
+
+/* Official Spider Uncopylocked avatar, used consistently across all site sections */
+.spider-logo{display:block!important;width:42px!important;height:42px!important;object-fit:cover!important;border-radius:10px!important;border:1px solid #3a3c40!important;flex:none}
+.resource-brand-image{display:block;width:34px;height:34px;object-fit:cover;border-radius:9px;border:1px solid #3a3c40;flex:none}
+.market-brand-mark{display:block!important;width:38px!important;height:38px!important;object-fit:cover!important;border-radius:10px!important;border:1px solid #3a3c40!important;flex:none;background:#0b0b0c!important}
+.rq-topbar-brand .market-brand-mark{width:30px!important;height:30px!important;border-radius:8px!important}
+.rq-profile-image{content:url("/spider-uncopylocked-pfp.webp")!important}
