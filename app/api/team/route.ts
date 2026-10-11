@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import teamConfig from "../../../../data/team-config.json";
+import teamConfig from "../../../data/team-config.json";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 type ConfigMember={id:string;roles:string[];bio:string;nitro:boolean;bannerOverride?:string};
