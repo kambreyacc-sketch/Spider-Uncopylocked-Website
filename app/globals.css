@@ -770,3 +770,42 @@ body{margin:0}
 .spider-hiring-banner>div:last-child{display:flex;flex-wrap:wrap;gap:8px}
 .spider-hiring-banner .spider-button-secondary{display:inline-flex;align-items:center;gap:7px;border:1px solid #303b4b;background:#0b0e14;color:#e2e7ef;border-radius:7px;padding:11px 13px;font-size:11px}
 @media(max-width:760px){.spider-hiring-banner{margin:18px 12px;align-items:flex-start;flex-direction:column;padding:17px}.spider-hiring-banner>div:last-child{width:100%}}
+
+
+/* Meet the team — Discord profile-popout styling */
+.team-page{max-width:1500px}
+.team-page-header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:1px solid #25272c;padding:4px 0 25px;margin-bottom:30px}
+.team-page-header h1{font:600 clamp(32px,4vw,44px)/1.05 'Space Grotesk',sans-serif;letter-spacing:-.055em;margin:10px 0}
+.team-page-header p{color:#9ba6b7;font-size:12px;line-height:1.8;margin:0}
+.team-count{display:flex;align-items:center;gap:8px;color:#aab6c8;background:#111722;border:1px solid #293344;border-radius:8px;padding:10px 12px;font-size:11px;white-space:nowrap}
+.team-role-section{margin:30px 0 38px}
+.team-role-heading{display:flex;align-items:center;gap:10px;margin-bottom:17px}
+.team-role-heading>span{width:4px;height:23px;border-radius:2px;background:#f39a3e;box-shadow:0 0 15px #f39a3e35}
+.team-role-heading h2{font:600 14px 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;margin:0;color:#f0f1f3}
+.team-role-heading small{margin-left:auto;color:#7f8a9a;font:10px 'DM Mono',monospace;letter-spacing:.08em}
+.team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.team-card{position:relative;min-width:0;overflow:hidden;background:#111318;border:1px solid #292d36;border-radius:12px;color:#e8eaf0;box-shadow:0 12px 30px #00000016;transition:border-color .15s,transform .15s}
+.team-card:hover{border-color:#3b4e69;transform:translateY(-2px)}
+.team-card-banner{height:92px;background-position:center;background-size:cover;background-repeat:no-repeat;border-bottom:1px solid #ffffff0b}
+.team-card-body{position:relative;padding:0 16px 14px}
+.team-avatar{display:block;position:relative;margin-top:-35px;width:70px;height:70px;object-fit:cover;border-radius:50%;border:5px solid #111318;background:#242a35}
+.team-card-heading{margin-top:8px;min-height:58px}
+.team-name-line{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.team-name-line h3{font:600 15px 'Space Grotesk',sans-serif;margin:0;overflow-wrap:anywhere}
+.team-discord-badge{display:inline-flex;align-items:center;justify-content:center;color:#a5caff;background:#263b5a;border:1px solid #36547a;border-radius:5px;width:21px;height:19px}
+.team-nitro-badge{width:19px;height:19px;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;background:linear-gradient(135deg,#f08eff,#7b72ff);color:#fff;font:700 11px 'DM Sans',sans-serif}
+.team-role-pill{display:inline-flex;margin-top:7px;padding:4px 7px;border:1px solid #394456;background:#1b2534;color:#a9c9ff;border-radius:5px;font:10px 'DM Mono',monospace}
+.team-username{font-size:10px;color:#7f8999;margin-left:7px;overflow-wrap:anywhere}
+.team-meta{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:15px;padding:12px 0;border-top:1px solid #272b33;border-bottom:1px solid #272b33}
+.team-meta>div{display:grid;gap:5px;min-width:0}
+.team-meta span{font:9px 'DM Mono',monospace;letter-spacing:.07em;color:#7f8998}
+.team-meta code{font:10px 'DM Mono',monospace;color:#b1bac7;overflow-wrap:anywhere}
+.team-bio{min-height:42px;font-size:11px;line-height:1.75;color:#aeb6c4;margin:12px 0 15px;white-space:pre-wrap;overflow-wrap:anywhere}
+.team-card-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid #272b33;padding-top:11px;color:#677486;font:8px 'DM Mono',monospace;letter-spacing:.06em}
+.team-card-footer span:last-child{color:#9ba8ba}
+.team-state{margin:20px 0;padding:22px;background:#111722;border:1px solid #293344;border-radius:10px;color:#aeb9c8;font-size:12px;line-height:1.8}
+.team-state h2{font:600 17px 'Space Grotesk',sans-serif;color:#f4f4f5;margin:0 0 7px}
+.team-state-error{border-color:#6e3737}.team-state-error p{margin:0 0 15px}
+.team-footnote{font-size:10px;line-height:1.8;color:#707b8b;margin-top:32px}
+@media(max-width:1180px){.team-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.team-page-header{align-items:flex-start;flex-direction:column}.team-grid{grid-template-columns:1fr}.team-card-banner{height:105px}.team-card-body{padding-left:15px;padding-right:15px}}
