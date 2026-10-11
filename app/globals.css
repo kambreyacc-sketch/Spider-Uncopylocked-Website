@@ -655,3 +655,40 @@ body{margin:0}
 .home-assets-footer a{display:inline-flex;align-items:center;gap:7px}
 @media(max-width:900px){.home-asset-filters{grid-template-columns:repeat(3,minmax(0,1fr))}.marketplace-page .market-nav{flex-wrap:wrap}}
 @media(max-width:500px){.home-asset-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.home-assets .spider-section-heading{align-items:flex-start;flex-direction:column}.home-assets-footer{flex-direction:column}}
+
+
+/* Marketplace is a view inside Spider, not a separate purple app */
+.marketplace-home{background:#090a0c!important;color:#f4f4f5!important;min-height:100vh}
+.marketplace-home .spider-current-nav{color:#fff!important;text-decoration:underline;text-decoration-color:#a5a7ad;text-underline-offset:7px}
+.marketplace-intro{padding:34px clamp(18px,3vw,42px) 22px;max-width:1390px;margin:0 auto}
+.marketplace-intro h1{font:600 clamp(30px,4vw,46px)/1.05 'Space Grotesk',sans-serif;letter-spacing:-.06em;margin:12px 0}
+.marketplace-intro p{font-size:12px;line-height:1.8;color:#a4a6ad;margin:0;max-width:620px}
+.marketplace-home .market-nav{display:none!important}
+.marketplace-home .rq-app{display:block!important;background:#090a0c!important;color:#f4f4f5!important;min-height:0!important;border:0!important}
+.marketplace-home .rq-sidebar,.marketplace-home .rq-topbar{display:none!important}
+.marketplace-home .rq-main{width:100%!important;min-width:0!important;background:#090a0c!important;color:#f4f4f5!important}
+.marketplace-home .rq-content{max-width:1390px;margin:0 auto;padding:14px clamp(18px,3vw,42px) 44px!important;background:#090a0c!important;color:#f4f4f5!important}
+.marketplace-home .rq-welcome h1{font:600 25px 'Space Grotesk',sans-serif;letter-spacing:-.04em;color:#f4f4f5}
+.marketplace-home .rq-welcome p,.marketplace-home .rq-section-title p{color:#a4a6ad!important}
+.marketplace-home .rq-eyebrow{color:#b9bbc1!important}
+.marketplace-home .rq-activity-strip>div,.marketplace-home .rq-listing-card,.marketplace-home .rq-how-steps article{background:#101113!important;border:1px solid #2e3035!important;color:#f4f4f5!important;box-shadow:none!important}
+.marketplace-home .rq-activity-icon,.marketplace-home .rq-empty-icon{background:#1a1b1e!important;color:#d5d6da!important;border:1px solid #393b40!important}
+.marketplace-home .rq-activity-strip small,.marketplace-home .rq-listing-foot,.marketplace-home .rq-price-row small,.marketplace-home .rq-seller,.marketplace-home .rq-how p{color:#a4a6ad!important}
+.marketplace-home .rq-browse{border-color:#2e3035!important}
+.marketplace-home .rq-search,.marketplace-home .rq-sort,.marketplace-home .rq-tab-group{background:#101113!important;border:1px solid #303237!important;color:#e5e6e9!important;box-shadow:none!important}
+.marketplace-home .rq-search input,.marketplace-home .rq-sort select{background:transparent!important;color:#f4f4f5!important}
+.marketplace-home .rq-tab-group button{background:transparent!important;color:#b9bbc1!important;border:0!important;box-shadow:none!important}
+.marketplace-home .rq-tab-group button.active{background:#292b30!important;color:#fff!important;border-radius:6px}
+.marketplace-home .rq-primary,.marketplace-home .rq-offer-button,.marketplace-home .rq-empty .rq-primary{background:#ededee!important;color:#111!important;border:1px solid #ededee!important;box-shadow:none!important}
+.marketplace-home .rq-listing-image,.marketplace-home .rq-image-empty{background:#17181b!important;color:#73767d!important}
+.marketplace-home .rq-type{background:#101113!important;border:1px solid #414348!important;color:#e1e2e5!important}
+.marketplace-home .rq-save{background:#111214!important;border:1px solid #414348!important;color:#e1e2e5!important}
+.marketplace-home .rq-metrics span{border-color:#3b3d42!important;color:#bfc1c7!important}
+.marketplace-home .rq-chart i{background:#8a8d93!important}
+.marketplace-home .rq-price-row .rq-revenue strong{color:#d4d5d9!important}
+.marketplace-home .rq-empty{background:#101113!important;border-color:#393b40!important;color:#f4f4f5!important}
+.marketplace-home .rq-empty p{color:#a4a6ad!important}
+.marketplace-home .rq-how{border-color:#2e3035!important}
+.marketplace-home .rq-how-steps article span{color:#c5c7cc!important}
+.marketplace-home .rq-footer{display:none!important}
+@media(max-width:720px){.marketplace-home .rq-content{padding:12px 14px 34px!important}.marketplace-intro{padding:27px 16px 16px}}
