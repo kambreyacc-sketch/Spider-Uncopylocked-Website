@@ -5,11 +5,12 @@
       "Owners"
     ],
     "bio": "",
-    "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1404024989208019086",
-    "bannerUrl": ""
+    "nitro": true,
+    "displayName": "Real Vectar",
+    "username": "Real Vectar",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1404024989208019086/fd13191fea1ea9cd3c361454aa42000e.webp?size=1024",
+    "bannerUrl": "",
+    "accentColor": "#000000"
   },
   {
     "id": "1330165371516489738",
@@ -17,11 +18,12 @@
       "Owners"
     ],
     "bio": "",
-    "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1330165371516489738",
-    "bannerUrl": ""
+    "nitro": true,
+    "displayName": "1xkh",
+    "username": "1xkh",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1330165371516489738/161e4e187f89ce69b313ff0b4619861a.webp?size=1024",
+    "bannerUrl": "",
+    "accentColor": "#000000"
   },
   {
     "id": "1337293227820322878",
@@ -29,11 +31,11 @@
       "Developer"
     ],
     "bio": "",
-    "nitro": false,
+    "nitro": true,
     "bannerOverride": "https://cdn.discordapp.com/banners/677914860159500290/15dffc14f09d88fa4a175691df44c14a.png?size=1024",
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1337293227820322878",
+    "displayName": "BreazyEzy",
+    "username": "BreazyEzy",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1337293227820322878/92116a426b17561c7c6c91c8c6bec1e8.webp?size=512",
     "bannerUrl": "https://cdn.discordapp.com/banners/677914860159500290/15dffc14f09d88fa4a175691df44c14a.png?size=1024"
   },
   {
@@ -43,9 +45,9 @@
     ],
     "bio": "",
     "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1431648090632355890",
+    "displayName": "Harry",
+    "username": "Harry",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1431648090632355890/7b0d67b0449d76e8c426e68fed7c00f1.webp?size=1024",
     "bannerUrl": ""
   },
   {
@@ -55,9 +57,9 @@
     ],
     "bio": "",
     "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1229135688784416820",
+    "displayName": "Erik",
+    "username": "Erik",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1229135688784416820/616321dc609152c67706af75ee8e774e.webp?size=1024",
     "bannerUrl": ""
   },
   {
@@ -68,10 +70,10 @@
     ],
     "bio": "",
     "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1299695683955200051",
-    "bannerUrl": ""
+    "displayName": "venoxr",
+    "username": "venoxr",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1299695683955200051/a_47dc4a17c71c20278ef08e17ca5c4b06.gif",
+    "bannerUrl": "https://cdn.discordapp.com/banners/1299695683955200051/a_cc5b9076b73b2ed390c028cb7cd3cd6b.webp?size=1024&animated=true"
   },
   {
     "id": "1283094430173102135",
@@ -81,9 +83,9 @@
     ],
     "bio": "",
     "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1283094430173102135",
+    "displayName": "Real Mohamed",
+    "username": "Real Mohamed",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1283094430173102135/2d80d991347e0fd4030cecf96b0aac6e.webp?size=1024",
     "bannerUrl": ""
   },
   {
@@ -93,9 +95,9 @@
     ],
     "bio": "",
     "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1319362421554417666",
+    "displayName": "clozey",
+    "username": "clozey",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1319362421554417666/391824bb1ea8397fc8813c60580986dc.webp?size=1024",
     "bannerUrl": ""
   },
   {
@@ -130,9 +132,9 @@
     ],
     "bio": "",
     "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1477490980096577628",
+    "displayName": "[𝐃𝐄𝐕] 𝐙𝐘𝐓𝐅𝐀𝐗",
+    "username": "[𝐃𝐄𝐕] 𝐙𝐘𝐓𝐅𝐀𝐗",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1477490980096577628/b8efb42084d9a4c8cd3e044e8820ab16.webp?size=1024",
     "bannerUrl": ""
   },
   {
@@ -142,9 +144,9 @@
     ],
     "bio": "",
     "nitro": false,
-    "displayName": "",
-    "username": "",
-    "avatarUrl": "https://unavatar.io/discord/1483863763366187230",
+    "displayName": "kazheryy",
+    "username": "kazheryy",
+    "avatarUrl": "https://cdn.discordapp.com/avatars/1483863763366187230/ac0e33e5aa22752a80e6ae763ae2d28e.webp?size=1024",
     "bannerUrl": ""
   },
   {
