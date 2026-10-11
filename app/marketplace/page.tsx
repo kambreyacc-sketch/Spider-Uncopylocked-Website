@@ -1,3 +1,4 @@
+import SpiderSidebar from "../components/SpiderSidebar";
 import Link from "next/link";
 import MarketplaceBrowser from "./marketplace-browser";
 import { ArrowUpRight, UploadCloud } from "lucide-react";
@@ -8,7 +9,7 @@ export const metadata = {
 };
 
 export default function MarketplacePage() {
-  return <main className="spider-home marketplace-home">
+  return <main className="spider-home marketplace-home"><SpiderSidebar/>
     <header className="spider-nav">
       <Link href="/" className="spider-wordmark"><img className="spider-logo" src="https://media.discordapp.net/attachments/1515309294332149770/1558762264838799420/image_1.webp?ex=6acc9dfc&is=6acb4c7c&hm=9ec0868ab9a9ce2893e6e8d10b29a0851329696c435496ec6036f852c3d3a4e6&=&format=webp" alt="Spider Uncopylocked" /><span>SPIDER <b>UNCOPYLOCKED</b><small>FREE CREATOR RESOURCES</small></span></Link>
       <nav><Link href="/#assets">Assets & Templates</Link><Link className="spider-current-nav" href="/marketplace">Game Marketplace</Link><Link href="/settings">Settings</Link></nav>
