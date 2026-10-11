@@ -5,7 +5,11 @@
       "Owners"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1330165371516489738",
@@ -13,7 +17,11 @@
       "Owners"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1337293227820322878",
@@ -22,7 +30,11 @@
     ],
     "bio": "",
     "nitro": false,
-    "bannerOverride": "https://cdn.discordapp.com/banners/677914860159500290/15dffc14f09d88fa4a175691df44c14a.png?size=1024"
+    "bannerOverride": "https://cdn.discordapp.com/banners/677914860159500290/15dffc14f09d88fa4a175691df44c14a.png?size=1024",
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": "https://cdn.discordapp.com/banners/677914860159500290/15dffc14f09d88fa4a175691df44c14a.png?size=1024"
   },
   {
     "id": "1431648090632355890",
@@ -30,7 +42,11 @@
       "Deputy Manager"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1229135688784416820",
@@ -38,7 +54,11 @@
       "Community Managers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1299695683955200051",
@@ -47,7 +67,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1283094430173102135",
@@ -56,7 +80,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1319362421554417666",
@@ -64,7 +92,11 @@
       "Admins"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1393862864741208094",
@@ -72,7 +104,11 @@
       "Mods"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1481542337233682476",
@@ -80,7 +116,11 @@
       "Mods"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1477490980096577628",
@@ -89,7 +129,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1483863763366187230",
@@ -97,7 +141,11 @@
       "Mods"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1172657986846589134",
@@ -105,7 +153,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1551437858458308629",
@@ -113,7 +165,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1270530824315342889",
@@ -121,7 +177,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1357455651844132936",
@@ -129,7 +189,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1501304740343058523",
@@ -137,7 +201,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1311354003828768770",
@@ -145,7 +213,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1167570503159005197",
@@ -153,7 +225,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1537524350335459520",
@@ -161,7 +237,11 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   },
   {
     "id": "1513286142613651647",
@@ -169,6 +249,10 @@
       "Leakers"
     ],
     "bio": "",
-    "nitro": false
+    "nitro": false,
+    "displayName": "",
+    "username": "",
+    "avatarUrl": "",
+    "bannerUrl": ""
   }
 ]
