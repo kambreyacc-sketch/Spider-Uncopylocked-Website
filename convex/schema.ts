@@ -39,4 +39,43 @@ export default defineSchema({
     discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string(), status: v.union(v.literal("open"), v.literal("closed")),
     createdAt: v.number(),
   }).index("by_status_createdAt", ["status", "createdAt"]).index("by_poster", ["posterDiscordId"]),
+
+  // Stripe customer mappings contain provider identifiers only; never store card numbers or CVCs.
+  billingCustomers: defineTable({
+    discordId: v.string(),
+    stripeCustomerId: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_discordId", ["discordId"]).index("by_stripeCustomerId", ["stripeCustomerId"]),
+  billingSubscriptions: defineTable({
+    discordId: v.string(),
+    stripeCustomerId: v.string(),
+    stripeSubscriptionId: v.string(),
+    planKey: v.string(),
+    priceId: v.optional(v.string()),
+    status: v.string(),
+    currentPeriodEnd: v.optional(v.number()),
+    cancelAtPeriodEnd: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_discordId", ["discordId"]).index("by_stripeSubscriptionId", ["stripeSubscriptionId"]).index("by_stripeCustomerId", ["stripeCustomerId"]),
+  billingInvoices: defineTable({
+    discordId: v.string(),
+    stripeCustomerId: v.string(),
+    stripeInvoiceId: v.string(),
+    invoiceNumber: v.optional(v.string()),
+    status: v.string(),
+    currency: v.string(),
+    amountDue: v.number(),
+    amountPaid: v.number(),
+    createdAt: v.number(),
+    invoicePdfUrl: v.optional(v.string()),
+    hostedInvoiceUrl: v.optional(v.string()),
+    subscriptionId: v.optional(v.string()),
+  }).index("by_discordId", ["discordId"]).index("by_stripeInvoiceId", ["stripeInvoiceId"]),
+  billingWebhookEvents: defineTable({
+    eventId: v.string(),
+    type: v.string(),
+    processedAt: v.number(),
+  }).index("by_eventId", ["eventId"]),
 });
