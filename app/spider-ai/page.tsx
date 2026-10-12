@@ -4,9 +4,8 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import {
   ArrowDown, ArrowUp, ArrowUpRight, Bot, Check, ChevronDown, CircleHelp,
-  Clock3, Code2, Command, Crown, FileCode2, FolderPlus, Gamepad2, History,
-  Layers3, Menu, MessageSquarePlus, MoreHorizontal, PanelLeftClose, Paperclip,
-  Plus, Search, Settings2, ShieldCheck, Sparkles, WandSparkles, Zap
+  Code2, Crown, FileCode2, History, Layers3, MessageSquarePlus, MoreHorizontal,
+  PanelLeftClose, Paperclip, Plus, Settings2, ShieldCheck, Sparkles, WandSparkles
 } from "lucide-react";
 import "./spider-ai.css";
 
