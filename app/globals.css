@@ -893,3 +893,54 @@ html,body{min-height:100%;overflow-x:hidden}body{overflow-y:auto}.market-shell,.
 .application-reject-form textarea{width:100%;min-height:64px;resize:vertical;padding:9px 10px;border:1px solid #4b3e53;border-radius:7px;background:#0f0d13;color:#f6f1fc;font:inherit;font-size:12px}
 .application-footnote{margin:0;line-height:1.6}
 @media(max-width:760px){.application-admin-summary{flex-direction:column}.application-counts{grid-template-columns:repeat(2,minmax(0,1fr))}.application-card-head{align-items:flex-start}.application-services{grid-template-columns:1fr}.application-toolbar{align-items:flex-start;flex-direction:column}.application-search{width:100%}.application-person img{width:38px;height:38px}.application-card-body,.application-card-head{padding:14px}.application-card-actions{padding:12px 14px}}
+
+
+/* Spider Uncopylocked dark dashboard refresh — shared site surfaces */
+:root{color-scheme:dark;--ink:#f4f4f5;--muted:#a1a1aa;--line:#27272a;--violet:#9b7cff;--paper:#09090b;--dark:#09090b}
+html,body{background:#09090b;color:#f4f4f5}
+body{background-image:radial-gradient(ellipse at 70% -15%,#1b1530 0%,transparent 48%);background-attachment:fixed}
+button,input,select,textarea{font:inherit}
+input,select,textarea{color:#f4f4f5;background:#111114;border:1px solid #303036;border-radius:7px}
+input::placeholder,textarea::placeholder{color:#71717a}
+:focus-visible{outline:2px solid #a78bfa;outline-offset:3px}
+.spider-home,.settings-page,.admin-layout,.admin-denied{background:#09090b!important;color:#f4f4f5!important}
+.spider-home .spider-nav{background:#09090bf2!important;border-color:#26232c!important;color:#f4f4f5!important;backdrop-filter:blur(18px)}
+.spider-home .spider-nav nav a,.spider-home .spider-signin{color:#c4c4cc}
+.spider-home .spider-hero{background:#09090b}
+.spider-home .spider-hero-shade{background:linear-gradient(90deg,#09090bf5 0%,#09090bdb 43%,#09090b52 100%)}
+.spider-home .spider-hero h1,.spider-home h2,.spider-home h3,.spider-home .spider-wordmark,.spider-home .sidebar-brand{color:#f4f4f5}
+.spider-home p,.spider-home .spider-section-heading p,.spider-home .spider-category-card small,.spider-home .spider-footer{color:#a1a1aa}
+.spider-home .spider-category-section,.spider-home .feature-section,.spider-home .resource-section,.spider-home .spider-upload-banner,.spider-home .spider-home-links,.spider-home .spider-hiring-banner{background:#0b0b0e!important;border-color:#26232c!important}
+.spider-home .spider-category-card,.spider-home .feature-card,.spider-home .resource-feature,.spider-home .spider-home-links>a,.spider-home .spider-upload-banner,.spider-home .spider-hiring-banner,.spider-home .float-card,.spider-home .live-pill{background:#131316!important;border-color:#2b2b31!important;color:#f4f4f5}
+.spider-home .float-card b,.spider-home .hero-note strong{color:#f4f4f5}
+.spider-home .spider-category-card:hover,.spider-home .feature-card:hover,.spider-home .spider-home-links>a:hover{border-color:#7956c9!important}
+.spider-home .spider-footer{border-color:#25252b!important}
+.spider-home .spider-upload-banner p,.spider-home .spider-hiring-banner p,.spider-home .feature-card p{color:#a1a1aa}
+.spider-home .spider-sidebar{background:#0b0b0e!important;border-color:#26262c!important;color:#b4b4bc}
+.spider-home .spider-sidebar a{color:#a1a1aa}
+.spider-home .spider-sidebar a.active,.spider-home .spider-sidebar a:hover{background:#1a1920!important;color:#f4f4f5!important}
+.spider-home .spider-hero-proof,.spider-home .spider-text-link{color:#c4b5fd}
+.settings-page .settings-shell{color:#f4f4f5}
+.settings-page .settings-card{background:#131316!important;border:1px solid #29292f!important;color:#f4f4f5}
+.settings-page .settings-card h2,.settings-page .settings-heading h1{color:#f4f4f5}
+.settings-page .settings-note,.settings-page .resource-intro{color:#a1a1aa}
+.settings-page select,.settings-page input{background:#0e0e11!important;color:#f4f4f5!important;border-color:#303036!important}
+.settings-page .resource-back{color:#c4b5fd}
+.admin-layout,.admin-main{color:#f4f4f5}
+.admin-top,.admin-card,.admin-empty,.admin-panel,.admin-table,.admin-section-card{background:#111114!important;border-color:#29292f!important;color:#f4f4f5}
+.admin-main p,.admin-main small,.admin-main .admin-kicker{color:#a1a1aa}
+.admin-main h1,.admin-main h2,.admin-main h3,.admin-main b{color:#f4f4f5}
+.admin-main input,.admin-main select,.admin-main textarea{background:#0b0b0e!important;color:#f4f4f5!important;border-color:#34343b!important}
+.spider-sidebar{background:#0b0b0e!important;border-color:#25252b!important;color:#d4d4d8}
+.spider-sidebar .sidebar-section-label{color:#71717a}
+.spider-sidebar a{color:#a1a1aa}
+.spider-sidebar a.active,.spider-sidebar nav a:hover,.spider-sidebar .sidebar-bottom>a:hover{background:#1a1920!important;color:#fafafa!important}
+.spider-sidebar .sidebar-user{border-color:#25252b!important}
+.spider-sidebar .sidebar-user b{color:#f4f4f5}
+.spider-sidebar .sidebar-signin{color:#c4b5fd!important}
+[class*="-page"]{color:#f4f4f5}
+[class*="-card"],[class*="-panel"],[class*="-empty"]{border-color:#29292f}
+@media(max-width:760px){
+  .spider-home .spider-nav{padding-left:16px;padding-right:16px}
+  .spider-home .spider-nav nav{background:#101014;border:1px solid #2c2c33}
+}
