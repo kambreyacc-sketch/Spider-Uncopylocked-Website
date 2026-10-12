@@ -39,10 +39,12 @@ export async function GET() {
         stripe.invoices.list({ customer: customerId, limit: 12 }),
         stripe.customers.retrieve(customerId),
       ]);
-      const defaultId = !customer.deleted && typeof customer.invoice_settings.default_payment_method === "string"
-        ? customer.invoice_settings.default_payment_method
-        : !customer.deleted && customer.invoice_settings.default_payment_method
-          ? customer.invoice_settings.default_payment_method.id : null;
+      let defaultId: string | null = null;
+      if (!customer.deleted) {
+        const defaultMethod = customer.invoice_settings.default_payment_method;
+        if (typeof defaultMethod === "string") defaultId = defaultMethod;
+        else if (defaultMethod) defaultId = defaultMethod.id;
+      }
       paymentMethods = methods.data.map((method) => ({
         id: method.id,
         brand: method.card?.brand || "Card",
