@@ -103,7 +103,7 @@ export default function BillingSettingsClient({ user }: Props) {
         <div className="billing-plan-symbol"><Sparkles size={21} /></div>
         <div className="billing-plan-details">
           <div className="billing-plan-title"><h3>{loading ? "Loading plan…" : data?.plan.name || "Free"}</h3><span className={"billing-status " + (data?.plan.status === "active" || data?.plan.status === "trialing" ? "active" : "")}>{loading ? "Checking" : prettyStatus(data?.plan.status || "free")}</span></div>
-          <p>{data?.plan.status === "active" || data?.plan.status === "trialing" ? data.plan.cancelAtPeriodEnd ? "Your subscription is set to cancel at the end of the current period." : "Your premium membership is active." : "You are currently on the free plan. No paid plan is active."}</p>
+          <p>{data?.plan.status === "active" || data?.plan.status === "trialing" ? data.plan.cancelAtPeriodEnd ? "Your subscription is set to cancel at the end of the current period." : "Your premium membership is active." : data?.plan.status === "past_due" || data?.plan.status === "unpaid" ? "Your payment needs attention. Open the Stripe portal to update your payment method." : data?.plan.status === "canceled" || data?.plan.status === "incomplete_expired" ? "Your paid subscription is no longer active." : "You are currently on the free plan. No paid plan is active."}</p>
           <small>{data?.plan.renewalDate ? (data.plan.cancelAtPeriodEnd ? "Access ends " : "Next renewal ") + date(data.plan.renewalDate) : "No renewal scheduled"}</small>
         </div>
         <div className="billing-plan-actions">
