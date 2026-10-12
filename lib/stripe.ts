@@ -17,6 +17,14 @@ export function billingIsEnabled(): boolean {
   return process.env.STRIPE_BILLING_ENABLED === "true";
 }
 
+export function stripeWebhookIsConfigured(): boolean {
+  return !!process.env.STRIPE_WEBHOOK_SECRET;
+}
+
+export function billingIsReady(stripe: Stripe | null): boolean {
+  return billingIsEnabled() && !!stripe && !!getBillingDb() && stripeWebhookIsConfigured();
+}
+
 export function getBillingDb() {
   const url = process.env.NEXT_PUBLIC_CONVEX_URL || process.env.CONVEX_URL;
   const secret = process.env.CONVEX_ADMIN_API_SECRET;
