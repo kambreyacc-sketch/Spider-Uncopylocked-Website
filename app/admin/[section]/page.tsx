@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { isSpiderAdmin } from "../../../lib/session";
 import SpiderSidebar from "../../components/SpiderSidebar";
 import DeveloperApplicationsPanel from "../applications-panel";
+import BillingAdminPanel from "../billing-panel";
 
 const pages: Record<string, { title: string; description: string }> = {
   reports: { title: "Scam reports", description: "Review submitted reports, supporting evidence, and moderation decisions." },
@@ -10,6 +11,7 @@ const pages: Record<string, { title: string; description: string }> = {
   "reported-content": { title: "Reported content", description: "Review user-submitted reports about profiles, studios, and listings." },
   users: { title: "Users", description: "Search accounts and review related studio, job, and moderation history." },
   applications: { title: "Developer applications", description: "Review developer profiles submitted through Spider Uncopylocked." },
+  billing: { title: "Billing & subscriptions", description: "Review subscription metadata, invoice references, and Stripe webhook health." },
   studios: { title: "Studios", description: "Review studio submissions, ownership, games, and approval status." },
   jobs: { title: "Job posts", description: "Review job terms, payment disclosures, reports, and listing status." },
   matches: { title: "Match requests", description: "Review real developer profiles, project requirements, and matching explanations." },
@@ -39,6 +41,8 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
         </header>
         {section === "applications" ? (
           <DeveloperApplicationsPanel />
+        ) : section === "billing" ? (
+          <BillingAdminPanel />
         ) : (
           <div className="admin-empty">
             <div className="admin-empty-mark">SU</div>
