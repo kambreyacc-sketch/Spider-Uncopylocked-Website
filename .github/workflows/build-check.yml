@@ -8,6 +8,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_CONVEX_URL: https://adept-hare-258.convex.cloud
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
