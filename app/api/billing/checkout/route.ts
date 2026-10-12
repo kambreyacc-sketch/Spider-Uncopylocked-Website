@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { getSpiderProfile } from "../../../../lib/session";
-import { billingIsEnabled, getOrCreateStripeCustomer, getStripe } from "../../../../lib/stripe";
+import { billingIsEnabled, getOrCreateStripeCustomer, getStripe, stripeWebhookIsConfigured } from "../../../../lib/stripe";
 
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   const user = await getSpiderProfile();
   if (!user) return NextResponse.json({ error: "Sign in with Discord before subscribing." }, { status: 401 });
   if (!billingIsEnabled()) return NextResponse.json({ error: "Billing is not enabled yet. No payments can be started." }, { status: 503 });
+  if (!stripeWebhookIsConfigured()) return NextResponse.json({ error: "Verified Stripe webhook setup is required before checkout can be enabled." }, { status: 503 });
 
   const stripe = getStripe();
   if (!stripe) return NextResponse.json({ error: "A Stripe test-mode secret key is required. Live payments are disabled by default." }, { status: 503 });
