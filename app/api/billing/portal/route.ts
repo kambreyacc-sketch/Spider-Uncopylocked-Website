@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { api } from "../../../../convex/_generated/api";
 import { getSpiderProfile } from "../../../../lib/session";
-import { billingIsEnabled, getBillingDb, getStripe } from "../../../../lib/stripe";
+import { billingIsEnabled, getBillingDb, getStripe, stripeWebhookIsConfigured } from "../../../../lib/stripe";
 
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   const user = await getSpiderProfile();
   if (!user) return NextResponse.json({ error: "Sign in with Discord to manage billing." }, { status: 401 });
   if (!billingIsEnabled()) return NextResponse.json({ error: "Billing is not enabled yet." }, { status: 503 });
+  if (!stripeWebhookIsConfigured()) return NextResponse.json({ error: "Verified Stripe webhook setup is required before subscription management is enabled." }, { status: 503 });
   const stripe = getStripe();
   const db = getBillingDb();
   if (!stripe || !db) return NextResponse.json({ error: "Billing has not been fully configured." }, { status: 503 });
