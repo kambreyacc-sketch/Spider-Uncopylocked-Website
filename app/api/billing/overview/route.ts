@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { api } from "../../../../convex/_generated/api";
 import { getSpiderProfile } from "../../../../lib/session";
-import { billingIsEnabled, getBillingDb, getStripe } from "../../../../lib/stripe";
+import { billingIsEnabled, getBillingDb, getStripe, stripeWebhookIsConfigured } from "../../../../lib/stripe";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +56,7 @@ export async function GET() {
       liveSubscriptions = subscriptions.data.map((sub) => ({
         id: sub.id,
         status: sub.status,
-        currentPeriodEnd: sub.items.data[0]?.current_period_end,
+        currentPeriodEnd: (sub as any).current_period_end ?? (sub.items.data[0] as any)?.current_period_end,
         cancelAtPeriodEnd: sub.cancel_at_period_end,
       }));
       latestInvoices = invoices.data.map((invoice) => ({
@@ -79,7 +79,7 @@ export async function GET() {
   const plan = liveSubscriptions.find((item) => ["active", "trialing", "past_due", "unpaid"].includes(item.status));
   return NextResponse.json({
     billingEnabled: enabled,
-    configured: !!stripe && !!db,
+    configured: !!stripe && !!db && stripeWebhookIsConfigured(),
     user: { id: user.id, displayName: user.displayName, avatar: user.avatar },
     plan: plan ? {
       name: "Premium",
@@ -105,8 +105,8 @@ export async function GET() {
     },
     message: !enabled
       ? "Billing is in setup mode. No charges can be started until you enable Stripe test billing."
-      : !stripe || !db
-        ? "Stripe billing credentials or the database service secret are not configured."
+      : !stripe || !db || !stripeWebhookIsConfigured()
+        ? "Stripe test key, verified webhook secret, or database service secret is not configured."
         : !process.env.STRIPE_PRICE_PREMIUM_MONTHLY && !process.env.STRIPE_PRICE_PREMIUM_YEARLY
           ? "No paid plans are configured yet. No price has been invented."
           : undefined,
