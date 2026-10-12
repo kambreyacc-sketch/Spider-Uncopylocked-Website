@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual, randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { ConvexHttpClient } from "convex/browser";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 export const runtime="nodejs";
 function sessionUser(raw:string,secret:string){
  const [payload,signature]=raw.split("."); if(!payload||!signature)return null;
