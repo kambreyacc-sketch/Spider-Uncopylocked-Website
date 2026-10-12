@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../convex/_generated/api";
 import { getBillingDb, getStripe } from "../../../../lib/stripe";
 
@@ -33,7 +32,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid webhook signature." }, { status: 400 });
   }
 
-  let customer: { discordId: string; stripeCustomerId: string } | undefined;
   let subscription: {
     stripeSubscriptionId: string;
     stripeCustomerId: string;
@@ -71,9 +69,11 @@ export async function POST(request: Request) {
         planKey: typeof object.metadata?.planKey === "string" ? object.metadata.planKey : "premium",
         ...(typeof price?.id === "string" ? { priceId: price.id } : {}),
         status: typeof object.status === "string" ? object.status : "unknown",
-        ...(typeof object.items?.data?.[0]?.current_period_end === "number"
-          ? { currentPeriodEnd: object.items.data[0].current_period_end }
-          : {}),
+        ...(typeof object.current_period_end === "number"
+          ? { currentPeriodEnd: object.current_period_end }
+          : typeof object.items?.data?.[0]?.current_period_end === "number"
+            ? { currentPeriodEnd: object.items.data[0].current_period_end }
+            : {}),
         cancelAtPeriodEnd: object.cancel_at_period_end === true,
       };
     }
@@ -89,7 +89,15 @@ export async function POST(request: Request) {
         stripeCustomerId: customerId,
         ...(typeof object.metadata?.discordId === "string" ? { discordId: object.metadata.discordId } : {}),
         ...(typeof object.number === "string" ? { invoiceNumber: object.number } : {}),
-        status: typeof object.status === "string" ? object.status : event.type.split(".").pop() || "unknown",
+        status: event.type === "invoice.paid"
+          ? "paid"
+          : event.type === "invoice.payment_failed"
+            ? "payment_failed"
+            : event.type === "invoice.voided"
+              ? "void"
+              : typeof object.status === "string"
+                ? object.status
+                : event.type.split(".").pop() || "unknown",
         currency: typeof object.currency === "string" ? object.currency : "usd",
         amountDue: Number(object.amount_due || 0),
         amountPaid: Number(object.amount_paid || 0),
@@ -108,7 +116,6 @@ export async function POST(request: Request) {
       adminSecret: db.secret,
       eventId: event.id,
       eventType: event.type,
-      ...(customer ? { customer } : {}),
       ...(subscription ? { subscription } : {}),
       ...(invoice ? { invoice } : {}),
     });
