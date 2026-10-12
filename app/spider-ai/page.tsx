@@ -144,7 +144,7 @@ export default function SpiderAIPage() {
             <div className="spai-kicker"><span className="spai-kicker-dot"/> SPIDER UNCOPYLOCKED <span className="spai-kicker-line"/></div>
             <h1>What are we<br/><span>building today?</span></h1>
             <p className="spai-subtitle">Describe the Roblox system you want to build. Start with a detailed template or write your own instructions.</p>
-            <form className="spai-composer spai-composer-welcome" onSubmit={sendMessage}>
+            {user ? <form className="spai-composer spai-composer-welcome" onSubmit={sendMessage}>
               <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }} placeholder="Describe what you want to build in Roblox Studio…" rows={3} aria-label="Describe what you want to build"/>
               <div className="spai-composer-tools">
                 <div className="spai-composer-left">
@@ -156,7 +156,7 @@ export default function SpiderAIPage() {
                 </div>
                 <button type="submit" className="spai-send-button" disabled={!prompt.trim()}>Generate <WandSparkles size={15}/></button>
               </div>
-            </form>
+            </form> : <div className="spai-auth-gate"><div className="spai-auth-glyph"><LogIn size={22}/></div><h3>Sign in to start building</h3><p>Connect your Discord account to use the Spider Uncopylocked workspace and show your profile here.</p><Link href="/api/auth/discord/login"><LogIn size={15}/> Continue with Discord</Link></div>}
             <div className="spai-suggestions-label"><span>START WITH A BUILD TEMPLATE</span><span className="spai-suggestions-rule"/></div>
             <div className="spai-starter-grid">{starterPrompts.map((item) => <button type="button" key={item.title} className="spai-starter" onClick={() => startPrompt(item.prompt)}><span className="spai-starter-icon">{item.icon}</span><span><strong>{item.title}</strong><small>{item.detail}</small></span><ArrowUpRight size={14} className="spai-starter-arrow"/></button>)}</div>
             <div className="spai-build-note"><ShieldCheck size={14}/> Templates include full requirements. Review and edit the prompt before submitting.</div>
