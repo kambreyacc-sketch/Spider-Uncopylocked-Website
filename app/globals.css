@@ -1090,3 +1090,23 @@ input::placeholder,textarea::placeholder{color:#71717a}
  .billing-admin-stats article{grid-template-columns:auto 1fr;align-items:center}
  .billing-admin-stats strong{grid-column:2}
 }
+
+/* Spider Uncopylocked monochrome refresh */
+:root{color-scheme:dark;--ink:#f1f1f2;--muted:#a0a0a7;--line:#29292d;--violet:#e7e7e9;--paper:#0b0b0c;--dark:#0b0b0c}
+html,body{background:#0b0b0c!important;color:#f1f1f2!important}body{color-scheme:dark}
+.topline{background:#070708;color:#a1a1a8;border-bottom:1px solid #242427}
+.navbar,.spider-nav{background:#0b0b0c!important;color:#f1f1f2!important;border-color:#29292d!important}
+.navlinks,.nav-login,.wordmark-light,.spider-nav nav,.spider-nav nav a{color:#a7a7ad!important}.navlinks a:hover,.nav-login:hover{color:#fff!important}
+.button,.hire-primary,.spider-upload-nav,.spider-signin,.spai-send-button{background:#f0f0f1!important;color:#111!important;border-color:#f0f0f1!important}.button:hover,.hire-primary:hover,.spider-upload-nav:hover,.spider-signin:hover,.spai-send-button:hover{background:#d9d9dc!important;color:#09090a!important}
+.button-ghost,.hire-back,.profile-link{background:transparent!important;color:#ededee!important;border-color:#38383d!important}
+.brand-mark{background:#202023!important;border-color:#3c3c42!important}.brand-mark:before,.brand-mark:after{border-color:#e4e4e7!important;box-shadow:none!important}.brand-mark:after{background:#e4e4e7!important}.brand-mark span{background:#c9c9ce!important}
+.live-pill,.float-card,.hire-panel,.developer-card,.hire-search,.hire-sort,.marketplace-intro,.market-toolbar,.market-filter,.market-listing-card,.resource-card,.spider-panel,.profile-hero,.service-row,.rate-box,.review-row,.hire-empty,.hire-chips button,.hire-toolbar input,.hire-toolbar select,.profile-gallery a{background:#111113!important;color:#eeeeef!important;border-color:#2a2a2e!important;box-shadow:none!important}
+.hero-grid div,.hero-grid div:first-child{border-color:#1d1d20!important}.hero h1 span,.spider-eyebrow,.pill-version,.float-card>svg,.developer-rating,.profile-rating,.review-row span{color:#dedee2!important}
+.live-dot{background:#d6d6da!important;box-shadow:0 0 0 3px #ffffff12!important}.art-orbit,.orbit-one,.orbit-two,.orbit-three{border-color:#2c2c31!important}
+.art-core{background:radial-gradient(circle at 55% 38%,#242427,#101012 68%)!important;border-color:#414146!important;box-shadow:0 24px 75px #0008,inset 0 0 70px #ffffff08!important}.core-glow{background:#ffffff0b!important}
+.spider-emblem:before,.spider-emblem:after{border-color:#e2e2e5!important;box-shadow:none!important}.spider-emblem span,.spider-emblem i,.spider-emblem b{background:#ededf0!important;box-shadow:none!important}.core-caption,.float-card b{color:#d4d4d8!important}
+.float-card small,.hero-sub,.hero-note p,.muted-copy,.hire-empty p,.developer-name p,.developer-name small,.developer-card-foot small,.profile-bio,.service-row p,.review-row p,.marketplace-intro p{color:#a0a0a7!important}
+.avatar-stack span,.mini-icon.violet,.mini-icon.green{background:#242427!important;color:#eee!important;border-color:#3a3a3e!important}
+.developer-card:hover,.profile-gallery a:hover,.hire-chips button:hover{border-color:#77777e!important;transform:translateY(-1px)}.hire-chips button.selected,.developer-tags span,.verified-tag,.status-available,.status-busy{background:#222225!important;color:#ededf0!important;border-color:#39393e!important}
+.spider-footer{background:#09090a!important;color:#99999f!important;border-color:#27272b!important}.spider-footer a{color:#d4d4d8!important}.spider-current-nav{color:#fff!important;border-color:#55555b!important}
+input,textarea,select{color:#f1f1f2!important}input::placeholder,textarea::placeholder{color:#74747b!important}input:focus,textarea:focus,select:focus{outline-color:#77777e!important;border-color:#77777e!important}hr{border-color:#29292d!important}
