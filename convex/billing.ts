@@ -234,7 +234,8 @@ export const getEntitlement = query({
     const nowSeconds = Math.floor(Date.now() / 1000);
     const active = subscriptions.find(sub =>
       (sub.status === "active" || sub.status === "trialing") &&
-      (sub.currentPeriodEnd === undefined || sub.currentPeriodEnd > nowSeconds)
+      typeof sub.currentPeriodEnd === "number" &&
+      sub.currentPeriodEnd > nowSeconds
     );
     return {
       premium: !!active,
