@@ -222,3 +222,26 @@ export const listForAdmin = query({
     };
   },
 });
+
+
+export const getEntitlement = query({
+  args: { adminSecret: v.string(), discordId: v.string() },
+  handler: async (ctx, args) => {
+    assertBillingSecret(args.adminSecret);
+    const subscriptions = await ctx.db.query("billingSubscriptions")
+      .withIndex("by_discordId", q => q.eq("discordId", args.discordId))
+      .order("desc").take(50);
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const active = subscriptions.find(sub =>
+      (sub.status === "active" || sub.status === "trialing") &&
+      (sub.currentPeriodEnd === undefined || sub.currentPeriodEnd > nowSeconds)
+    );
+    return {
+      premium: !!active,
+      planKey: active?.planKey ?? "free",
+      status: active?.status ?? "free",
+      renewalDate: active?.currentPeriodEnd ?? null,
+      cancelAtPeriodEnd: active?.cancelAtPeriodEnd ?? false,
+    };
+  },
+});
