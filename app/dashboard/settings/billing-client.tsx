@@ -133,7 +133,10 @@ export default function BillingSettingsClient({ user }: Props) {
           <button className="billing-secondary-button full-width" onClick={() => void goToStripe("/api/billing/payment-method", "setup")} disabled={!canManage || busy !== ""}>
             {busy === "setup" ? <LoaderCircle size={15} className="spin"/> : <Plus size={15}/>} Add payment method
           </button>
-          <p className="billing-quiet-note"><LockKeyhole size={13}/> Card updates, removal, and default-card selection are handled in Stripe's secure portal.</p>
+          <button className="billing-secondary-button full-width" onClick={() => void goToStripe("/api/billing/portal", "portal")} disabled={!canManage || busy !== "" || !data?.paymentMethods.length}>
+            {busy === "portal" ? <LoaderCircle size={15} className="spin"/> : <ExternalLink size={15}/>} Update, remove, or set default card
+          </button>
+          <p className="billing-quiet-note"><LockKeyhole size={13}/> Card controls open Stripe's secure portal. Enable payment-method management in your Stripe portal settings.</p>
         </section>
 
         <section className="billing-panel">
