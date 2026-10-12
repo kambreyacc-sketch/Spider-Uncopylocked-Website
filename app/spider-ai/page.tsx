@@ -51,6 +51,7 @@ export default function SpiderAIPage() {
   const [showHistory, setShowHistory] = useState(false);
   const [user, setUser] = useState<DiscordUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -62,16 +63,29 @@ export default function SpiderAIPage() {
     return () => { active = false; };
   }, []);
 
-  function sendMessage(event?: FormEvent) {
+  async function sendMessage(event?: FormEvent) {
     event?.preventDefault();
     const text = prompt.trim();
-    if (!text) return;
-    setMessages((current) => [
-      ...current,
-      { role: "user", text },
-      { role: "assistant", text: "Your request is ready for the Spider Uncopylocked build workflow. The live model and Roblox Studio connection are not connected yet, so I have not generated verified code or changed any game files. When the build service is connected, it should inspect your project, propose the full implementation, and ask for approval before applying edits." },
-    ]);
+    if (!text || isGenerating || !user) return;
+    const nextMessages: ChatMessage[] = [...messages, { role: "user", text }];
+    setMessages(nextMessages);
     setPrompt("");
+    setIsGenerating(true);
+    try {
+      const response = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: nextMessages.map((message) => ({ role: message.role, content: message.text })) }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Spider Uncopylocked AI could not complete the request.");
+      setMessages((current) => [...current, { role: "assistant", text: data.reply }]);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Something went wrong. Please try again.";
+      setMessages((current) => [...current, { role: "assistant", text: "I couldn't generate a response. " + message }]);
+    } finally {
+      setIsGenerating(false);
+    }
   }
 
   function startPrompt(text: string) {
@@ -154,7 +168,7 @@ export default function SpiderAIPage() {
                     {showModelMenu && <div className="spai-model-menu">{["Default", "Fast", "Detailed"].map((m) => <button type="button" key={m} onClick={() => {setModel(m);setShowModelMenu(false)}}>{m}{model===m&&<Check size={13}/>}</button>)}</div>}
                   </div>
                 </div>
-                <button type="submit" className="spai-send-button" disabled={!prompt.trim()}>Generate <WandSparkles size={15}/></button>
+                <button type="submit" className="spai-send-button" disabled={!prompt.trim() || isGenerating}>{isGenerating ? "Building…" : "Generate"} <WandSparkles size={15}/></button>
               </div>
             </form> : <div className="spai-auth-gate"><div className="spai-auth-glyph"><LogIn size={22}/></div><h3>Sign in to start building</h3><p>Connect your Discord account to use the Spider Uncopylocked workspace and show your profile here.</p><Link href="/api/auth/discord/login"><LogIn size={15}/> Continue with Discord</Link></div>}
             {user && <><div className="spai-suggestions-label"><span>START WITH A BUILD TEMPLATE</span><span className="spai-suggestions-rule"/></div>
@@ -163,8 +177,8 @@ export default function SpiderAIPage() {
           </div> : <div className="spai-chat-layout">
             <div className="spai-chat-header"><div><span className="spai-chat-label">SPIDER UNCOPYLOCKED</span><h2>{messages.find(m=>m.role==="user")?.text || "New conversation"}</h2></div><button className="spai-icon-button" onClick={() => setMessages([])} title="New chat"><MessageSquarePlus size={17}/></button></div>
             <div className="spai-messages">{messages.map((message, index) => <div className={"spai-message "+message.role} key={index}><div className="spai-message-avatar">{message.role==="assistant"?<img className="spai-message-user-avatar" src="https://media.discordapp.net/attachments/1515309294332149770/1558762264838799420/image_1.webp?ex=6acc9dfc&is=6acb4c7c&hm=9ec0868ab9a9ce2893e6e8d10b29a0851329696c435496ec6036f852c3d3a4e6&=&format=webp" alt="Spider Uncopylocked"/>: user && avatarUrl ? <img className="spai-message-user-avatar" src={avatarUrl} alt=""/> : "?"}</div><div className="spai-message-body"><div className="spai-message-name">{message.role==="assistant"?"Spider Uncopylocked":(user?.displayName || user?.username || "You")}<span>{message.role==="assistant"?"WORKSPACE NOTICE":"JUST NOW"}</span></div><p>{message.text}</p>{message.role==="assistant"&&<div className="spai-preview-box"><div><Code2 size={16}/><span><strong>Roblox Studio connection</strong><small>Plugin connection is a separate next step</small></span></div><span className="spai-status-pill">NOT CONNECTED</span></div>}</div></div>)}</div>
-            <form className="spai-composer spai-composer-chat" onSubmit={sendMessage}><textarea value={prompt} onChange={(e)=>setPrompt(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}}} placeholder="Describe the full system you want to build…" rows={2} aria-label="Message Spider Uncopylocked"/><div className="spai-composer-tools"><div className="spai-composer-left"><button type="button" className="spai-tool-button" onClick={()=>window.alert("Attachments will be enabled when the build service is connected.")}><Paperclip size={15}/></button><button type="button" className="spai-model-select" onClick={()=>setShowModelMenu(!showModelMenu)}><Bot size={15}/>{model}<ChevronDown size={13}/></button>{showModelMenu&&<span className="spai-model-inline">Model choice preview</span>}</div><button type="submit" className="spai-send-button" disabled={!prompt.trim()}><ArrowUp size={16}/></button></div></form>
-            <div className="spai-chat-foot"><ShieldCheck size={13}/> Workspace preview — live AI generation and Studio sync are not connected yet.</div>
+            <form className="spai-composer spai-composer-chat" onSubmit={sendMessage}><textarea value={prompt} onChange={(e)=>setPrompt(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}}} placeholder="Describe the full system you want to build…" rows={2} aria-label="Message Spider Uncopylocked"/><div className="spai-composer-tools"><div className="spai-composer-left"><button type="button" className="spai-tool-button" onClick={()=>window.alert("Attachments will be enabled when the build service is connected.")}><Paperclip size={15}/></button><button type="button" className="spai-model-select" onClick={()=>setShowModelMenu(!showModelMenu)}><Bot size={15}/>{model}<ChevronDown size={13}/></button>{showModelMenu&&<span className="spai-model-inline">Model choice preview</span>}</div><button type="submit" className="spai-send-button" disabled={!prompt.trim() || isGenerating}><ArrowUp size={16}/></button></div></form>
+            <div className="spai-chat-foot"><ShieldCheck size={13}/> AI responses use the configured server-side provider. Roblox Studio sync is a separate plugin integration.</div>
           </div>}
         </div>
         <footer className="spai-footer"><span>SPIDER UNCOPYLOCKED <span className="spai-footer-version">WORKSPACE</span></span><span><CircleHelp size={13}/> Built for Roblox creators <span className="spai-footer-sep">·</span> Studio connection planned</span></footer>
