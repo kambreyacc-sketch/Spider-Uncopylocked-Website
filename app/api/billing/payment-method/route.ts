@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { getSpiderProfile } from "../../../../lib/session";
-import { billingIsEnabled, getOrCreateStripeCustomer, getStripe } from "../../../../lib/stripe";
+import { billingIsEnabled, getOrCreateStripeCustomer, getStripe, stripeWebhookIsConfigured } from "../../../../lib/stripe";
 
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   const user = await getSpiderProfile();
   if (!user) return NextResponse.json({ error: "Sign in with Discord to manage payment methods." }, { status: 401 });
   if (!billingIsEnabled()) return NextResponse.json({ error: "Billing setup is not enabled yet." }, { status: 503 });
+  if (!stripeWebhookIsConfigured()) return NextResponse.json({ error: "Verified Stripe webhook setup is required before managing stored payment methods." }, { status: 503 });
   const stripe = getStripe();
   if (!stripe) return NextResponse.json({ error: "Stripe test mode is not configured." }, { status: 503 });
 
