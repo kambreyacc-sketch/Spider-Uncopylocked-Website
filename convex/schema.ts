@@ -27,6 +27,11 @@ export default defineSchema({
     status: v.union(v.literal("pending"), v.literal("approved"), v.literal("rejected")), verified: v.boolean(), createdAt: v.number(), updatedAt: v.number(),
     reviewReason: v.optional(v.string()),
   }).index("by_status_createdAt", ["status", "createdAt"]).index("by_username", ["username"]).index("by_discord", ["discordId"]),
+  scamReports: defineTable({
+    reference: v.string(), reporterDiscordId: v.string(), reportedType: v.string(), targetUrl: v.string(),
+    reason: v.string(), details: v.string(), status: v.union(v.literal("submitted"), v.literal("pending"), v.literal("under_investigation"), v.literal("additional_information_requested"), v.literal("action_taken"), v.literal("dismissed"), v.literal("closed")),
+    createdAt: v.number(), updatedAt: v.number(),
+  }).index("by_reference", ["reference"]).index("by_reporter_createdAt", ["reporterDiscordId", "createdAt"]).index("by_status_createdAt", ["status", "createdAt"]),
   developerReports: defineTable({ developerId: v.id("developers"), reporterDiscordId: v.string(), reason: v.string(), details: v.string(), createdAt: v.number(), status: v.union(v.literal("open"), v.literal("reviewed")) }).index("by_status_createdAt", ["status", "createdAt"]),
   developerReviews: defineTable({ developerId: v.id("developers"), reviewerDiscordId: v.string(), reviewerName: v.string(), rating: v.number(), comment: v.string(), createdAt: v.number() }).index("by_developer_createdAt", ["developerId", "createdAt"]),
   jobs: defineTable({
