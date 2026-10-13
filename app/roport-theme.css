@@ -1,0 +1,99 @@
+/* Spider Uncopylocked — Roport-inspired visual refinement.
+   Keeps existing routes and components; updates the visual system only. */
+:root {
+  --spider-bg: #09090b;
+  --spider-surface: #111113;
+  --spider-surface-raised: #18181b;
+  --spider-border: #29292f;
+  --spider-border-strong: #3f3f46;
+  --spider-text: #f4f4f5;
+  --spider-text-secondary: #a1a1aa;
+  --spider-text-muted: #71717a;
+  --spider-accent: #e4e4e7;
+  --spider-accent-ink: #09090b;
+  color-scheme: dark;
+}
+html, body {
+  background: var(--spider-bg);
+  color: var(--spider-text);
+}
+body { -webkit-font-smoothing: antialiased; }
+::selection { background: #52525b; color: #fff; }
+a { text-underline-offset: 3px; }
+button, a, input, textarea, select {
+  transition-timing-function: cubic-bezier(.2,.7,.2,1);
+}
+:where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid #a1a1aa;
+  outline-offset: 3px;
+}
+/* Consistent restrained monochrome buttons, forms, and surfaces. */
+:where(.button, .hire-primary, .spider-button-primary, .spider-upload-nav,
+.spider-signin, .resource-upload, .resource-submit) {
+  background: var(--spider-text) !important;
+  border-color: var(--spider-text) !important;
+  color: var(--spider-accent-ink) !important;
+  box-shadow: none !important;
+}
+:where(.button, .hire-primary, .spider-button-primary, .spider-upload-nav,
+.spider-signin, .resource-upload, .resource-submit):hover {
+  background: #d4d4d8 !important;
+  border-color: #d4d4d8 !important;
+  color: #09090b !important;
+}
+:where(.button-ghost, .spider-button-secondary) {
+  background: var(--spider-surface) !important;
+  border-color: var(--spider-border-strong) !important;
+  color: var(--spider-text) !important;
+}
+:where(input, textarea, select, .resource-search, .resource-field,
+.hire-search, .hire-sort, .rq-search, .rq-sort) {
+  background-color: var(--spider-surface) !important;
+  border-color: var(--spider-border-strong) !important;
+  color: var(--spider-text) !important;
+  box-shadow: none !important;
+}
+:where(input, textarea, select)::placeholder { color: var(--spider-text-muted) !important; }
+:where(.resource-card, .creator-portfolio-card, .creator-detail-panel,
+.rq-listing-card, .spider-category-card, .spider-home-links > a,
+.spider-upload-banner, .spider-hiring-banner) {
+  background-color: var(--spider-surface) !important;
+  border-color: var(--spider-border) !important;
+  box-shadow: none !important;
+}
+:where(.resource-card, .creator-portfolio-card, .creator-detail-panel,
+.rq-listing-card, .spider-category-card, .spider-home-links > a):hover {
+  border-color: var(--spider-border-strong) !important;
+}
+:where(.resource-card p, .creator-card-person small, .creator-card-headline,
+.creator-profile-identity p, .creator-detail-panel p, .resource-card-content p) {
+  color: var(--spider-text-secondary) !important;
+}
+:where(.resource-tags span, .developer-tags span, .creator-skill-tags span,
+.resource-category-pills button, .hire-chips button) {
+  background: #202023 !important;
+  border-color: #34343a !important;
+  color: #d4d4d8 !important;
+}
+:where(.resource-category-pills button.active, .hire-chips button.selected) {
+  background: #e4e4e7 !important;
+  color: #09090b !important;
+  border-color: #e4e4e7 !important;
+}
+:where(.spider-nav, .resource-nav) {
+  background: rgb(9 9 11 / 92%) !important;
+  border-color: var(--spider-border) !important;
+  backdrop-filter: blur(16px);
+}
+:where(.spider-footer, .footer) {
+  background: var(--spider-bg);
+  border-color: var(--spider-border) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

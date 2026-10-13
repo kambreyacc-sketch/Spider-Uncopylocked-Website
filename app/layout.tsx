@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./roport-theme.css";
 import AppConvexProvider from "./convex-provider";
 
 export const metadata: Metadata = {
