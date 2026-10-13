@@ -7,7 +7,8 @@ import SpiderSidebar from "../components/SpiderSidebar";
 import {Search,Star,ArrowUpRight,SlidersHorizontal,ArrowUpRight as External, BriefcaseBusiness, CircleDollarSign} from "lucide-react";
 const crafts=["All","Scripting","Building","UI/UX","3D Modeling","Animation","VFX","GFX","Audio"];
 export default function DevelopersPage(){
- const [craft,setCraft]=useState("All"),[search,setSearch]=useState(""),[sort,setSort]=useState("newest"),[user,setUser]=useState<any>(null);\n useEffect(()=>{const params=new URLSearchParams(window.location.search);const q=params.get("search");if(q)setSearch(q)},[]);
+ const [craft,setCraft]=useState("All"),[search,setSearch]=useState(""),[sort,setSort]=useState("newest"),[user,setUser]=useState<any>(null);
+ useEffect(()=>{const params=new URLSearchParams(window.location.search);const q=params.get("search");if(q)setSearch(q)},[]);
  const people=useQuery(api.developers.list,{craft,search:search||undefined,sort:sort as any});
  useEffect(()=>{fetch("/api/auth/discord/me").then(r=>r.json()).then(d=>setUser(d.user)).catch(()=>{});},[]);
  return <main className="market-shell spider-directory"><SpiderSidebar/><section className="market-content">
