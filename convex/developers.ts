@@ -63,7 +63,7 @@ export const submit = mutation({
     const existingName = await ctx.db.query("developers").withIndex("by_username", q => q.eq("username", username)).first();
     if (existingName && existingName.discordId !== args.discordId) throw new Error("That developer username is already taken.");
     const mine = await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).first();
-    const data = { ...args, username, displayName: args.displayName.trim(), headline: args.headline.trim(), bio: args.bio.trim(), status: "pending" as const, verified: mine?.verified ?? false, createdAt: mine?.createdAt ?? Date.now(), updatedAt: Date.now() };
+    const data = { ...args, username, displayName: args.displayName.trim(), headline: args.headline.trim(), bio: args.bio.trim(), status: "approved" as const, verified: mine?.verified ?? false, createdAt: mine?.createdAt ?? Date.now(), updatedAt: Date.now() };
     if (mine) return await ctx.db.patch(mine._id, data);
     return await ctx.db.insert("developers", data);
   },
