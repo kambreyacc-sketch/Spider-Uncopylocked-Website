@@ -1110,3 +1110,39 @@ html,body{background:#0b0b0c!important;color:#f1f1f2!important}body{color-scheme
 .developer-card:hover,.profile-gallery a:hover,.hire-chips button:hover{border-color:#77777e!important;transform:translateY(-1px)}.hire-chips button.selected,.developer-tags span,.verified-tag,.status-available,.status-busy{background:#222225!important;color:#ededf0!important;border-color:#39393e!important}
 .spider-footer{background:#09090a!important;color:#99999f!important;border-color:#27272b!important}.spider-footer a{color:#d4d4d8!important}.spider-current-nav{color:#fff!important;border-color:#55555b!important}
 input,textarea,select{color:#f1f1f2!important}input::placeholder,textarea::placeholder{color:#74747b!important}input:focus,textarea:focus,select:focus{outline-color:#77777e!important;border-color:#77777e!important}hr{border-color:#29292d!important}
+
+
+/* Roport-inspired Spider refresh: one consistent charcoal, white and grey design system. */
+:root{color-scheme:dark;--ink:#f5f5f5!important;--muted:#a1a1aa!important;--line:#29292d!important;--violet:#f2f2f3!important;--paper:#0b0b0c!important;--dark:#09090a!important}
+html,body{background:#0b0b0c!important;color:#f1f1f2!important}
+.spider-home,.market-shell,.market-content,.rq-app,.rq-main,.rq-content,.marketplace-page,.marketplace-shell,.resource-page,.resource-library,.settings-shell,.jobs-shell,.billing-main,.spai-shell{background:#0b0b0c!important;color:#f1f1f2!important}
+:where(.spider-nav,.rq-topbar,.rq-sidebar,.rq-footer,.spider-footer,.navbar,.topline,.rq-nav-group,.rq-sidebar-bottom){background:#09090a!important;border-color:#29292d!important}
+:where(.spider-nav,.rq-topbar,.navbar){color:#f1f1f2!important}
+:where(.navlinks,.nav-login,.wordmark-light,.spider-nav nav,.spider-nav nav a,.rq-topbar>nav a,.rq-nav-item,.rq-profile-link,.rq-account-label,.wordmark,.spider-wordmark,.rq-nav-group h2){color:#d4d4d8!important}
+:where(.navlinks a:hover,.nav-login:hover,.spider-nav a:hover){color:#fff!important}
+:where(.spider-button-primary,.spider-upload-nav,.spider-signin,.hire-primary,.rq-primary,.rq-offer-button,.button,.spai-send-button,.billing-button-primary,.billing-checkout-button,.profile-contact-button){background:#f2f2f3!important;color:#111113!important;border-color:#f2f2f3!important;box-shadow:none!important}
+:where(.spider-button-primary,.spider-upload-nav,.spider-signin,.hire-primary,.rq-primary,.rq-offer-button,.button,.spai-send-button,.billing-button-primary,.billing-checkout-button,.profile-contact-button):hover{background:#d8d8dc!important;color:#080809!important;border-color:#d8d8dc!important}
+:where(.spider-button-secondary,.button-ghost,.rq-icon-button,.rq-save,.rq-collapse,.hire-chips button,.rq-tab-group button,.rq-sort,.hire-sort,.profile-link,.billing-button-secondary){background:#151517!important;color:#dedee2!important;border-color:#303034!important}
+:where(.spider-category-card,.feature-card,.developer-card,.resource-card,.rq-listing-card,.marketplace-intro,.market-toolbar,.market-filter,.market-listing-card,.hire-panel,.profile-hero,.service-row,.rate-box,.review-row,.spider-panel,.billing-card,.billing-plan-card,.billing-premium-card,.billing-grid>section,.billing-admin-table-wrap,.spider-home-links>a,.spider-upload-banner,.spider-hiring-banner,.rq-activity-strip,.rq-how,.rq-empty,.hire-empty){background:#111113!important;color:#f1f1f2!important;border-color:#29292d!important;box-shadow:none!important}
+:where(.spider-category-card,.feature-card,.developer-card,.resource-card,.rq-listing-card,.marketplace-intro,.market-toolbar,.market-filter,.market-listing-card,.hire-panel,.profile-hero,.service-row,.rate-box,.review-row,.spider-panel,.billing-card,.billing-plan-card,.billing-premium-card,.spider-home-links>a,.spider-upload-banner,.spider-hiring-banner,.rq-activity-strip,.rq-how,.rq-empty,.hire-empty):hover{border-color:#55555b!important}
+:where(.spider-category-card.red,.spider-category-card.orange,.spider-category-card.yellow,.spider-category-card.green,.spider-category-card.blue,.spider-category-card.pink,.feature-icon.violet,.feature-icon.blue,.feature-icon.pink,.mini-icon.violet,.mini-icon.green,.rq-activity-icon,.rq-empty-icon,.spider-upload-icon){background:#202023!important;color:#e4e4e7!important;border-color:#333338!important}
+:where(.spider-category-card.red,.spider-category-card.orange,.spider-category-card.yellow,.spider-category-card.green,.spider-category-card.blue,.spider-category-card.pink){background:#111113!important}
+:where(.developer-tags span,.verified-tag,.status-available,.status-busy,.rq-type,.rq-nav-item.selected,.rq-tab-group button.active,.hire-chips button.selected,.billing-status,.billing-default-pill,.billing-alert.success){background:#222225!important;color:#e4e4e7!important;border-color:#39393e!important}
+:where(.spider-eyebrow,.section-label,.eyebrow,.rq-eyebrow,.spider-current-nav,.spider-text-link,.text-link,.developer-rating,.profile-rating,.round-arrow,.feature-icon,.feature-num,.pill-version,.section-label>span,.spider-category-arrow,.spider-home-links svg,.spider-hiring-banner svg,.spider-upload-icon svg,.billing-plan-icon,.billing-invoice-icon,.billing-admin-stats svg,.billing-signin-card>svg,.billing-invoice-download,.billing-empty>svg,.billing-alert>svg,.billing-premium-card svg,.billing-quiet-note svg,.rq-activity-icon){color:#d4d4d8!important}
+:where(.spider-hero-content h1,.hero h1,.section h2,.section-head h2,.intro h2,.membership-copy h2,.community-content h2,.rq-welcome h1,.rq-section-title h2,.rq-how h2,.hire-page-head h1,.developer-name h2,.profile-hero h1,.feature-card h3,.rq-listing-content h3,.rq-price-row strong){color:#f5f5f5!important}
+:where(.spider-hero-content h1 span,.hero h1 span,.intro h2 em,.section-head h2 em,.membership-copy h2 em,.community-content h2 em,.spider-category-card span){color:#f1f1f2!important}
+:where(.spider-hero-content p,.hero-sub,.hero-note p,.section-head>p,.intro-copy p,.feature-card p,.rq-welcome p,.rq-how>div>p,.rq-how-steps p,.rq-listing-content small,.rq-seller,.rq-metrics,.rq-listing-foot,.developer-name p,.developer-name small,.profile-bio,.service-row p,.review-row p,.hire-empty p,.marketplace-intro p,.spider-category-card small,.spider-footer,.spider-footer span,.rq-account-label small){color:#a1a1aa!important}
+:where(input,textarea,select,.rq-search,.hire-search,.hire-toolbar input,.hire-toolbar select){background:#101012!important;color:#f1f1f2!important;border-color:#303034!important;box-shadow:none!important}
+:where(input,textarea,select)::placeholder{color:#73737b!important;opacity:1}
+:where(input,textarea,select):focus{border-color:#77777e!important;outline-color:#77777e!important}
+:where(.spider-hero-shade){background:linear-gradient(90deg,#09090af2 0%,#09090ac9 52%,#09090a70 100%)!important}
+:where(.hero-grid div,.hero-grid div:first-child,.art-orbit,.orbit-one,.orbit-two,.orbit-three,.resource-feature,.feature-card,.developer-card,.rq-listing-card,.rq-activity-strip,.rq-how,.spider-category-card,.spider-home-links>a){border-color:#29292d!important}
+:where(.ticker){background:#111113!important;color:#e4e4e7!important}
+:where(.ticker-track i,.live-dot){color:#d4d4d8!important;background:#d4d4d8!important}
+:where(.live-pill){background:#151517!important;color:#d4d4d8!important;border-color:#303034!important}
+:where(.art-core){background:radial-gradient(circle at 55% 38%,#242427,#101012 68%)!important;border-color:#414146!important;box-shadow:0 24px 75px #0008,inset 0 0 70px #ffffff08!important}
+:where(.core-glow){background:#ffffff0b!important}
+:where(.spider-emblem:before,.spider-emblem:after){border-color:#e2e2e5!important;box-shadow:none!important}
+:where(.rq-chart i,.card-line,.spider-emblem span,.spider-emblem i,.spider-emblem b){background:#bfc0c4!important;box-shadow:none!important}
+:where(.spider-footer a,.rq-footer a){color:#d4d4d8!important}
+::selection{background:#e4e4e7!important;color:#111113!important}
