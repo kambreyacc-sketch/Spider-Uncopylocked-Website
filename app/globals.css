@@ -1295,3 +1295,78 @@ html,body{background:#0b0b0c!important;color:#f1f1f2!important}
 .spider-logo-mark{width:34px;height:34px;display:grid;place-items:center;flex:none;border:1px solid #45454b;border-radius:8px;background:#111113;color:#f4f4f5;padding:5px}
 .spider-logo-mark svg{display:block;width:100%;height:100%}
 .spider-wordmark{display:flex;align-items:center;gap:10px}
+
+
+/* Roport-inspired product polish: consistent monochrome surfaces and responsive rhythm. */
+:root{
+  --ink:#f4f4f5;
+  --muted:#a1a1aa;
+  --line:#2b2b30;
+  --violet:#e4e4e7;
+  --paper:#0b0b0d;
+  --dark:#101012;
+  color-scheme:dark;
+}
+html{background:#0b0b0d}
+body{background:#0b0b0d;color:#f4f4f5}
+input,textarea,select{accent-color:#d4d4d8}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #a1a1aa!important;outline-offset:2px}
+::placeholder{color:#71717a!important;opacity:1}
+.spider-nav,.resource-nav{background:rgba(11,11,13,.94)!important;border-bottom:1px solid #26262a!important;backdrop-filter:blur(18px)}
+.spider-nav nav a,.resource-nav nav a{color:#a1a1aa!important}
+.spider-nav nav a:hover,.resource-nav nav a:hover{color:#fafafa!important}
+.spider-upload-nav,.spider-signin,.resource-upload,.hire-primary,.spider-button-primary,.resource-submit{background:#f4f4f5!important;color:#111113!important;border-color:#f4f4f5!important;box-shadow:none!important}
+.spider-upload-nav:hover,.spider-signin:hover,.resource-upload:hover,.hire-primary:hover,.spider-button-primary:hover,.resource-submit:hover{background:#d4d4d8!important;border-color:#d4d4d8!important;color:#09090b!important}
+.spider-button-secondary{background:#151518!important;color:#e4e4e7!important;border:1px solid #37373d!important}
+.spider-button-secondary:hover{background:#222226!important;border-color:#52525b!important}
+.spider-hero{background:#0b0b0d!important}
+.spider-hero-video{filter:grayscale(1) brightness(.25) contrast(1.05)!important;opacity:.34!important}
+.spider-hero-shade{background:linear-gradient(90deg,#0b0b0d 0%,rgba(11,11,13,.95) 40%,rgba(11,11,13,.65) 100%),linear-gradient(0deg,#0b0b0d 0%,transparent 48%)!important}
+.spider-hero-content h1 span{color:#a1a1aa!important}
+.spider-category-card,.spider-home-links>a,.spider-upload-banner,.spider-hiring-banner,.resource-card,.creator-portfolio-card,.creator-detail-panel,.rq-listing-card{box-shadow:none!important}
+.spider-category-card{background:#111113!important;border-color:#29292d!important}
+.spider-category-card:hover{background:#18181b!important;border-color:#52525b!important}
+.spider-category-card .spider-category-icon{color:#a1a1aa!important}
+.spider-category-card.red,.spider-category-card.orange,.spider-category-card.yellow,.spider-category-card.green,.spider-category-card.blue,.spider-category-card.pink{background:#111113!important;color:#f4f4f5!important}
+.spider-upload-banner,.spider-hiring-banner{background:#111113!important;border:1px solid #29292d!important}
+.spider-home-links>a{background:#111113!important;border:1px solid #29292d!important}
+.spider-home-links>a>svg{color:#d4d4d8!important}
+.spider-home-links>a:hover{background:#18181b!important;border-color:#52525b!important}
+.spider-footer{border-top:1px solid #29292d!important;background:#0b0b0d!important;color:#8f8f98!important}
+.resource-page,.market-shell,.marketplace-home{background:#0b0b0d!important;color:#f4f4f5!important}
+.resource-nav{color:#f4f4f5!important}
+.resource-shell{max-width:1180px!important}
+.resource-heading h1,.upload-shell>h1{font-size:clamp(34px,5vw,52px)!important;line-height:1.02!important;letter-spacing:-.06em!important;font-weight:650!important}
+.resource-search,.resource-field,.hire-search,.hire-sort,.rq-search,.rq-sort{background:#111113!important;color:#f4f4f5!important;border-color:#343439!important;box-shadow:none!important}
+.resource-search:focus-within,.resource-field:focus,.hire-search:focus-within,.hire-sort:focus-within{border-color:#777780!important}
+.resource-category-pills button,.hire-chips button{background:#111113!important;border-color:#303036!important;color:#b4b4bc!important}
+.resource-category-pills button.active,.hire-chips button.selected{background:#e4e4e7!important;border-color:#e4e4e7!important;color:#111113!important}
+.resource-card{background:#111113!important;border-color:#29292d!important;border-radius:9px!important}
+.resource-card-image{background:#1a1a1d!important}
+.resource-card-content h2{letter-spacing:-.025em!important}
+.resource-card-content p{color:#a1a1aa!important}
+.resource-tags span,.developer-tags span{background:#202023!important;border-color:#303034!important;color:#d4d4d8!important}
+.resource-card-foot{border-top:1px solid #29292d!important}
+.resource-card-foot a{background:#f4f4f5!important;color:#111113!important;border-radius:5px!important}
+.resource-form-section{background:#101012!important;border-color:#29292d!important;border-radius:10px!important}
+.resource-step>span{background:#202023!important;color:#e4e4e7!important;border:1px solid #343439!important}
+.resource-form label{color:#d4d4d8!important}
+.resource-form-message{background:#18181b!important;border-color:#52525b!important;color:#f4f4f5!important}
+.resource-preview-card{background:#151518!important;border-color:#303036!important}
+.resource-pending-note{color:#a1a1aa!important}
+.hire-empty{background:#111113!important;border:1px solid #29292d!important;border-radius:10px!important;color:#a1a1aa!important}
+.creator-profile-gallery>a,.creator-detail-panel{background:#111113!important;border-color:#29292d!important}
+.creator-profile-gallery>a:hover{border-color:#66666f!important}
+.verified-tag{background:#222225!important;color:#e4e4e7!important;border-color:#414147!important}
+.status-available,.status-busy{color:#d4d4d8!important}
+@media(max-width:760px){
+  .spider-nav nav{overflow-x:auto!important;white-space:nowrap!important}
+  .spider-wordmark>span{font-size:10px!important}
+  .spider-hero{min-height:560px!important}
+  .spider-hero-content>p{font-size:14px!important}
+  .spider-hero-proof{gap:10px!important}
+  .spider-upload-banner,.spider-hiring-banner{align-items:flex-start!important;flex-direction:column!important}
+  .spider-upload-banner .spider-button-primary,.spider-hiring-banner>div:last-child{width:100%!important}
+  .resource-nav{gap:12px!important;flex-wrap:wrap!important;padding:12px 16px!important}
+  .resource-nav nav{order:3;width:100%;display:flex;justify-content:space-between;gap:10px!important}
+}
