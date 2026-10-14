@@ -1904,3 +1904,21 @@ html[data-spider-sidebar-collapsed="true"] .settings-page { padding-left: 72px !
 }
 .creator-person-avatar > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 .creator-avatar-initial { color: #e4e4e7; font: 600 13px 'Space Grotesk',sans-serif; }
+
+
+.creator-profile-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 82px;
+  height: 82px;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid #38383d;
+  border-radius: 50%;
+  background: #202023;
+  color: #e4e4e7;
+  font: 600 25px 'Space Grotesk',sans-serif;
+}
+.creator-profile-avatar > img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+@media(max-width:600px){.creator-profile-avatar{width:60px;height:60px;font-size:20px}}
