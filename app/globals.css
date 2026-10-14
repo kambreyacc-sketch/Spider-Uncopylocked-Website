@@ -2292,7 +2292,7 @@ a:hover { text-decoration-color: #a1a1aa; }
   font:8px 'DM Mono',monospace;
   letter-spacing:.09em;
 }
-.spider-hero-video { filter:grayscale(1) brightness(.26) contrast(1.05) !important; opacity:.48 !important; }
+.spider-hero-video { filter:brightness(.34) contrast(1.05) !important; opacity:.42 !important; }
 .spider-hero-media-fallback { background:linear-gradient(130deg,#151517,#09090b 70%) !important; }
 .spider-hero-shade {
   background:linear-gradient(90deg,#09090bf5 0%,#09090be8 43%,#09090b75 100%),linear-gradient(0deg,#09090bdc,transparent 75%) !important;
@@ -2341,6 +2341,7 @@ a:hover { text-decoration-color: #a1a1aa; }
 .application-error,.sell-message.error { background:#1a1a1d !important; }
 .team-discord-badge,.team-role-pill,.team-nitro-badge-image { color:#d4d4d8 !important; }
 .spider-game-preview img { background:#171719; }
+.spai-root .spai-accent,.spai-root [class*="accent"] { color:inherit; }
 
 
 /* Listing detail empty state is intentionally plain UI, never substitute artwork. */
