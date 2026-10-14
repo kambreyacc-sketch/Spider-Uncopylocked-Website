@@ -8,7 +8,6 @@ import { AlertCircle, ArrowRight, Check, Upload, X } from "lucide-react";
 const DRAFT_KEY = "spider-uncopylocked-listing-draft-v1";
 type Draft = { title:string; type:"Game"|"UGC Group"; robloxUrl:string; price:string; description:string; imageData:string; imageName:string; sellerName:string; sellerRobloxId:string; contactDiscord:string; contactEmail:string; contactPhone:string };
 type RobloxPreview = { imageUrl:string; universeId:number };
-const robloxLogo = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Roblox_Logo.svg";
 
 export default function SellerForm() {
   const [draft,setDraft] = useState<Draft>({title:"",type:"Game",robloxUrl:"",price:"",description:"",imageData:"",imageName:"",sellerName:"",sellerRobloxId:"",contactDiscord:"",contactEmail:"",contactPhone:""});
@@ -45,6 +44,7 @@ export default function SellerForm() {
     if(!draft.price||Number(draft.price)<=0){setError("Enter an asking price greater than $0.");return;}
     if(!draft.sellerName.trim()||!draft.sellerRobloxId.trim()){setError("Add your Roblox username and numeric Roblox user ID.");return;}
     if(!(draft.contactDiscord.trim()||draft.contactEmail.trim()||draft.contactPhone.trim())){setError("Add at least one contact method: Discord, email, or phone.");return;}
+    if(!(draft.imageData||robloxPreview?.imageUrl)){setError("Add a real listing thumbnail. Load a public Roblox game thumbnail above or upload an image.");return;}
     setSubmitting(true);
     try {
       let imageStorageId: string | undefined;
@@ -85,7 +85,7 @@ export default function SellerForm() {
       <label className="sell-field">{draft.type==="Game"?"Game details":"UGC group details"}<textarea value={draft.description} onChange={e=>update("description",e.target.value)} rows={5} maxLength={2000} placeholder={draft.type==="Game"?"Describe gameplay, monetization, and what is included.":"Describe the group, catalog/UGC assets, ownership, and what is included."}/><small>{draft.description.length}/2000 characters</small></label>
     </section>
     <section className="sell-form-section"><div className="sell-form-title"><span>03</span><div><h2>Listing thumbnail</h2><p>Upload a clear image buyers will see in the marketplace.</p></div></div>
-      <label className={"sell-upload "+(draft.imageData?"has-image":"")}>{draft.imageData?<><img src={draft.imageData} alt="Listing thumbnail preview"/><span className="sell-upload-overlay"><Upload size={16}/> Replace thumbnail</span></>:robloxPreview?<><img src={robloxPreview.imageUrl} alt="Roblox experience thumbnail"/><span className="sell-upload-overlay"><Upload size={16}/> Upload a custom thumbnail instead</span></>:<><span className="sell-upload-icon"><img src={robloxLogo} alt="Roblox logo"/></span><b>Use a Roblox thumbnail or upload your own</b><span>Paste a game URL above and load its public thumbnail.</span><span className="sell-upload-button"><Upload size={15}/> Upload image</span></>}<input type="file" accept="image/png,image/jpeg,image/webp" onChange={e=>onImage(e.target.files?.[0])}/></label>
+      <label className={"sell-upload "+(draft.imageData?"has-image":"")}>{draft.imageData?<><img src={draft.imageData} alt="Listing thumbnail preview"/><span className="sell-upload-overlay"><Upload size={16}/> Replace thumbnail</span></>:robloxPreview?<><img src={robloxPreview.imageUrl} alt="Roblox experience thumbnail"/><span className="sell-upload-overlay"><Upload size={16}/> Upload a custom thumbnail instead</span></>:<><span className="sell-upload-icon"><Upload size={20}/></span><b>No preview image uploaded</b><span>Load a real public Roblox game thumbnail above, or upload your own image.</span><span className="sell-upload-button"><Upload size={15}/> Upload image</span></>}<input type="file" accept="image/png,image/jpeg,image/webp" onChange={e=>onImage(e.target.files?.[0])}/></label>
       {draft.imageName&&<div className="sell-file-row"><span>{draft.imageName}</span><button type="button" onClick={()=>update("imageData","")} aria-label="Remove thumbnail"><X size={15}/> Remove</button></div>}
     </section>
     <section className="sell-form-section"><div className="sell-form-title"><span>04</span><div><h2>Seller contact</h2><p>Add at least one way for interested buyers to reach you.</p></div></div>
