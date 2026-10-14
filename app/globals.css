@@ -1381,3 +1381,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .spider-hero-search button:hover{background:#27272a}
 .spider-hero-actions{margin-top:16px!important}
 @media(max-width:600px){.spider-hero-search{min-height:50px;gap:7px;padding-left:10px}.spider-hero-search button{padding:0 9px;font-size:10px}.spider-hero-search input{font-size:11px!important}}
+
+
+/* Use the actual Spider Uncopylocked profile image for site branding. */
+.spider-logo-mark img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.sidebar-brand>img{object-fit:cover;}
