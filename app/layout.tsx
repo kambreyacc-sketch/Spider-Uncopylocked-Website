@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./premium-surfaces.css";
+import "./workspace-enhancements.css";
 import AppConvexProvider from "./convex-provider";
 
 export const metadata: Metadata = {
