@@ -1,38 +1,440 @@
-/* Spider Uncopylocked premium neutral surfaces: loaded after legacy global CSS. */
-:root{color-scheme:dark;--ink:#f4f4f5!important;--muted:#9a9a9a!important;--line:#292929!important;--paper:#080808!important;--dark:#080808!important;--spider-bg:#080808!important;--spider-surface:#101010!important;--spider-raised:#151515!important;--spider-surface-raised:#151515!important;--spider-border:#292929!important;--spider-border-strong:#3a3a3a!important;--spider-text:#f4f4f5!important;--spider-muted:#9a9a9a!important;--spider-accent:#e8e8e8!important;--accent:#e8e8e8!important;--accent-strong:#f4f4f5!important;--accent-soft:#202020!important;--focus-ring:#888!important}
-html{color-scheme:dark;background:#080808!important;scroll-behavior:smooth}
-body{background:radial-gradient(ellipse at 50% -18%,rgba(255,255,255,.035),transparent 58%),#080808!important;color:#f4f4f5!important;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-::selection{background:#d9d9d9;color:#101010}
-:focus-visible{outline:2px solid #777!important;outline-offset:3px}
-.spider-home,.market-shell,.market-content,.settings-page,.admin-layout,.admin-denied{color:#f4f4f5!important;background:#080808!important}
-.spider-home{background:transparent!important}
-.market-content{min-width:0;background:radial-gradient(ellipse at 48% 0%,rgba(255,255,255,.018),transparent 52%),#080808!important}
-.spider-nav,.navbar,.spider-sidebar,.spider-sidebar .sidebar-head,.spider-sidebar .sidebar-bottom{background:linear-gradient(180deg,rgba(255,255,255,.022),rgba(255,255,255,.004) 30%,rgba(0,0,0,.08)),#090909!important;color:#f4f4f5!important;border-color:rgba(255,255,255,.09)!important;box-shadow:inset 0 -1px 0 rgba(255,255,255,.018)}
-.topline{background:#080808!important;border-color:rgba(255,255,255,.065)!important;color:#a2a2a2!important}
+/* Spider Uncopylocked — Roport-inspired reflective graphite surfaces.
+   Kept neutral: silver light, layered charcoal, no violet/blue accent palette. */
+:root{
+  color-scheme:dark;
+  --ink:#f4f4f5!important;
+  --muted:#a6a6a8!important;
+  --line:#3a3b3e!important;
+  --paper:#111214!important;
+  --dark:#0c0d0e!important;
+  --spider-bg:#0d0e10!important;
+  --spider-surface:#17181a!important;
+  --spider-raised:#202124!important;
+  --spider-surface-raised:#202124!important;
+  --spider-border:#3a3b3e!important;
+  --spider-border-strong:#55565a!important;
+  --spider-text:#f4f4f5!important;
+  --spider-muted:#a6a6a8!important;
+  --spider-accent:#f0f0f0!important;
+  --spider-accent-contrast:#111214!important;
+  --accent:#ededee!important;
+  --accent-strong:#f7f7f7!important;
+  --accent-soft:#292a2d!important;
+  --accent-foreground:#111214!important;
+  --focus-ring:#a8a8aa!important;
+}
+html{color-scheme:dark;background:#0d0e10!important;scroll-behavior:smooth}
+body{
+  color:#f4f4f5!important;
+  background:
+    radial-gradient(ellipse at 48% -14%,rgba(255,255,255,.105) 0%,rgba(255,255,255,.034) 28%,transparent 57%),
+    radial-gradient(ellipse at 100% 18%,rgba(210,210,210,.035),transparent 31%),
+    linear-gradient(180deg,#151618 0%,#101113 38%,#0c0d0e 100%)!important;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:#e2e2e2;color:#111214}
+:focus-visible{outline:2px solid #a5a5a5!important;outline-offset:3px}
+
+/* Keep the page canvas graphite rather than pure black. Light lives near the top edges. */
+.spider-home,.market-shell,.market-content,.settings-page,.admin-layout,.admin-denied,
+main.market-shell,main.spider-home{
+  color:#f4f4f5!important;
+  background:transparent!important;
+}
+.market-shell,.admin-layout,.settings-page{min-height:100vh}
+.market-content{
+  min-width:0;
+  background:
+    radial-gradient(ellipse at 50% -5%,rgba(255,255,255,.042),transparent 47%),
+    linear-gradient(180deg,#111214 0%,rgba(15,16,18,.98) 55%,#0d0e10 100%)!important;
+}
+
+/* The chrome reads as smoked glass with a slim, visible rim. */
+.spider-nav,.navbar,.spider-sidebar,.spider-sidebar .sidebar-head,.spider-sidebar .sidebar-bottom{
+  color:#f4f4f5!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.105) 0%,rgba(255,255,255,.045) 1px,rgba(255,255,255,.016) 32%,rgba(255,255,255,.028) 100%),
+    rgba(22,23,25,.87)!important;
+  border-color:rgba(255,255,255,.14)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.13),
+    inset 0 -1px 0 rgba(0,0,0,.48),
+    0 10px 36px rgba(0,0,0,.22);
+  -webkit-backdrop-filter:blur(22px) saturate(125%);
+  backdrop-filter:blur(22px) saturate(125%);
+}
+.spider-nav,.navbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.55),0 8px 28px rgba(0,0,0,.2)!important}
+.topline{
+  color:#b3b3b5!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.005)),#101113!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
 .spider-wordmark,.wordmark,.sidebar-brand,.sidebar-brand-copy,.spider-sidebar strong,.spider-sidebar b{color:#f4f4f5!important}
-.spider-wordmark small,.wordmark small,.sidebar-section-label,.spider-eyebrow{color:#888!important}
-.spider-sidebar{border-right:1px solid rgba(255,255,255,.09)!important;box-shadow:1px 0 0 rgba(0,0,0,.45),10px 0 34px rgba(0,0,0,.12)}
-.spider-sidebar nav a,.spider-sidebar .sidebar-bottom>a,.spider-sidebar .sidebar-account-cta{color:#a3a3a3!important;border:1px solid transparent!important;transition:background 150ms ease,color 150ms ease,border-color 150ms ease!important}
-.spider-sidebar nav a:hover,.spider-sidebar .sidebar-bottom>a:hover,.spider-sidebar .sidebar-account-cta:hover{color:#fff!important;background:#151515!important;border-color:rgba(255,255,255,.055)!important}
-.spider-sidebar nav a.active,.spider-sidebar .sidebar-bottom>a.active{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.008)),#1a1a1a!important;border-color:rgba(255,255,255,.065)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
-.sidebar-user,.sidebar-user-footer,.sidebar-account-cta{background:linear-gradient(180deg,rgba(255,255,255,.025),transparent),#111!important;border-color:rgba(255,255,255,.085)!important}
-.feature-card,.resource-feature,.spider-category-card,.spider-home-links>a,.spider-upload-banner,.spider-hiring-banner,.spider-game-preview,.float-card,.message-placeholder,.job-card,.application-card,.developer-card,.studio-card,.resource-card,.marketplace-card,.listing-card,.listing-no-preview,.sell-panel,.billing-panel,.settings-panel,.admin-panel,.dashboard-panel,.dashboard-card,.spider-panel,.team-card{background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.012) 26%,rgba(255,255,255,.004)),#101010!important;border-color:rgba(255,255,255,.085)!important;color:#f4f4f5!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 10px 28px rgba(0,0,0,.16)!important}
-.feature-card:hover,.resource-feature:hover,.spider-category-card:hover,.spider-home-links>a:hover,.job-card:hover,.developer-card:hover,.studio-card:hover,.resource-card:hover,.marketplace-card:hover,.listing-card:hover,.team-card:hover{border-color:rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 14px 34px rgba(0,0,0,.24)!important;transform:translateY(-1px)}
-.spider-home .spider-category-section,.spider-home .feature-section,.spider-home .resource-section,.spider-home .spider-home-links,.spider-home .spider-category-section,.spider-home .spider-section,.spider-home .spider-game-showcase{background:transparent!important;border-color:rgba(255,255,255,.07)!important}
-.spider-hero{background-color:#080808!important;border-color:rgba(255,255,255,.09)!important}
-.spider-hero-shade{background:linear-gradient(90deg,rgba(8,8,8,.97),rgba(8,8,8,.86) 33%,rgba(8,8,8,.5) 65%,rgba(8,8,8,.26)),linear-gradient(0deg,rgba(8,8,8,.66),transparent 45%)!important}
-.spider-hero-content h1,.spider-home h1,.spider-home h2,.spider-home h3,.market-content h1,.market-content h2,.market-content h3,.hire-page-head h1{color:#f4f4f5!important}
-.spider-home p,.market-content p,.spider-home .spider-category-card small,.spider-home .spider-footer,.hire-page-head p{color:#a0a0a0!important}
-input,textarea,select,[role=combobox],.hire-search,.jobs-search,.market-search,.search-field,.resource-search,.spider-search{color:#f2f2f2;background:linear-gradient(180deg,rgba(255,255,255,.018),transparent),#111!important;border-color:#303030!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.018)}
-input::placeholder,textarea::placeholder{color:#777!important}
-.hire-chips button,.hire-chips a,.market-filter button,.market-filter a,.market-tabs button,.resource-filter button,.resource-category,.category-chip,.filter-chip{color:#a8a8a8!important;background:#111!important;border-color:#2b2b2b!important}
-.hire-chips button.selected,.hire-chips button[aria-pressed=true],.market-filter button.selected,.market-filter button[aria-pressed=true],.market-tabs button[aria-selected=true],.resource-filter button.selected,.resource-category.active,.category-chip.active,.filter-chip.active{color:#fff!important;background:#202020!important;border-color:#414141!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)}
-.spider-button-primary,.hire-primary,.spider-upload-nav,.spider-signin,.spider-hero-actions .spider-button-primary,button[class*=primary],a[class*=primary],input[type=submit]{color:#101010!important;background:linear-gradient(180deg,#fff,#e6e6e6)!important;border:1px solid rgba(255,255,255,.8)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 2px rgba(0,0,0,.18)!important}
-.spider-button-primary:hover,.hire-primary:hover,.spider-upload-nav:hover,.spider-signin:hover,button[class*=primary]:hover,a[class*=primary]:hover,input[type=submit]:hover{background:#dcdcdc!important;color:#080808!important}
-.spider-button-secondary,.spider-hero-actions .spider-button-secondary,button[class*=secondary],a[class*=secondary]{color:#e2e2e2!important;background:linear-gradient(180deg,rgba(255,255,255,.028),rgba(255,255,255,.008)),#141414!important;border:1px solid #353535!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important}
-[role=dialog],[aria-modal=true],.modal,.dialog,.job-wizard,.post-job-wizard,.wizard-modal,.sidebar-drawer{color:#f4f4f5!important;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.008) 36%),#111!important;border-color:rgba(255,255,255,.11)!important;box-shadow:0 24px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.025)!important}
-.message-placeholder,.message-workspace,.message-list,.message-conversation,.settings-card,.settings-section,.admin-section,.billing-section,.studio-empty-state,.developer-empty-state,.market-empty-state,.resource-empty-state{color:#f4f4f5!important;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.004)),#0f0f0f!important;border-color:rgba(255,255,255,.09)!important}
+.spider-wordmark small,.wordmark small,.sidebar-section-label,.spider-eyebrow{color:#a0a0a2!important}
+.spider-sidebar{
+  border-right:1px solid rgba(255,255,255,.14)!important;
+  box-shadow:inset -1px 0 0 rgba(255,255,255,.025),12px 0 36px rgba(0,0,0,.2);
+}
+.spider-sidebar nav a,.spider-sidebar .sidebar-bottom>a,.spider-sidebar .sidebar-account-cta{
+  color:#b5b5b7!important;
+  border:1px solid transparent!important;
+  border-radius:8px!important;
+  transition:background 160ms ease,color 160ms ease,border-color 160ms ease,box-shadow 160ms ease!important;
+}
+.spider-sidebar nav a:hover,.spider-sidebar .sidebar-bottom>a:hover,.spider-sidebar .sidebar-account-cta:hover{
+  color:#fff!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.025)),#222326!important;
+  border-color:rgba(255,255,255,.09)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 5px 14px rgba(0,0,0,.14)!important;
+}
+.spider-sidebar nav a.active,.spider-sidebar .sidebar-bottom>a.active{
+  color:#fff!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.055) 2px,rgba(255,255,255,.025) 100%),
+    linear-gradient(100deg,rgba(255,255,255,.055),rgba(255,255,255,.015)),
+    #202124!important;
+  border-color:rgba(255,255,255,.15)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),inset 0 -1px 0 rgba(0,0,0,.45),0 4px 14px rgba(0,0,0,.16)!important;
+}
+.spider-sidebar nav a.active svg{color:#fff!important}
+.spider-sidebar nav a svg,.sidebar-bottom>a svg,.sidebar-account-cta svg{color:#b3b3b5!important}
+.sidebar-user,.sidebar-user-footer,.sidebar-account-cta{
+  color:#f4f4f5!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.02)),rgba(28,29,31,.82)!important;
+  border-color:rgba(255,255,255,.13)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -1px 0 rgba(0,0,0,.35)!important;
+}
+.sidebar-collapse,.sidebar-mobile-close,.sidebar-mobile-open,.sidebar-toggle,.spider-sidebar button{
+  color:#ededed!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.035)),#202124!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 3px 8px rgba(0,0,0,.2)!important;
+}
+.sidebar-collapse:hover,.sidebar-mobile-close:hover,.sidebar-mobile-open:hover,.sidebar-toggle:hover,.spider-sidebar button:hover{
+  background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.045)),#292a2d!important;
+  color:#fff!important;
+}
+
+/* The signature surface recipe: brighter top rim, smoky glass body, soft inset lighting. */
+.feature-card,.resource-feature,.spider-category-card,.spider-home-links>a,.spider-upload-banner,
+.spider-hiring-banner,.spider-game-preview,.float-card,.message-placeholder,.message-empty-state,
+.job-card,.job-listing-card,.application-card,.developer-card,.studio-card,.resource-card,
+.marketplace-card,.listing-card,.listing-panel,.listing-no-preview,.sell-panel,.sell-card,
+.billing-panel,.settings-panel,.admin-card,.admin-panel,.dashboard-panel,.dashboard-card,
+.spider-panel,.spai-card,.spai-composer,.spai-root .spai-panel,.spai-root .spai-message,
+.studio-panel,.team-card,.settings-card,.settings-section,.admin-section,.billing-section,
+.message-workspace,.message-list,.message-conversation{
+  color:#f4f4f5!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.115) 0%,rgba(255,255,255,.052) 1px,rgba(255,255,255,.018) 25%,rgba(255,255,255,.035) 100%),
+    radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.055),transparent 58%),
+    rgba(29,30,32,.86)!important;
+  border:1px solid rgba(255,255,255,.11)!important;
+  border-top-color:rgba(255,255,255,.22)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -1px 0 rgba(0,0,0,.52),
+    0 18px 38px rgba(0,0,0,.28)!important;
+  -webkit-backdrop-filter:blur(15px) saturate(120%);
+  backdrop-filter:blur(15px) saturate(120%);
+}
+.feature-card:hover,.resource-feature:hover,.spider-category-card:hover,.spider-home-links>a:hover,
+.job-card:hover,.job-listing-card:hover,.developer-card:hover,.studio-card:hover,.resource-card:hover,
+.marketplace-card:hover,.listing-card:hover,.team-card:hover{
+  border-color:rgba(255,255,255,.22)!important;
+  border-top-color:rgba(255,255,255,.31)!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.15),rgba(255,255,255,.055) 1px,rgba(255,255,255,.025) 35%,rgba(255,255,255,.045)),
+    radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.065),transparent 58%),
+    rgba(35,36,39,.9)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.42),0 22px 42px rgba(0,0,0,.33)!important;
+  transform:translateY(-1px);
+}
+.spider-home .spider-category-section,.spider-home .feature-section,.spider-home .resource-section,
+.spider-home .spider-home-links,.spider-home .spider-category-section,.spider-home .spider-section,
+.spider-home .spider-game-showcase{
+  background:transparent!important;
+  border-color:rgba(255,255,255,.085)!important;
+}
+.spider-home .spider-category-card,.spider-home .feature-card,.spider-home .resource-feature,
+.spider-home .spider-home-links>a,.spider-home .spider-upload-banner,.spider-home .spider-hiring-banner{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.05) 1px,rgba(255,255,255,.02) 30%,rgba(255,255,255,.035)),
+    radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.05),transparent 60%),
+    rgba(27,28,30,.88)!important;
+  border-color:rgba(255,255,255,.12)!important;
+}
+
+/* Let the hero imagery breathe. Never monochrome-filter genuine game or creator art. */
+.spider-hero{background-color:#151618!important;border-color:rgba(255,255,255,.15)!important}
+.spider-hero-shade{
+  background:
+    linear-gradient(90deg,rgba(11,12,13,.88) 0%,rgba(11,12,13,.70) 32%,rgba(11,12,13,.42) 68%,rgba(11,12,13,.24) 100%),
+    linear-gradient(0deg,rgba(11,12,13,.65),transparent 45%)!important;
+}
+.spider-hero-content h1,.spider-home h1,.spider-home h2,.spider-home h3,
+.market-content h1,.market-content h2,.market-content h3,.hire-page-head h1{color:#f4f4f5!important}
+.spider-home p,.market-content p,.spider-home .spider-category-card small,.spider-home .spider-footer,.hire-page-head p{color:#b0b0b2!important}
+
+/* Inputs use inset light and a real graphite edge instead of a flat black rectangle. */
+input,textarea,select,[role=combobox],.hire-search,.jobs-search,.market-search,.search-field,.resource-search,.spider-search{
+  color:#f4f4f5!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.015) 65%),
+    rgba(19,20,22,.9)!important;
+  border-color:rgba(255,255,255,.16)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.35)!important;
+}
+input::placeholder,textarea::placeholder,.hire-search input::placeholder,.jobs-search input::placeholder,
+.market-search input::placeholder,.search-field input::placeholder,.spider-search input::placeholder{color:#929295!important}
+.hire-search:focus-within,.jobs-search:focus-within,.market-search:focus-within,.search-field:focus-within,.spider-search:focus-within{
+  border-color:rgba(255,255,255,.30)!important;
+  box-shadow:0 0 0 2px rgba(255,255,255,.04),inset 0 1px 0 rgba(255,255,255,.1)!important;
+}
+.hire-chips button,.hire-chips a,.market-filter button,.market-filter a,.market-tabs button,
+.resource-filter button,.resource-category,.category-chip,.filter-chip{
+  color:#c0c0c2!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.018)),#1c1d1f!important;
+  border-color:rgba(255,255,255,.13)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.075)!important;
+}
+.hire-chips button:hover,.hire-chips a:hover,.market-filter button:hover,.market-filter a:hover,
+.market-tabs button:hover,.resource-filter button:hover,.resource-category:hover,.category-chip:hover,.filter-chip:hover{
+  color:#fff!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.035)),#292a2d!important;
+  border-color:rgba(255,255,255,.2)!important;
+}
+.hire-chips button.selected,.hire-chips button[aria-pressed=true],.market-filter button.selected,
+.market-filter button[aria-pressed=true],.market-tabs button[aria-selected=true],.resource-filter button.selected,
+.resource-category.active,.category-chip.active,.filter-chip.active{
+  color:#fff!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.055) 2px,rgba(255,255,255,.03)),#2b2c2f!important;
+  border-color:rgba(255,255,255,.24)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.17),inset 0 -1px 0 rgba(0,0,0,.3)!important;
+}
+
+/* Soft polished silver controls, with a highlight rather than a neon accent. */
+.spider-button-primary,.hire-primary,.spider-upload-nav,.spider-signin,
+.spider-hero-actions .spider-button-primary,button[class*=primary],a[class*=primary],input[type=submit]{
+  color:#111214!important;
+  background:linear-gradient(180deg,#fff 0%,#ededed 24%,#d0d0d0 100%)!important;
+  border:1px solid rgba(255,255,255,.86)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(0,0,0,.10),0 8px 22px rgba(0,0,0,.22)!important;
+}
+.spider-button-primary:hover,.hire-primary:hover,.spider-upload-nav:hover,.spider-signin:hover,
+.spider-hero-actions .spider-button-primary:hover,button[class*=primary]:hover,a[class*=primary]:hover,input[type=submit]:hover{
+  color:#080808!important;
+  background:linear-gradient(180deg,#fff,#dcdcdc)!important;
+  border-color:#fff!important;
+  box-shadow:inset 0 1px 0 #fff,0 10px 24px rgba(0,0,0,.27)!important;
+}
+.spider-button-secondary,.spider-hero-actions .spider-button-secondary,button[class*=secondary],a[class*=secondary]{
+  color:#ededed!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.035) 2px,rgba(255,255,255,.018)),rgba(31,32,34,.91)!important;
+  border:1px solid rgba(255,255,255,.17)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.36),0 4px 12px rgba(0,0,0,.16)!important;
+}
+.spider-button-secondary:hover,.spider-hero-actions .spider-button-secondary:hover,button[class*=secondary]:hover,a[class*=secondary]:hover{
+  background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.045)),#292a2d!important;
+  border-color:rgba(255,255,255,.25)!important;
+  color:#fff!important;
+}
+
+/* Dialogs, wizard steps and drawers need the strongest glass so text remains readable. */
+[role=dialog],[aria-modal=true],.modal,.dialog,.job-wizard,.post-job-wizard,.wizard-modal,.sidebar-drawer{
+  color:#f4f4f5!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.065) 1px,rgba(255,255,255,.025) 38%,rgba(255,255,255,.035)),
+    radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.06),transparent 55%),
+    rgba(25,26,28,.94)!important;
+  border:1px solid rgba(255,255,255,.17)!important;
+  border-top-color:rgba(255,255,255,.28)!important;
+  box-shadow:0 28px 84px rgba(0,0,0,.56),inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.4)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(120%);
+  backdrop-filter:blur(24px) saturate(120%);
+}
+.job-wizard button,.post-job-wizard button,.wizard-modal button,[role=dialog] button,[aria-modal=true] button{border-radius:8px}
+.job-wizard [aria-pressed=true],.post-job-wizard [aria-pressed=true],.wizard-modal [aria-pressed=true],[role=dialog] [aria-pressed=true]{
+  color:#fff!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.05)),#2b2c2f!important;
+  border-color:rgba(255,255,255,.25)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+.message-placeholder,.message-workspace,.message-list,.message-conversation,.settings-card,.settings-section,
+.admin-section,.billing-section,.studio-empty-state,.developer-empty-state,.market-empty-state,.resource-empty-state,
+.spider-game-showcase-empty{
+  color:#f4f4f5!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.018)),rgba(22,23,25,.86)!important;
+  border-color:rgba(255,255,255,.12)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.42),0 16px 32px rgba(0,0,0,.18)!important;
+}
+.message-placeholder p,.message-workspace p,.settings-section p,.admin-section p,.billing-section p,
+.studio-empty-state p,.developer-empty-state p,.market-empty-state p,.resource-empty-state p{color:#adadaf!important}
+.spai-root{color:#f2f2f2;--spai-accent:#ededed}
+.spai-root button,.spai-root [role=button]{border-color:rgba(255,255,255,.13)}
 .spai-root .spai-accent,.spai-root [class*=accent]{color:inherit!important}
-hr,.sidebar-divider,.section-divider{border-color:rgba(255,255,255,.075)!important}
-@media(max-width:760px){:root{--spider-sidebar-width:0px}.spider-hero-shade{background:linear-gradient(90deg,rgba(8,8,8,.94),rgba(8,8,8,.68)),linear-gradient(0deg,rgba(8,8,8,.7),transparent 60%)!important}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+hr,.sidebar-divider,.section-divider{border-color:rgba(255,255,255,.10)!important}
+img.spider-pfp,img.sidebar-avatar,.sidebar-brand img,.team-avatar,.team-card img{object-fit:cover}
+@media(max-width:760px){
+  :root{--spider-sidebar-width:0px}
+  .spider-hero-shade{background:linear-gradient(90deg,rgba(11,12,13,.91),rgba(11,12,13,.61)),linear-gradient(0deg,rgba(11,12,13,.7),transparent 60%)!important}
+  .spider-sidebar{box-shadow:inset -1px 0 0 rgba(255,255,255,.08),18px 0 55px rgba(0,0,0,.45)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .spider-nav,.navbar,.spider-sidebar,.feature-card,.resource-feature,.spider-category-card,.job-card,.developer-card,.studio-card,.resource-card,.marketplace-card,.listing-card{background-color:#1b1c1e!important}
+}
+
+
+/* Contrast refinement after browser preview: lift smoked glass from black into visible graphite. */
+body{
+  background:
+    radial-gradient(ellipse at 45% -12%,rgba(255,255,255,.15) 0%,rgba(255,255,255,.055) 28%,transparent 58%),
+    radial-gradient(ellipse at 94% 25%,rgba(210,210,210,.055),transparent 34%),
+    linear-gradient(180deg,#18191b 0%,#121315 40%,#0f1012 100%)!important;
+}
+.market-content{
+  background:
+    radial-gradient(ellipse at 50% -4%,rgba(255,255,255,.065),transparent 48%),
+    linear-gradient(180deg,#151619 0%,#111214 64%,#0f1012 100%)!important;
+}
+.spider-nav,.navbar,.spider-sidebar,.spider-sidebar .sidebar-head,.spider-sidebar .sidebar-bottom{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.19) 0%,rgba(255,255,255,.07) 1px,rgba(255,255,255,.026) 34%,rgba(255,255,255,.065) 100%),
+    linear-gradient(105deg,rgba(255,255,255,.045),transparent 48%),
+    rgba(31,32,35,.93)!important;
+  border-color:rgba(255,255,255,.19)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(0,0,0,.44),0 14px 36px rgba(0,0,0,.29)!important;
+}
+.feature-card,.resource-feature,.spider-category-card,.spider-home-links>a,.spider-upload-banner,
+.spider-hiring-banner,.spider-game-preview,.float-card,.message-placeholder,.message-empty-state,
+.job-card,.job-listing-card,.application-card,.developer-card,.studio-card,.resource-card,
+.marketplace-card,.listing-card,.listing-panel,.listing-no-preview,.sell-panel,.sell-card,
+.billing-panel,.settings-panel,.admin-card,.admin-panel,.dashboard-panel,.dashboard-card,
+.spider-panel,.spai-card,.spai-composer,.spai-root .spai-panel,.spai-root .spai-message,
+.studio-panel,.team-card,.settings-card,.settings-section,.admin-section,.billing-section,
+.message-workspace,.message-list,.message-conversation{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.205) 0%,rgba(255,255,255,.085) 1px,rgba(255,255,255,.034) 27%,rgba(255,255,255,.065) 100%),
+    linear-gradient(112deg,rgba(255,255,255,.055),transparent 45%),
+    radial-gradient(ellipse at 16% 0%,rgba(255,255,255,.07),transparent 58%),
+    rgba(39,40,43,.94)!important;
+  border-color:rgba(255,255,255,.16)!important;
+  border-top-color:rgba(255,255,255,.32)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(0,0,0,.48),0 20px 40px rgba(0,0,0,.3)!important;
+}
+.spider-home .spider-category-card,.spider-home .feature-card,.spider-home .resource-feature,
+.spider-home .spider-home-links>a,.spider-home .spider-upload-banner,.spider-home .spider-hiring-banner{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.09) 1px,rgba(255,255,255,.04) 32%,rgba(255,255,255,.065) 100%),
+    linear-gradient(115deg,rgba(255,255,255,.06),transparent 48%),
+    radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.07),transparent 60%),
+    rgba(37,38,41,.96)!important;
+  border-color:rgba(255,255,255,.17)!important;
+  border-top-color:rgba(255,255,255,.34)!important;
+}
+.feature-card:hover,.resource-feature:hover,.spider-category-card:hover,.spider-home-links>a:hover,
+.job-card:hover,.job-listing-card:hover,.developer-card:hover,.studio-card:hover,.resource-card:hover,
+.marketplace-card:hover,.listing-card:hover,.team-card:hover{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.105) 1px,rgba(255,255,255,.05) 36%,rgba(255,255,255,.075)),
+    linear-gradient(115deg,rgba(255,255,255,.075),transparent 52%),
+    rgba(47,48,51,.97)!important;
+  border-color:rgba(255,255,255,.25)!important;
+  border-top-color:rgba(255,255,255,.4)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 0 rgba(0,0,0,.4),0 22px 44px rgba(0,0,0,.36)!important;
+}
+.spider-sidebar nav a.active,.spider-sidebar .sidebar-bottom>a.active{
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08) 2px,rgba(255,255,255,.045) 100%),#292a2d!important;
+  border-color:rgba(255,255,255,.21)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.35),0 6px 14px rgba(0,0,0,.2)!important;
+}
+input,textarea,select,[role=combobox],.hire-search,.jobs-search,.market-search,.search-field,.resource-search,.spider-search{
+  background:linear-gradient(180deg,rgba(255,255,255,.095),rgba(255,255,255,.025)),rgba(28,29,32,.96)!important;
+  border-color:rgba(255,255,255,.18)!important;
+}
+.spider-button-secondary,.spider-hero-actions .spider-button-secondary,button[class*=secondary],a[class*=secondary]{
+  background:linear-gradient(180deg,rgba(255,255,255,.19),rgba(255,255,255,.055) 2px,rgba(255,255,255,.025)),#252629!important;
+  border-color:rgba(255,255,255,.2)!important;
+}
+
+
+/* Final legibility pass: make the glass effect perceptible at a glance, not only on hover. */
+body{
+  background:
+    radial-gradient(ellipse at 50% -8%,rgba(255,255,255,.18) 0%,rgba(255,255,255,.065) 26%,transparent 58%),
+    radial-gradient(ellipse at 92% 18%,rgba(235,235,235,.06),transparent 33%),
+    linear-gradient(180deg,#191a1c 0%,#141517 42%,#101113 100%)!important;
+}
+.market-content{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.08),transparent 46%),
+    linear-gradient(180deg,#17181a 0%,#131416 64%,#111214 100%)!important;
+}
+.spider-nav,.navbar,.spider-sidebar,.spider-sidebar .sidebar-head,.spider-sidebar .sidebar-bottom{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,.13) 1px,rgba(255,255,255,.055) 3px,rgba(255,255,255,.015) 48%,rgba(255,255,255,.07) 100%),
+    linear-gradient(108deg,rgba(255,255,255,.085),transparent 43%),
+    rgba(38,39,42,.97)!important;
+  border-color:rgba(255,255,255,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(0,0,0,.42),0 14px 38px rgba(0,0,0,.32)!important;
+}
+.feature-card,.resource-feature,.spider-category-card,.spider-home-links>a,.spider-upload-banner,
+.spider-hiring-banner,.spider-game-preview,.float-card,.message-placeholder,.message-empty-state,
+.job-card,.job-listing-card,.application-card,.developer-card,.studio-card,.resource-card,
+.marketplace-card,.listing-card,.listing-panel,.listing-no-preview,.sell-panel,.sell-card,
+.billing-panel,.settings-panel,.admin-card,.admin-panel,.dashboard-panel,.dashboard-card,
+.spider-panel,.spai-card,.spai-composer,.spai-root .spai-panel,.spai-root .spai-message,
+.studio-panel,.team-card,.settings-card,.settings-section,.admin-section,.billing-section,
+.message-workspace,.message-list,.message-conversation{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.29) 0%,rgba(255,255,255,.14) 1px,rgba(255,255,255,.075) 3px,rgba(255,255,255,.024) 36%,rgba(255,255,255,.075) 100%),
+    linear-gradient(112deg,rgba(255,255,255,.085),transparent 44%),
+    radial-gradient(ellipse at 15% 0%,rgba(255,255,255,.10),transparent 58%),
+    rgba(48,49,52,.97)!important;
+  border-color:rgba(255,255,255,.2)!important;
+  border-top-color:rgba(255,255,255,.38)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.42),0 20px 42px rgba(0,0,0,.32)!important;
+}
+.spider-home .feature-card,.spider-home .resource-feature,.spider-home .spider-category-card,
+.spider-home .spider-home-links>a,.spider-home .spider-upload-banner,.spider-home .spider-hiring-banner{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.31) 0%,rgba(255,255,255,.15) 1px,rgba(255,255,255,.075) 3px,rgba(255,255,255,.03) 38%,rgba(255,255,255,.08) 100%),
+    linear-gradient(110deg,rgba(255,255,255,.095),transparent 45%),
+    radial-gradient(ellipse at 15% 0%,rgba(255,255,255,.11),transparent 58%),
+    rgba(45,46,49,.98)!important;
+  border-color:rgba(255,255,255,.21)!important;
+  border-top-color:rgba(255,255,255,.4)!important;
+}
+.feature-card:hover,.resource-feature:hover,.spider-category-card:hover,.spider-home-links>a:hover,
+.job-card:hover,.job-listing-card:hover,.developer-card:hover,.studio-card:hover,.resource-card:hover,
+.marketplace-card:hover,.listing-card:hover,.team-card:hover{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.18) 1px,rgba(255,255,255,.08) 4px,rgba(255,255,255,.05) 100%),
+    linear-gradient(110deg,rgba(255,255,255,.12),transparent 48%),
+    rgba(59,60,63,.99)!important;
+  border-color:rgba(255,255,255,.28)!important;
+  border-top-color:rgba(255,255,255,.48)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(0,0,0,.36),0 22px 44px rgba(0,0,0,.36)!important;
+}
+.spider-sidebar nav a.active,.spider-sidebar .sidebar-bottom>a.active{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,.14) 1px,rgba(255,255,255,.06) 4px,rgba(255,255,255,.045) 100%),
+    linear-gradient(100deg,rgba(255,255,255,.085),transparent 65%),
+    #303134!important;
+  border-color:rgba(255,255,255,.26)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(0,0,0,.35),0 6px 15px rgba(0,0,0,.22)!important;
+}
+input,textarea,select,[role=combobox],.hire-search,.jobs-search,.market-search,.search-field,.resource-search,.spider-search{
+  background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.045)),rgba(35,36,39,.98)!important;
+  border-color:rgba(255,255,255,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,0,0,.28)!important;
+}
+.spider-button-secondary,.spider-hero-actions .spider-button-secondary,button[class*=secondary],a[class*=secondary]{
+  background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.09) 1px,rgba(255,255,255,.035)),#303134!important;
+  border-color:rgba(255,255,255,.23)!important;
+}

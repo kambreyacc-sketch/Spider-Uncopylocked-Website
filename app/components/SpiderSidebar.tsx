@@ -143,7 +143,7 @@ export default function SpiderSidebar() {
   }, []);
 
   const userName = user?.displayName || user?.username || "Discord account";
-  const userAvatar = user?.avatar || "/spider-uncopylocked-pfp.webp";
+  const userAvatar = user?.avatar || "/spider-uncopylocked-pfp.svg";
 
   return (
     <>
@@ -172,7 +172,7 @@ export default function SpiderSidebar() {
       >
         <div className="sidebar-head">
           <Link href="/" className="sidebar-brand" aria-label="Spider Uncopylocked home" onClick={closeMobile}>
-            <img src="/spider-uncopylocked-pfp.webp" alt="" />
+            <img src="/spider-uncopylocked-pfp.svg" alt="" />
             <span className="sidebar-brand-copy">SPIDER<small>UNCOPYLOCKED</small></span>
           </Link>
           <button
@@ -197,7 +197,7 @@ export default function SpiderSidebar() {
         <div className="sidebar-scroll-area">
           {user ? (
             <div className="sidebar-user" title={userName}>
-              <img src={userAvatar} alt="" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/spider-uncopylocked-pfp.webp"; }} />
+              <img src={userAvatar} alt="" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/spider-uncopylocked-pfp.svg"; }} />
               <span className="sidebar-user-copy">
                 <b>{userName}</b>
                 <small>@{user.username || "Discord connected"}</small>
