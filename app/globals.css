@@ -1763,3 +1763,106 @@ html[data-spider-sidebar-collapsed="true"] .settings-page { padding-left: 72px !
   .messages-list-panel { border-right: 0; border-bottom: 1px solid #29292d; min-height: 250px; }
   .messages-thread-panel { min-height: 280px; }
 }
+
+
+/* Job-posting wizard: stages map to fields supported by the current Convex mutation. */
+.job-wizard-page { max-width: 1040px; }
+.job-wizard-page-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 24px; }
+.job-wizard-page-heading h1 { font: 600 clamp(28px,3.4vw,38px)/1.08 'Space Grotesk',sans-serif; letter-spacing: -.05em; margin: 10px 0 8px; color: #f4f4f5; }
+.job-wizard-page-heading p { margin: 0; color: #a1a1aa; font-size: 12px; line-height: 1.7; }
+.job-wizard-close { width: 34px; height: 34px; flex: none; display: grid; place-items: center; border: 1px solid #333338; border-radius: 6px; color: #a1a1aa; background: #111113; }
+.job-wizard-close:hover { color: #fff; background: #222225; }
+.job-wizard {
+  max-width: 760px;
+  overflow: hidden;
+  border: 1px solid #303034;
+  border-radius: 9px;
+  background: #111113;
+  box-shadow: 0 24px 75px #0004;
+}
+.job-wizard-progress { padding: 18px 24px 14px; border-bottom: 1px solid #29292d; background: #151517; }
+.job-wizard-progress-bars { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 5px; margin-bottom: 12px; }
+.job-wizard-progress-bars span { height: 4px; border-radius: 3px; background: #333338; }
+.job-wizard-progress-bars span.complete { background: #f4f4f5; }
+.job-wizard-progress-labels { display: flex; justify-content: space-between; gap: 8px; }
+.job-wizard-progress-labels span { color: #777780; font-size: 9px; }
+.job-wizard-progress-labels span.current { color: #f4f4f5; font-weight: 600; }
+.job-wizard-progress-labels span.complete { color: #b3b3bc; }
+.job-wizard-step { display: grid; gap: 17px; padding: 24px; }
+.job-wizard-step-heading { margin-bottom: 2px; }
+.job-wizard-step-heading > span { color: #85858e; font: 9px 'DM Mono',monospace; letter-spacing: .13em; }
+.job-wizard-step-heading h2 { color: #f4f4f5; font: 600 22px/1.2 'Space Grotesk',sans-serif; letter-spacing: -.035em; margin: 8px 0 6px; }
+.job-wizard-step-heading p { color: #a1a1aa; font-size: 11px; line-height: 1.7; margin: 0; }
+.job-role-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.job-role-tile {
+  position: relative; min-width: 0; min-height: 101px; display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center; gap: 7px; padding: 13px;
+  background: #151517; color: #a1a1aa; border: 1px solid #303034; border-radius: 6px;
+  text-align: left; cursor: pointer; transition: background .14s,border-color .14s,color .14s;
+}
+.job-role-tile svg { color: #a1a1aa; }
+.job-role-tile b { color: #e4e4e7; font-size: 11px; font-weight: 600; }
+.job-role-tile small { color: #85858e; font-size: 9px; line-height: 1.45; }
+.job-role-tile:hover { background: #1e1e21; border-color: #52525b; }
+.job-role-tile.selected { background: #222225; border-color: #73737d; box-shadow: inset 0 0 0 1px #73737d; }
+.job-role-tile.selected > svg, .job-role-tile.selected b { color: #fff; }
+.job-role-check { position: absolute; top: 9px; right: 9px; width: 18px; height: 18px; display: grid; place-items: center; border-radius: 4px; background: #f4f4f5; color: #111113; }
+.job-wizard-field { display: grid; gap: 7px; color: #dedee2; font-size: 11px; font-weight: 600; }
+.job-wizard-field input, .job-wizard-field textarea {
+  width: 100%; min-width: 0; background: #202023; color: #f4f4f5; border: 1px solid #4a4a51;
+  border-radius: 6px; padding: 12px; font: 12px 'DM Sans',sans-serif; outline: none;
+}
+.job-wizard-field textarea { resize: vertical; min-height: 145px; line-height: 1.7; }
+.job-wizard-field input:focus, .job-wizard-field textarea:focus { border-color: #aaaab2; box-shadow: 0 0 0 1px #aaaab2; }
+.job-wizard-field input::placeholder, .job-wizard-field textarea::placeholder { color: #8a8a93; }
+.job-wizard-field > small { color: #777780; font-size: 9px; font-weight: 400; text-align: right; }
+.field-optional { margin-left: 6px; color: #888891; font-size: 10px; font-weight: 400; }
+.job-budget-preview { display: grid; gap: 6px; padding: 13px 14px; background: #18181b; border: 1px solid #303034; border-radius: 6px; }
+.job-budget-preview-label { margin-top: 2px; color: #7d7d86; font: 8px 'DM Mono',monospace; letter-spacing: .12em; }
+.job-budget-preview strong { color: #f4f4f5; font-size: 13px; font-weight: 600; }
+.job-wizard-budget-fields { margin: 0; }
+.job-wizard-note { margin: 0; color: #8f8f98; font-size: 10px; line-height: 1.75; }
+.job-review-card { border: 1px solid #303034; border-radius: 7px; padding: 15px; background: #18181b; }
+.job-review-top, .job-review-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; color: #aaaab2; font-size: 9px; }
+.job-review-top span:first-child { padding: 4px 7px; border-radius: 4px; background: #2a2a2e; color: #f4f4f5; }
+.job-review-card h3 { color: #f4f4f5; font-size: 17px; margin: 15px 0 8px; }
+.job-review-card p { white-space: pre-wrap; color: #b5b5bd; font-size: 11px; line-height: 1.8; margin: 0 0 15px; }
+.job-review-bottom { padding-top: 12px; border-top: 1px solid #303034; align-items: center; }
+.job-review-bottom strong { color: #f4f4f5; font-size: 13px; }
+.job-review-card > small { display: block; color: #85858e; font-size: 9px; line-height: 1.7; margin-top: 12px; overflow-wrap: anywhere; }
+.job-wizard-error { margin: 0 24px; padding: 10px 12px; border: 1px solid #55555c; border-radius: 6px; background: #1a1a1d; color: #f4f4f5 !important; }
+.job-wizard-footer { display: flex; align-items: center; gap: 10px; padding: 14px 24px; background: #18181b; border-top: 1px solid #29292d; }
+.job-wizard-footer-spacer { flex: 1; }
+.job-wizard-back { display: inline-flex; align-items: center; gap: 7px; color: #b0b0b8; background: transparent; border: 0; font-size: 11px; cursor: pointer; text-decoration: none; }
+.job-wizard-back:hover { color: #fff; }
+.job-wizard-footer .hire-primary { min-height: 38px; }
+.job-wizard-success { max-width: 760px; padding: 42px 20px; }
+.job-wizard-success-icon { width: 44px; height: 44px; display: grid; place-items: center; margin: 0 auto 12px; border: 1px solid #424248; border-radius: 50%; background: #202023; color: #f4f4f5; }
+.job-wizard-success .hire-primary { margin-top: 8px; }
+.rq-market-brand { display: flex; align-items: center; gap: 8px; padding: 3px 10px 16px; margin-bottom: 7px; border-bottom: 1px solid #29292d; }
+.rq-market-brand img { width: 30px; height: 30px; object-fit: cover; border-radius: 7px; background: #000; }
+.rq-market-brand b { font-size: 10px; font-weight: 600; letter-spacing: .02em; color: #f4f4f5; }
+.rq-market-brand b span { display: block; color: #85858e; font: 8px 'DM Mono',monospace; letter-spacing: .1em; margin-top: 3px; }
+.rq-image-empty { display: flex; height: 100%; width: 100%; align-items: center; justify-content: center; flex-direction: column; gap: 9px; background: #171719; color: #777780; }
+.rq-image-empty span { font-size: 9px; color: #85858e; }
+.rq-real-price-row { align-items: flex-start; }
+.rq-real-price-row .rq-revenue strong { font-size: 11px !important; }
+.rq-save.active { background: #f4f4f5 !important; color: #111113 !important; border-color: #f4f4f5 !important; }
+.rq-clear-watchlist { padding: 7px 10px; border: 1px solid #36363c; border-radius: 6px; color: #c4c4cc; background: #141416; font-size: 10px; cursor: pointer; }
+.rq-clear-watchlist:hover { background: #252528; color: #fff; }
+.rq-icon-button:disabled { opacity: .45; cursor: not-allowed; }
+.rq-notifications-dot { width: 7px; height: 7px; display: block; border-radius: 50%; border: 1px solid #aaaab2; }
+@media (max-width: 760px) {
+  .job-wizard-page-heading { margin-bottom: 17px; }
+  .job-wizard-progress { padding: 15px 15px 12px; }
+  .job-wizard-step { padding: 18px 15px; }
+  .job-wizard-footer { padding: 12px 15px; }
+  .job-wizard-error { margin-inline: 15px; }
+  .job-role-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 420px) {
+  .job-role-grid { grid-template-columns: 1fr; }
+  .job-role-tile { min-height: 76px; }
+  .job-wizard-progress-labels span { font-size: 8px; }
+  .job-wizard-budget-fields { grid-template-columns: 1fr; }
+}
