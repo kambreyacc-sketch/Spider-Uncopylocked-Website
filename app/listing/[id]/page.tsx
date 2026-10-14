@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { ArrowLeft, MessageCircle, Gamepad2 } from "lucide-react";
+import { ArrowLeft, MessageCircle } from "lucide-react";
 
 type Listing = {
   _id: string; title: string; type: "Game" | "UGC Group"; robloxUrl: string;
@@ -18,12 +18,12 @@ export default function ListingPage() {
   if (rows === undefined) return <main className="sell-page"><div className="sell-shell"><p>Loading listing…</p></div></main>;
   if (!listing) return <main className="sell-page"><div className="sell-shell"><Link href="/marketplace" className="sell-back"><ArrowLeft size={15}/> Back to marketplace</Link><h1>Listing not found</h1><p>This listing may have been removed or is not public.</p></div></main>;
   return <main className="sell-page">
-    <header className="sell-topbar"><Link href="/marketplace" className="sell-brand"><span>SPIDER <b>UNCOPYLOCKED</b><small>CREATOR MARKETPLACE</small></span></Link><div className="sell-top-links"><Link href="/marketplace">Marketplace</Link><Link href="/sell">Sell on Spider</Link><Link href="/api/auth/discord/login" className="sell-connect">Sign in with Discord</Link></div></header>
+    <header className="sell-topbar"><Link href="/marketplace" className="sell-brand"><img className="market-brand-mark" src="/spider-uncopylocked-pfp.webp" alt="" /><span>SPIDER <b>UNCOPYLOCKED</b><small>CREATOR MARKETPLACE</small></span></Link><div className="sell-top-links"><Link href="/marketplace">Marketplace</Link><Link href="/sell">Sell on Spider</Link><Link href="/api/auth/discord/login" className="sell-connect">Sign in with Discord</Link></div></header>
     <div className="sell-shell">
       <Link href="/marketplace" className="sell-back"><ArrowLeft size={15}/> Back to marketplace</Link>
       <section className="sell-intro"><span className="sell-eyebrow">{listing.type === "Game" ? "ROBLOX EXPERIENCE" : "UGC GROUP"}</span><h1>{listing.title}</h1><p>Listed by @{listing.sellerName}</p></section>
       <section className="sell-form-section" style={{maxWidth:900}}>
-        {listing.imageUrl ? <img src={listing.imageUrl} alt={listing.title} style={{width:"100%",maxHeight:380,objectFit:"cover",borderRadius:12,marginBottom:24}}/> : <div style={{height:160,display:"grid",placeItems:"center",background:"#17151f",borderRadius:12,marginBottom:24,color:"#a58bff"}}><Gamepad2 size={48}/></div>}
+        {listing.imageUrl ? <><img src={listing.imageUrl} alt={listing.title} style={{width:"100%",maxHeight:380,objectFit:"cover",borderRadius:8,marginBottom:24}} onError={(event) => { event.currentTarget.style.display = "none"; const fallback = event.currentTarget.parentElement?.querySelector(".listing-no-preview"); if (fallback instanceof HTMLElement) fallback.hidden = false; }} /><div className="listing-no-preview" hidden><span>NO PREVIEW IMAGE</span><p>The seller has not provided a thumbnail for this listing.</p></div></> : <div className="listing-no-preview"><span>NO PREVIEW IMAGE</span><p>The seller has not provided a thumbnail for this listing.</p></div>}
         <h2>Asking price: {listing.price.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2})}</h2>
         <p style={{whiteSpace:"pre-wrap"}}>{listing.description || "The seller hasn't added a description yet."}</p>
         <p><a href={listing.robloxUrl} target="_blank" rel="noreferrer" className="sell-fetch-thumbnail">Open Roblox listing ↗</a></p>

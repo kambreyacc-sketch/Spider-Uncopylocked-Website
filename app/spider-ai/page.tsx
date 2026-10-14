@@ -5,8 +5,8 @@ import { FormEvent, useEffect, useState } from "react";
 import {
   ArrowDown, ArrowUp, ArrowUpRight, Bot, Check, ChevronDown, CircleHelp,
   Code2, Crown, FileCode2, History, Layers3, LogIn, MessageSquarePlus,
-  MoreHorizontal, PanelLeftClose, Paperclip, Plus, Settings2, ShieldCheck,
-  Sparkles, WandSparkles
+  MoreHorizontal, PanelLeftClose, PanelLeftOpen, Paperclip, Plus, Settings2, ShieldCheck,
+  Sparkles, WandSparkles, Menu, X
 } from "lucide-react";
 import "./spider-ai.css";
 
@@ -46,6 +46,7 @@ export default function SpiderAIPage() {
   const [project, setProject] = useState("Untitled project");
   const [editingProject, setEditingProject] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [model, setModel] = useState("Default");
   const [showModelMenu, setShowModelMenu] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
@@ -93,15 +94,22 @@ export default function SpiderAIPage() {
     window.requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>(".spai-composer-welcome textarea")?.focus());
   }
 
-  const avatarUrl = user?.avatar || (user?.id ? "https://cdn.discordapp.com/embed/avatars/0.png" : "");
+  const avatarUrl = user?.avatar || "";
+
+  useEffect(() => {
+    if (!mobileSidebarOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setMobileSidebarOpen(false); };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", onKeyDown); };
+  }, [mobileSidebarOpen]);
 
   return (
     <main className="spai-root">
-      {sidebarOpen && <aside className="spai-sidebar">
-        <Link href="/" className="spai-brand" aria-label="Spider Uncopylocked home">
-          <span className="spai-brand-mark"><span /></span>
-          <span>SPIDER<small>UNCOPYLOCKED</small></span>
-        </Link>
+      {mobileSidebarOpen && <button type="button" className="spai-backdrop" onClick={() => setMobileSidebarOpen(false)} aria-label="Close navigation menu" />}
+      <aside className={"spai-sidebar" + (!sidebarOpen ? " is-collapsed" : "") + (mobileSidebarOpen ? " is-mobile-open" : "")}>
+        <div className="spai-sidebar-brand-row"><Link href="/" className="spai-brand" aria-label="Spider Uncopylocked home"><img className="spai-brand-image" src="/spider-uncopylocked-pfp.webp" alt="" /><span>SPIDER<small>UNCOPYLOCKED</small></span></Link><button type="button" className="spai-mobile-close" aria-label="Close navigation menu" onClick={() => setMobileSidebarOpen(false)}><X size={18}/></button></div>
         <button className="spai-new-project" onClick={() => { setMessages([]); setProject("Untitled project"); setPrompt(""); }}>
           <Plus size={16} /> New project <span className="spai-shortcut">⌘ K</span>
         </button>
@@ -127,7 +135,7 @@ export default function SpiderAIPage() {
           <Link className="spai-side-link" href="/settings"><Settings2 size={16}/> Settings</Link>
           {authLoading ? <div className="spai-user-row"><span className="spai-avatar spai-avatar-loading" /><span><strong>Checking Discord…</strong><small>Loading account</small></span></div> :
             user ? <div className="spai-user-row">
-              <img className="spai-user-avatar" src={avatarUrl} alt="" />
+              {avatarUrl ? <img className="spai-user-avatar" src={avatarUrl} alt="" onError={(event) => { event.currentTarget.style.display = "none"; }} /> : <span className="spai-avatar">{String(user.displayName || user.username || "?").slice(0, 1).toUpperCase()}</span>}
               <span><strong>{user.displayName || user.username}</strong><small>@{user.username} · Discord</small></span>
               <Link href="/api/auth/logout" aria-label="Sign out" title="Sign out"><MoreHorizontal size={17}/></Link>
             </div> :
@@ -136,12 +144,12 @@ export default function SpiderAIPage() {
               <Link href="/api/auth/discord/login"><LogIn size={14}/> Continue with Discord</Link>
             </div>}
         </div>
-      </aside>}
+      </aside>
 
       <section className="spai-main">
         <header className="spai-topbar">
           <div className="spai-top-left">
-            <button className="spai-icon-button" aria-label="Toggle sidebar" onClick={() => setSidebarOpen(!sidebarOpen)}><PanelLeftClose size={17}/></button>
+            <button className="spai-icon-button spai-sidebar-toggle" aria-label={mobileSidebarOpen ? "Close navigation menu" : sidebarOpen ? "Collapse sidebar" : "Expand sidebar"} onClick={() => { if (window.matchMedia("(max-width: 620px)").matches) setMobileSidebarOpen((open) => !open); else setSidebarOpen((open) => !open); }}><Menu className="spai-mobile-menu-icon" size={17}/>{sidebarOpen ? <PanelLeftClose className="spai-desktop-toggle-icon" size={17}/> : <PanelLeftOpen className="spai-desktop-toggle-icon" size={17}/>}</button>
             <span className="spai-top-divider"/>
             {editingProject ? <input autoFocus value={project} onChange={(e) => setProject(e.target.value)} onBlur={() => setEditingProject(false)} onKeyDown={(e) => e.key === "Enter" && setEditingProject(false)} className="spai-project-input"/> : <button className="spai-project-name" onClick={() => setEditingProject(true)}>{project}<ChevronDown size={14}/></button>}
             <span className="spai-unsaved"><span/> Draft</span>
@@ -176,7 +184,7 @@ export default function SpiderAIPage() {
             <div className="spai-build-note"><ShieldCheck size={14}/> Templates include full requirements. Review and edit the prompt before submitting.</div></>}
           </div> : <div className="spai-chat-layout">
             <div className="spai-chat-header"><div><span className="spai-chat-label">SPIDER UNCOPYLOCKED</span><h2>{messages.find(m=>m.role==="user")?.text || "New conversation"}</h2></div><button className="spai-icon-button" onClick={() => setMessages([])} title="New chat"><MessageSquarePlus size={17}/></button></div>
-            <div className="spai-messages">{messages.map((message, index) => <div className={"spai-message "+message.role} key={index}><div className="spai-message-avatar">{message.role==="assistant"?<img className="spai-message-user-avatar" src="https://media.discordapp.net/attachments/1515309294332149770/1558762264838799420/image_1.webp?ex=6acc9dfc&is=6acb4c7c&hm=9ec0868ab9a9ce2893e6e8d10b29a0851329696c435496ec6036f852c3d3a4e6&=&format=webp" alt="Spider Uncopylocked"/>: user && avatarUrl ? <img className="spai-message-user-avatar" src={avatarUrl} alt=""/> : "?"}</div><div className="spai-message-body"><div className="spai-message-name">{message.role==="assistant"?"Spider Uncopylocked":(user?.displayName || user?.username || "You")}<span>{message.role==="assistant"?"WORKSPACE NOTICE":"JUST NOW"}</span></div><p>{message.text}</p>{message.role==="assistant"&&<div className="spai-preview-box"><div><Code2 size={16}/><span><strong>Roblox Studio connection</strong><small>Plugin connection is a separate next step</small></span></div><span className="spai-status-pill">NOT CONNECTED</span></div>}</div></div>)}</div>
+            <div className="spai-messages">{messages.map((message, index) => <div className={"spai-message "+message.role} key={index}><div className="spai-message-avatar">{message.role==="assistant"?<img className="spai-message-user-avatar" src="/spider-uncopylocked-pfp.webp" alt="Spider Uncopylocked"/>: user && avatarUrl ? <img className="spai-message-user-avatar" src={avatarUrl} alt=""/> : "?"}</div><div className="spai-message-body"><div className="spai-message-name">{message.role==="assistant"?"Spider Uncopylocked":(user?.displayName || user?.username || "You")}<span>{message.role==="assistant"?"WORKSPACE NOTICE":"JUST NOW"}</span></div><p>{message.text}</p>{message.role==="assistant"&&<div className="spai-preview-box"><div><Code2 size={16}/><span><strong>Roblox Studio connection</strong><small>Plugin connection is a separate next step</small></span></div><span className="spai-status-pill">NOT CONNECTED</span></div>}</div></div>)}</div>
             <form className="spai-composer spai-composer-chat" onSubmit={sendMessage}><textarea value={prompt} onChange={(e)=>setPrompt(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}}} placeholder="Describe the full system you want to build…" rows={2} aria-label="Message Spider Uncopylocked"/><div className="spai-composer-tools"><div className="spai-composer-left"><button type="button" className="spai-tool-button" onClick={()=>window.alert("Attachments will be enabled when the build service is connected.")}><Paperclip size={15}/></button><button type="button" className="spai-model-select" onClick={()=>setShowModelMenu(!showModelMenu)}><Bot size={15}/>{model}<ChevronDown size={13}/></button>{showModelMenu&&<span className="spai-model-inline">Model choice preview</span>}</div><button type="submit" className="spai-send-button" disabled={!prompt.trim() || isGenerating}><ArrowUp size={16}/></button></div></form>
             <div className="spai-chat-foot"><ShieldCheck size={13}/> AI responses use the configured server-side provider. Roblox Studio sync is a separate plugin integration.</div>
           </div>}
