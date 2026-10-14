@@ -154,7 +154,7 @@ export default function DeveloperApplicationsPanel() {
             <article key={item._id} className="application-card">
               <header className="application-card-head">
                 <div className="application-person">
-                  <img src={item.avatarUrl || "/spider-uncopylocked-pfp.webp"} alt="" />
+                  <img src={item.avatarUrl || "/spider-uncopylocked-pfp.svg"} alt="" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = "/spider-uncopylocked-pfp.svg"; }} />
                   <div><h3>{item.displayName || item.username}</h3><p>@{item.username} · Discord: {item.discordUsername || item.discordId}</p><small>Submitted {new Date(item.createdAt || item._creationTime).toLocaleString()}</small></div>
                 </div>
                 <span className={"application-status " + item.status}>{item.status}</span>
