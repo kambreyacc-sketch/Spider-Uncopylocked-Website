@@ -2341,3 +2341,24 @@ a:hover { text-decoration-color: #a1a1aa; }
 .application-error,.sell-message.error { background:#1a1a1d !important; }
 .team-discord-badge,.team-role-pill,.team-nitro-badge-image { color:#d4d4d8 !important; }
 .spider-game-preview img { background:#171719; }
+
+
+/* Listing detail empty state is intentionally plain UI, never substitute artwork. */
+.listing-no-preview {
+  min-height:180px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:8px;
+  margin:0 0 24px;
+  border:1px dashed #39393f;
+  border-radius:8px;
+  background:#111113;
+  color:#d4d4d8;
+}
+.listing-no-preview[hidden] { display:none !important; }
+.listing-no-preview>span { font:9px 'DM Mono',monospace; letter-spacing:.13em; color:#92929a; }
+.listing-no-preview p { color:#8b8b94; font-size:11px; margin:0; line-height:1.6; }
+@media(max-width:600px) { .listing-no-preview { min-height:135px; padding:16px; } }
