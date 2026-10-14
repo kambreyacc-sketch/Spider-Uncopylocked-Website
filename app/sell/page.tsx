@@ -12,7 +12,7 @@ export const metadata = {
 export default function SellPage() {
   return <main className="sell-page">
     <header className="sell-topbar">
-      <Link href="/marketplace" className="sell-brand"><img className="market-brand-mark" src="https://media.discordapp.net/attachments/1515309294332149770/1558762264838799420/image_1.webp?ex=6acc9dfc&is=6acb4c7c&hm=9ec0868ab9a9ce2893e6e8d10b29a0851329696c435496ec6036f852c3d3a4e6&=&format=webp" alt="" /><span>SPIDER <b>UNCOPYLOCKED</b><small>CREATOR MARKETPLACE</small></span></Link>
+      <Link href="/marketplace" className="sell-brand"><img className="market-brand-mark" src="/spider-uncopylocked-pfp.webp" alt="" /><span>SPIDER <b>UNCOPYLOCKED</b><small>CREATOR MARKETPLACE</small></span></Link>
       <div className="sell-top-links"><Link href="/marketplace">Marketplace</Link><Link href="/marketplace#browse">Browse listings</Link><Link href="/api/auth/discord/login" className="sell-connect">Sign in with Discord <ArrowUpRight size={14}/></Link></div>
     </header>
     <div className="sell-shell">
