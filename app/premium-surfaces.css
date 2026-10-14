@@ -288,3 +288,76 @@ img.spider-pfp,img.sidebar-avatar,.sidebar-brand img,.team-avatar,.team-card img
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .spider-nav,.navbar,.spider-sidebar,.feature-card,.resource-feature,.spider-category-card,.job-card,.developer-card,.studio-card,.resource-card,.marketplace-card,.listing-card{background-color:#1b1c1e!important}
 }
+
+
+/* Contrast refinement after browser preview: lift smoked glass from black into visible graphite. */
+body{
+  background:
+    radial-gradient(ellipse at 45% -12%,rgba(255,255,255,.15) 0%,rgba(255,255,255,.055) 28%,transparent 58%),
+    radial-gradient(ellipse at 94% 25%,rgba(210,210,210,.055),transparent 34%),
+    linear-gradient(180deg,#18191b 0%,#121315 40%,#0f1012 100%)!important;
+}
+.market-content{
+  background:
+    radial-gradient(ellipse at 50% -4%,rgba(255,255,255,.065),transparent 48%),
+    linear-gradient(180deg,#151619 0%,#111214 64%,#0f1012 100%)!important;
+}
+.spider-nav,.navbar,.spider-sidebar,.spider-sidebar .sidebar-head,.spider-sidebar .sidebar-bottom{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.19) 0%,rgba(255,255,255,.07) 1px,rgba(255,255,255,.026) 34%,rgba(255,255,255,.065) 100%),
+    linear-gradient(105deg,rgba(255,255,255,.045),transparent 48%),
+    rgba(31,32,35,.93)!important;
+  border-color:rgba(255,255,255,.19)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(0,0,0,.44),0 14px 36px rgba(0,0,0,.29)!important;
+}
+.feature-card,.resource-feature,.spider-category-card,.spider-home-links>a,.spider-upload-banner,
+.spider-hiring-banner,.spider-game-preview,.float-card,.message-placeholder,.message-empty-state,
+.job-card,.job-listing-card,.application-card,.developer-card,.studio-card,.resource-card,
+.marketplace-card,.listing-card,.listing-panel,.listing-no-preview,.sell-panel,.sell-card,
+.billing-panel,.settings-panel,.admin-card,.admin-panel,.dashboard-panel,.dashboard-card,
+.spider-panel,.spai-card,.spai-composer,.spai-root .spai-panel,.spai-root .spai-message,
+.studio-panel,.team-card,.settings-card,.settings-section,.admin-section,.billing-section,
+.message-workspace,.message-list,.message-conversation{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.205) 0%,rgba(255,255,255,.085) 1px,rgba(255,255,255,.034) 27%,rgba(255,255,255,.065) 100%),
+    linear-gradient(112deg,rgba(255,255,255,.055),transparent 45%),
+    radial-gradient(ellipse at 16% 0%,rgba(255,255,255,.07),transparent 58%),
+    rgba(39,40,43,.94)!important;
+  border-color:rgba(255,255,255,.16)!important;
+  border-top-color:rgba(255,255,255,.32)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(0,0,0,.48),0 20px 40px rgba(0,0,0,.3)!important;
+}
+.spider-home .spider-category-card,.spider-home .feature-card,.spider-home .resource-feature,
+.spider-home .spider-home-links>a,.spider-home .spider-upload-banner,.spider-home .spider-hiring-banner{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.09) 1px,rgba(255,255,255,.04) 32%,rgba(255,255,255,.065) 100%),
+    linear-gradient(115deg,rgba(255,255,255,.06),transparent 48%),
+    radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.07),transparent 60%),
+    rgba(37,38,41,.96)!important;
+  border-color:rgba(255,255,255,.17)!important;
+  border-top-color:rgba(255,255,255,.34)!important;
+}
+.feature-card:hover,.resource-feature:hover,.spider-category-card:hover,.spider-home-links>a:hover,
+.job-card:hover,.job-listing-card:hover,.developer-card:hover,.studio-card:hover,.resource-card:hover,
+.marketplace-card:hover,.listing-card:hover,.team-card:hover{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.105) 1px,rgba(255,255,255,.05) 36%,rgba(255,255,255,.075)),
+    linear-gradient(115deg,rgba(255,255,255,.075),transparent 52%),
+    rgba(47,48,51,.97)!important;
+  border-color:rgba(255,255,255,.25)!important;
+  border-top-color:rgba(255,255,255,.4)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 0 rgba(0,0,0,.4),0 22px 44px rgba(0,0,0,.36)!important;
+}
+.spider-sidebar nav a.active,.spider-sidebar .sidebar-bottom>a.active{
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08) 2px,rgba(255,255,255,.045) 100%),#292a2d!important;
+  border-color:rgba(255,255,255,.21)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.35),0 6px 14px rgba(0,0,0,.2)!important;
+}
+input,textarea,select,[role=combobox],.hire-search,.jobs-search,.market-search,.search-field,.resource-search,.spider-search{
+  background:linear-gradient(180deg,rgba(255,255,255,.095),rgba(255,255,255,.025)),rgba(28,29,32,.96)!important;
+  border-color:rgba(255,255,255,.18)!important;
+}
+.spider-button-secondary,.spider-hero-actions .spider-button-secondary,button[class*=secondary],a[class*=secondary]{
+  background:linear-gradient(180deg,rgba(255,255,255,.19),rgba(255,255,255,.055) 2px,rgba(255,255,255,.025)),#252629!important;
+  border-color:rgba(255,255,255,.2)!important;
+}
