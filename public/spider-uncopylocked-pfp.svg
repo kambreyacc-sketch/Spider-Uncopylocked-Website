@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Spider Uncopylocked</title>
+  <defs>
+    <radialGradient id="shell" cx="28%" cy="14%" r="95%">
+      <stop offset="0" stop-color="#424345"/>
+      <stop offset=".28" stop-color="#28292b"/>
+      <stop offset=".68" stop-color="#151618"/>
+      <stop offset="1" stop-color="#090a0b"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".88"/>
+      <stop offset=".38" stop-color="#bdbdbf" stop-opacity=".38"/>
+      <stop offset=".75" stop-color="#555659" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#e5e5e5" stop-opacity=".66"/>
+    </linearGradient>
+    <linearGradient id="metal" x1=".12" y1="0" x2=".82" y2="1">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".34" stop-color="#dededf"/>
+      <stop offset=".72" stop-color="#8f9092"/>
+      <stop offset="1" stop-color="#c9c9ca"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".45" stop-color="#c9c9cb"/>
+      <stop offset="1" stop-color="#77787a"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="28%" cy="5%" r="74%">
+      <stop offset="0" stop-color="#fff" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity=".56"/>
+    </filter>
+  </defs>
+  <circle cx="128" cy="128" r="120" fill="url(#shell)"/>
+  <circle cx="128" cy="128" r="119" fill="none" stroke="url(#rim)" stroke-width="1.7"/>
+  <circle cx="128" cy="128" r="111.5" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width=".8"/>
+  <ellipse cx="102" cy="40" rx="91" ry="34" fill="url(#sheen)"/>
+  <g fill="none" stroke="url(#metal)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#shadow)">
+    <path d="M113 91 88 67 67 68 51 49"/>
+    <path d="M109 101 81 96 59 109 41 99"/>
+    <path d="M108 112 79 120 62 140 41 147"/>
+    <path d="M113 125 92 149 85 174 64 193"/>
+    <path d="M143 91 168 67 189 68 205 49"/>
+    <path d="M147 101 175 96 197 109 215 99"/>
+    <path d="M148 112 177 120 194 140 215 147"/>
+    <path d="M143 125 164 149 171 174 192 193"/>
+  </g>
+  <g filter="url(#shadow)">
+    <circle cx="128" cy="82" r="11.5" fill="url(#body)" stroke="#fff" stroke-opacity=".65" stroke-width="1"/>
+    <path d="M128 95C144 102 150 118 145 138 141 155 133.5 169 128 178 122.5 169 115 155 111 138 106 118 112 102 128 95Z" fill="url(#body)" stroke="#f4f4f4" stroke-opacity=".58" stroke-width="1.1"/>
+    <path d="M124 104C117 117 120 138 128 157" fill="none" stroke="#fff" stroke-opacity=".44" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M128 95V178" stroke="#67686a" stroke-opacity=".62" stroke-width="1"/>
+  </g>
+  <path d="M19 80A113 113 0 0 1 87 20" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="1.4" stroke-linecap="round"/>
+</svg>
