@@ -68,7 +68,7 @@ function ListingCard({
     <article className="rq-listing-card">
       <div className="rq-listing-image">
         {listing.image ? (
-          <img src={listing.image} alt={listing.title + " preview"} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} />
+          <><img src={listing.image} alt={listing.title + " preview"} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; const fallback = event.currentTarget.parentElement?.querySelector(".rq-image-empty"); if (fallback instanceof HTMLElement) fallback.hidden = false; }} /><div className="rq-image-empty" hidden><Gamepad2 size={27} strokeWidth={1.5} /><span>No preview available</span></div></>
         ) : (
           <div className="rq-image-empty">
             <Gamepad2 size={27} strokeWidth={1.5} />
@@ -242,7 +242,7 @@ export default function MarketplaceBrowser() {
             <div><span className="rq-activity-icon"><Wallet size={18} /></span><span><b>Payments</b><small>Checkout is not active on this marketplace yet.</small></span></div>
           </section>
           <section id="browse" className="rq-browse">
-            <div className="rq-section-title"><div><h2>{savedOnly ? "Saved listings" : "Listings"}</h2><p>Prices and listing dates come from the published listing records.</p></div><button className="rq-clear-watchlist" type="button" onClick={() => { setSavedOnly(false); setSidebar("Home"); window.history.replaceState({}, "", "/marketplace#browse"); }}>Show all listings</button></div>
+            <div className="rq-section-title"><div><h2>{savedOnly ? "Saved listings" : "Listings"}</h2><p>Prices and listing dates come from the published listing records.</p></div><button className="rq-clear-watchlist" type="button" onClick={() => { const nextSavedOnly = !savedOnly; setSavedOnly(nextSavedOnly); setSidebar(nextSavedOnly ? "Watchlist" : "Home"); window.history.replaceState({}, "", nextSavedOnly ? "/marketplace?view=watchlist#browse" : "/marketplace#browse"); }}>{savedOnly ? "Show all listings" : "Show saved"}</button></div>
             <div className="rq-filters">
               <label className="rq-search"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search games or sellers..." aria-label="Search listings" /></label>
               <div className="rq-tab-group"><button className={tab === "Games" ? "active" : ""} onClick={() => setTab("Games")}><Gamepad2 size={15} /> Games</button><button className={tab === "UGC Groups" ? "active" : ""} onClick={() => setTab("UGC Groups")}><Users size={15} /> UGC Groups</button></div>
