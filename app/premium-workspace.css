@@ -1,0 +1,56 @@
+/* Studio directory and form layouts — spacious, real-data-first workspace. */
+.studios-content{padding:clamp(20px,3.1vw,48px)!important}
+.studios-page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:8px 0 27px;padding:clamp(24px,3.2vw,42px);border:1px solid rgba(255,255,255,.18);border-top-color:rgba(255,255,255,.34);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.23),rgba(255,255,255,.075) 1px,rgba(255,255,255,.025) 3px),radial-gradient(ellipse at 12% 0%,rgba(255,255,255,.075),transparent 60%),linear-gradient(145deg,#2d2e30,#222325 70%,#1f2022)!important;box-shadow:inset 0 1px rgba(255,255,255,.15),0 17px 35px rgba(0,0,0,.18)}
+.studios-page-header h1{font-size:clamp(36px,4.2vw,58px);line-height:1.05;letter-spacing:-.055em;margin:12px 0}
+.studios-page-header p{max-width:720px;color:#bcbcbf;line-height:1.7;margin:0}
+.studios-create-button{flex:none}
+.studios-section{margin:32px 0}
+.studios-section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
+.studios-section-heading h2{font-size:clamp(23px,2.6vw,32px);letter-spacing:-.04em;margin:8px 0}
+.studios-section-heading p{color:#b7b7b9;font-size:13px;line-height:1.6;margin:0}
+.studios-panel-count{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.17);border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.035) 2px,transparent 4px),#292a2c;padding:8px 10px;color:#d5d5d7;font-size:11px;white-space:nowrap}
+.studios-directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.studios-directory-card{min-width:0;padding:22px;border:1px solid rgba(255,255,255,.17);border-top-color:rgba(255,255,255,.31);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.06) 1px,rgba(255,255,255,.025) 3px),radial-gradient(ellipse at 12% 0%,rgba(255,255,255,.05),transparent 58%),linear-gradient(145deg,#2c2d2f,#242527 65%,#202123)!important;box-shadow:inset 0 1px rgba(255,255,255,.14),0 12px 24px rgba(0,0,0,.14);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.studios-directory-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.29);box-shadow:inset 0 1px rgba(255,255,255,.18),0 17px 29px rgba(0,0,0,.2)}
+.studios-directory-top{display:flex;align-items:center;gap:12px;min-width:0}
+.studios-directory-avatar{width:48px;height:48px;flex:none;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(255,255,255,.22);border-top-color:rgba(255,255,255,.4);border-radius:11px;background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.035) 2px,transparent 4px),#353638;color:#ddd}
+.studios-directory-avatar img{width:100%;height:100%;object-fit:cover}
+.studios-directory-title{min-width:0;flex:1}
+.studios-directory-title h3{margin:0 0 4px;font-size:17px;letter-spacing:-.025em;overflow-wrap:anywhere}
+.studios-directory-title span{color:#aaa;font-size:11px}
+.studios-owner-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 8px;color:#ddd;font-size:10px;white-space:nowrap}
+.studios-directory-description{color:#bdbdbf;font-size:13px;line-height:1.7;min-height:65px;margin:19px 0}
+.studios-directory-specialties{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.studios-directory-specialties span{padding:6px 8px;border:1px solid rgba(255,255,255,.15);border-radius:6px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.025) 2px,transparent 4px),#292a2c;color:#d0d0d2;font-size:10px}
+.studios-directory-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid rgba(255,255,255,.13);color:#aaa;font-size:11px}
+.studios-directory-footer>span,.studios-directory-footer>div{display:flex;align-items:center;gap:8px}
+.studios-directory-footer a{display:grid;place-items:center;width:30px;height:30px;border:1px solid rgba(255,255,255,.16);border-radius:7px;background:#303133;color:#ddd}
+.studios-directory-footer a:hover{background:#414244;color:#fff}
+.studios-notice{display:flex;align-items:center;gap:12px;margin:16px 0;padding:15px 17px;border:1px solid rgba(255,255,255,.17);border-top-color:rgba(255,255,255,.29);border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03) 2px,transparent 4px),#28292b;color:#c9c9cb;font-size:12px;line-height:1.6}
+.studios-notice>svg{flex:none}
+.studios-notice>span{flex:1}
+.studios-notice strong{color:#f0f0f1}
+.studios-notice a{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;color:#f1f1f2}
+.studios-empty-compact{padding:30px 20px!important}
+.studios-team-panel{margin-top:34px;padding:24px}
+.studios-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.studios-panel-heading h2{font-size:20px;letter-spacing:-.03em;margin:0 0 7px}
+.studios-panel-heading p{margin:0;color:#b4b4b6;font-size:12px;line-height:1.6}
+.studios-inline-link{display:inline-flex;align-items:center;gap:6px;color:#e2e2e3;font-size:12px;white-space:nowrap}
+.studios-role-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.studios-role-card{display:flex;align-items:center;gap:10px;padding:14px;border:1px solid rgba(255,255,255,.15);border-radius:9px;background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.035) 2px,transparent 4px),#292a2c;color:#e7e7e8;font-size:12px}
+.studios-role-card>span{width:32px;height:32px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);border-radius:7px;background:#363739}
+.studios-role-arrow{margin-left:auto;color:#aaa}
+.studios-role-card:hover{background:linear-gradient(180deg,rgba(255,255,255,.23),rgba(255,255,255,.06) 2px,transparent 4px),#353638;border-color:rgba(255,255,255,.26)}
+.form-page .hire-page-head{padding:28px;border:1px solid rgba(255,255,255,.18);border-top-color:rgba(255,255,255,.33);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.21),rgba(255,255,255,.055) 2px,transparent 4px),linear-gradient(145deg,#2d2e30,#222325)!important}
+.form-page .hire-form{max-width:900px;padding:clamp(20px,3vw,34px);margin:20px 0;border:1px solid rgba(255,255,255,.17);border-top-color:rgba(255,255,255,.29);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.19),rgba(255,255,255,.045) 2px,transparent 4px),linear-gradient(145deg,#2a2b2d,#222325)!important;box-shadow:inset 0 1px rgba(255,255,255,.13),0 12px 25px rgba(0,0,0,.13)}
+.form-page .hire-form label{display:flex;flex-direction:column;gap:9px;color:#e5e5e6;font-size:13px;font-weight:600;margin-bottom:20px}
+.form-page .hire-form input,.form-page .hire-form textarea{width:100%;min-height:44px;padding:12px 13px;border:1px solid rgba(255,255,255,.18);border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.02) 2px,transparent 4px),#1f2022;color:#f3f3f4}
+.form-page .hire-form textarea{resize:vertical;min-height:130px}
+.form-page .hire-form small,.form-optional{color:#a9a9ab;font-size:11px;font-weight:400}
+.form-disclaimer{padding:12px 14px;border:1px solid rgba(255,255,255,.16);border-radius:8px;background:#262729;color:#d2d2d4;font-size:12px;line-height:1.6}
+.hire-primary:disabled{opacity:.65;cursor:wait}
+.spin{animation:spider-spin 1s linear infinite}
+@keyframes spider-spin{to{transform:rotate(360deg)}}
+@media(max-width:900px){.studios-content{padding:22px 18px!important}.studios-directory-grid{grid-template-columns:1fr}.studios-role-grid{grid-template-columns:1fr}.studios-directory-description{min-height:0}}
+@media(max-width:700px){.studios-page-header{align-items:flex-start;flex-direction:column;padding:24px 18px}.studios-section-heading{align-items:flex-start;flex-direction:column}.studios-notice{align-items:flex-start;flex-wrap:wrap}.studios-notice>span{flex:1 1 calc(100% - 40px)}.studios-notice a{margin-left:30px}.studios-panel-heading{align-items:flex-start;flex-direction:column}.studios-team-panel{padding:18px}.studios-directory-card{padding:17px}.studios-owner-chip{font-size:9px;padding:5px 6px}}

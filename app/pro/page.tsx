@@ -2,8 +2,8 @@ import Link from "next/link";
 import SpiderSidebar from "../components/SpiderSidebar";
 import { Activity, BadgeCheck, BarChart3, Check, ChevronRight, CircleDollarSign, Crown, Eye, LockKeyhole, MessageSquare, Palette, ShieldCheck, Sparkles, UsersRound, Zap } from "lucide-react";
 import { getSpiderProfile } from "../../lib/session";
-import { getBillingDb, billingIsReady, getStripe } from "../../lib/stripe";
-import { api } from "../../convex/_generated/api";
+import { billingIsReady, getStripe } from "../../lib/stripe";
+import { getSpiderProEntitlement } from "../../lib/pro-access";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Spider Pro | Creator Membership", description: "Explore Spider Pro benefits and check your current membership." };
@@ -19,22 +19,8 @@ const benefits = [
 
 export default async function ProPage() {
   const profile = await getSpiderProfile();
-  let entitlement = { premium: false, planKey: "free", status: "free", renewalDate: null as number | null, cancelAtPeriodEnd: false };
-  let entitlementAvailable = false;
-  const db = getBillingDb();
-  if (profile && db) {
-    try {
-      const result = await db.client.query(api.billing.getEntitlement, { adminSecret: db.secret, discordId: profile.id });
-      entitlement = {
-        premium: !!result.premium,
-        planKey: String(result.planKey || "free"),
-        status: String(result.status || "free"),
-        renewalDate: typeof result.renewalDate === "number" ? result.renewalDate : null,
-        cancelAtPeriodEnd: !!result.cancelAtPeriodEnd,
-      };
-      entitlementAvailable = true;
-    } catch { entitlementAvailable = false; }
-  }
+  const entitlement = await getSpiderProEntitlement(profile);
+  const entitlementAvailable = !!profile && entitlement.status !== "unavailable";
   const checkoutConfigured = billingIsReady(getStripe()) && !!process.env.STRIPE_PRICE_PREMIUM_MONTHLY && !!process.env.STRIPE_PRICE_PREMIUM_YEARLY;
   const endDate = entitlement.renewalDate ? new Date(entitlement.renewalDate * 1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : null;
 
