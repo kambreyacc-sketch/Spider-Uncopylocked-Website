@@ -29,6 +29,8 @@ export default function PostJobPage() {
   const [form, setForm] = useState({
     title: "",
     description: "",
+    milestones: "",
+    workType: "Fixed price",
     craft: "Scripting",
     budgetMin: "0",
     budgetMax: "100",
@@ -63,6 +65,7 @@ export default function PostJobPage() {
     if (index === 1) {
       if (form.title.trim().length < 5) return "Add a job title with at least 5 characters.";
       if (!form.description.trim()) return "Add a short description of the work.";
+      if ((form.description.trim() + (form.milestones.trim() ? "\n\nMILESTONES & ACCEPTANCE CHECKS:\n" + form.milestones.trim() : "")).length > 3000) return "The project details and milestones together must be 3,000 characters or fewer.";
     }
     if (index === 2) {
       const min = Number(form.budgetMin);
@@ -103,7 +106,7 @@ export default function PostJobPage() {
       await post({
         ...form,
         title: form.title.trim(),
-        description: form.description.trim(),
+        description: [form.description.trim(), "WORK ARRANGEMENT: " + form.workType, form.milestones.trim() ? "MILESTONES & ACCEPTANCE CHECKS:\\n" + form.milestones.trim() : ""].filter(Boolean).join("\\n\\n"),
         budgetMin: Number(form.budgetMin),
         budgetMax: Number(form.budgetMax),
         deadline: form.deadline || undefined,
@@ -181,7 +184,11 @@ export default function PostJobPage() {
                 </label>
                 <label className="job-wizard-field">Project details
                   <textarea required maxLength={3000} rows={7} value={form.description} onChange={(event) => update("description", event.target.value)} placeholder="Scope, deliverables, required experience, and what success looks like..." />
-                  <small>{form.description.length}/3000 characters</small>
+                  <small>Describe the outcome, tools, and what counts as complete.</small>
+                </label>
+                <label className="job-wizard-field">Milestones & acceptance checks <span className="field-optional">Optional</span>
+                  <textarea maxLength={2000} rows={4} value={form.milestones} onChange={(event) => update("milestones", event.target.value)} placeholder="1. First playable build — core loop works\n2. Review pass — agreed issues resolved\n3. Final handoff — files and setup notes included" />
+                  <small>These notes are included in the published brief. Spider is not holding money or providing escrow.</small>
                 </label>
               </section>
             )}
@@ -203,6 +210,14 @@ export default function PostJobPage() {
                     <input type="number" inputMode="decimal" min="0" max="1000000" required value={form.budgetMax} onChange={(event) => update("budgetMax", event.target.value)} />
                   </label>
                 </div>
+                <label className="job-wizard-field">Work arrangement
+                  <select value={form.workType} onChange={(event) => update("workType", event.target.value)}>
+                    <option value="Fixed price">Fixed price</option>
+                    <option value="Hourly">Hourly</option>
+                    <option value="Revenue share">Revenue share (agree on terms directly)</option>
+                    <option value="Open to offers">Open to offers</option>
+                  </select>
+                </label>
                 <label className="job-wizard-field">Deadline <span className="field-optional">Optional</span>
                   <input type="date" value={form.deadline} onChange={(event) => update("deadline", event.target.value)} />
                 </label>
@@ -224,6 +239,8 @@ export default function PostJobPage() {
                   <h3>{form.title || "Untitled job"}</h3>
                   <p>{form.description || "No project details provided."}</p>
                   <div className="job-review-bottom"><strong>${Number(form.budgetMin || 0).toLocaleString()} – ${Number(form.budgetMax || 0).toLocaleString()}</strong><span>{form.deadline ? "Deadline " + form.deadline : "No deadline set"}</span></div>
+                  <p className="job-wizard-note"><strong>Work arrangement:</strong> {form.workType}</p>
+                  {form.milestones.trim() && <p className="job-review-milestones"><strong>Milestones & acceptance checks</strong><br/>{form.milestones}</p>}
                   <small>Posting as {form.posterName || user?.displayName || "Your account"} · Contact @{form.discordContact || user?.username || "your Discord"}</small>
                 </div>
                 <p className="job-wizard-note">By publishing, you confirm that your job details are accurate. Never share passwords or .ROBLOSECURITY cookies.</p>
