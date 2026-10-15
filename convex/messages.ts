@@ -70,8 +70,9 @@ export const startConversation = mutation({
     const participantOne = oneFirst ? args.senderDiscordId : args.recipientDiscordId;
     const participantTwo = oneFirst ? args.recipientDiscordId : args.senderDiscordId;
     const existing = await ctx.db.query("conversations")
-      .withIndex("by_participants", q => q.eq("participantOne", participantOne).eq("participantTwo", participantTwo))
-      .unique();
+      .withIndex("by_participants", q => q.eq("participantOne", participantOne))
+      .filter(q => q.eq(q.field("participantTwo"), participantTwo))
+      .first();
     if (existing) return { id: existing._id, created: false };
     const senderName = args.senderName.trim().slice(0, 80) || "Spider creator";
     const recipientName = recipient.displayName || recipient.username;
