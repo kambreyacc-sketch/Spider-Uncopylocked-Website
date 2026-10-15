@@ -118,6 +118,12 @@ export const reviewResource = mutation({
     const now = Date.now();
     await ctx.db.patch(resource._id, { status: args.status, reviewReason: args.status === "rejected" ? reason : undefined, reviewedAt: now });
     await ctx.db.insert("moderationAuditEvents", { actorDiscordId: args.reviewerDiscordId, actorName: args.reviewerName.slice(0, 100), action: "resource_" + args.status, targetType: "resource", targetId: String(resource._id), details: reason, createdAt: now });
+    await ctx.db.insert("userNotifications", {
+      recipientDiscordId: resource.creatorDiscordId, category: "moderation",
+      title: "Resource review: " + args.status,
+      body: "Your resource \"" + resource.title.slice(0, 120) + "\" was " + (args.status === "active" ? "approved and published." : args.status === "rejected" ? "rejected. " + (reason || "") : "returned to pending review."),
+      href: "/resources/my", createdAt: now,
+    });
     return { success: true, id: resource._id, status: args.status };
   },
 });
@@ -172,6 +178,12 @@ export const reviewJob = mutation({
       actorDiscordId: args.reviewerDiscordId, actorName: args.reviewerName.slice(0, 100),
       action: "job_" + args.status, targetType: "job", targetId: String(job._id),
       details: reason, createdAt: now,
+    });
+    await ctx.db.insert("userNotifications", {
+      recipientDiscordId: job.posterDiscordId, category: "moderation",
+      title: "Job review: " + args.status,
+      body: "Your job post \"" + job.title.slice(0, 120) + "\" was " + (args.status === "active" ? "approved and published." : "rejected. " + (reason || "")),
+      href: "/jobs", createdAt: now,
     });
     return { success: true, id: job._id, status: args.status };
   },
@@ -418,6 +430,12 @@ export const createRestriction = mutation({
       action: "account_restriction_created", targetType: "member", targetId: subjectDiscordId,
       details: args.kind + ": " + reason, createdAt: now,
     });
+    await ctx.db.insert("userNotifications", {
+      recipientDiscordId: subjectDiscordId, category: "moderation",
+      title: "Account action: " + args.kind,
+      body: "A " + args.kind.toLowerCase() + " was placed on your account. Reason: " + reason.slice(0, 600),
+      href: "/support", createdAt: now,
+    });
     return { success: true, id, kind: args.kind, subjectDiscordId };
   },
 });
@@ -444,6 +462,12 @@ export const liftRestriction = mutation({
       actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0,100),
       action: "account_restriction_lifted", targetType: "member", targetId: restriction.subjectDiscordId,
       details: reason, createdAt: now,
+    });
+    await ctx.db.insert("userNotifications", {
+      recipientDiscordId: restriction.subjectDiscordId, category: "moderation",
+      title: "Account restriction lifted",
+      body: "A " + restriction.kind.toLowerCase() + " restriction was lifted. Reason: " + reason.slice(0, 600),
+      href: "/support", createdAt: now,
     });
     return { success: true, id: restriction._id };
   },
