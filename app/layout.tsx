@@ -13,7 +13,7 @@ import "./premium-finish.css";
 import "./premium-component-fixes.css";
 import "./premium-workspace.css";
 import "./premium-messaging.css";
-import "./operations-admin.css";
+import "./admin/operations-admin.css";
 import AppConvexProvider from "./convex-provider";
 
 export const metadata: Metadata = {
