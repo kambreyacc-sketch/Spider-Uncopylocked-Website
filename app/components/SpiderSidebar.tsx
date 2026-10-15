@@ -74,6 +74,7 @@ const creatorTools: NavigationItem[] = [
 ];
 const safety: NavigationItem[] = [
   { href: "/report-scam", label: "Report a Scam", Icon: ShieldCheck },
+  { href: "/reports", label: "My Reports", Icon: ClipboardList },
   { href: "/guidelines", label: "Safety & FAQ", Icon: ShieldCheck },
 ];
 
