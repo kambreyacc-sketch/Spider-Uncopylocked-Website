@@ -16,6 +16,7 @@ const pages: Record<string, { title: string; description: string }> = {
   restrictions: { title: "User restrictions", description: "Review restrictions, suspensions, reasons, and expiry information." },
   "reported-content": { title: "Content moderation", description: "Review pending resource and marketplace submissions before publication." },
   users: { title: "Users", description: "Search accounts and review related studio, job, and moderation history." },
+  roles: { title: "Staff roles & permissions", description: "Manage website staff grants, review effective permissions, and audit role changes." },
   applications: { title: "Applications & approvals", description: "Review studio, resource, marketplace, developer, creator, and staff applications." },
   billing: { title: "Billing & subscriptions", description: "Review subscription metadata, invoice references, and Stripe webhook health." },
   studios: { title: "Studios", description: "Review studio submissions, ownership, games, and approval status." },
@@ -70,6 +71,8 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
           <BillingAdminPanel />
         ) : section === "users" ? (
           <AdminOperationsPanel section="users" />
+        ) : section === "roles" ? (
+          <AdminOperationsPanel section="roles" />
         ) : section === "studios" ? (
           <AdminOperationsPanel section="studios" />
         ) : section === "jobs" ? (
