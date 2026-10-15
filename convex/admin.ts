@@ -143,7 +143,7 @@ export const getPlatformOverview = query({
     const openTickets = tickets.filter(x => ["open", "in_review", "waiting_on_user", "escalated"].includes(x.status)).length;
     return {
       stats: {
-        developers: developers.length,
+        developers: developers.filter(x => x.status === "approved").length,
         listings: listings.length,
         resources: resources.length,
         jobs: jobs.length,
