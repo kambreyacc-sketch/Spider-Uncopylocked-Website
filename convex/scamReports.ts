@@ -17,9 +17,13 @@ export const mine = query({
   handler: async (ctx, args) => {
     const expected = process.env.REPORT_WRITE_SECRET;
     if (!expected || args.writeKey.length !== expected.length || args.writeKey !== expected) throw new Error("Unauthorized report lookup.");
-    return await ctx.db.query("scamReports")
+    const rows = await ctx.db.query("scamReports")
       .withIndex("by_reporter_createdAt", q => q.eq("reporterDiscordId", args.reporterDiscordId))
       .order("desc").take(100);
+    // Never expose staff assignment or private review notes to the reporting member.
+    return rows.map(({ _id, _creationTime, reference, reportedType, targetUrl, reason, details, status, createdAt, updatedAt }) => ({
+      _id, reference, reportedType, targetUrl, reason, details, status, createdAt, updatedAt,
+    }));
   },
 });
 
