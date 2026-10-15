@@ -14,6 +14,10 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: "Sign in with Discord before submitting an asset." }, { status: 401 });
   const db = getServiceConvex();
   if (!db) return NextResponse.json({ error: "Resource storage is not configured. Nothing was submitted." }, { status: 503 });
+  try {
+    const approved = await db.client.query(api.applications.hasApprovedAccess, { adminSecret: db.secret, applicantDiscordId: user.id, type: "Resource / leaker upload" });
+    if (!approved) return NextResponse.json({ error: "Resource upload access has not been approved for your account. Apply first.", applyUrl: "/apply" }, { status: 403 });
+  } catch (error) { console.error("Resource permission check failed:", error); return NextResponse.json({ error: "Could not verify upload permission. Access remains locked." }, { status: 503 }); }
   let body: Record<string, unknown>;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid upload submission." }, { status: 400 }); }
   const string = (key: string, max: number) => typeof body[key] === "string" ? (body[key] as string).trim().slice(0,max) : "";
