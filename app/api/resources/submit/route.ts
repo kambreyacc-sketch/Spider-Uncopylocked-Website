@@ -26,6 +26,10 @@ export async function POST(request: Request) {
   }
   try {
     const client = new ConvexHttpClient(url);
+    const active = await client.query(api.admin.getActiveRestrictionsForUser, { adminSecret: secret, targetDiscordId: user.id });
+    if (active.some((r: { restrictionType: string }) => ["restricted", "temporary_ban", "permanent_ban", "upload_ban"].includes(r.restrictionType))) {
+      return NextResponse.json({ error: "Your account is not allowed to submit resources while an active restriction applies." }, { status: 403 });
+    }
     const resourceId = await client.mutation(api.resources.submit, {
       adminSecret: secret,
       title: body.title, category: body.category as any, description: body.description,
