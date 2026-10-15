@@ -45,6 +45,7 @@ const discover: NavigationItem[] = [
   { href: "/developers", label: "Hire Developers", Icon: Search },
   { href: "/studios", label: "Studios", Icon: Building2 },
   { href: "/vip", label: "VIP Access", Icon: ShieldCheck },
+  { href: "/pro", label: "Spider Pro", Icon: Sparkles },
   { href: "/team", label: "Meet the Team", Icon: UsersRound },
 ];
 const work: NavigationItem[] = [
