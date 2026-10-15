@@ -477,3 +477,29 @@ export const getPublicSettings = query({
     };
   },
 });
+
+
+export const getActiveRestriction = query({
+  args: { adminSecret: v.string(), subjectDiscordId: v.string() },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const now = Date.now();
+    const rows = await ctx.db.query("accountRestrictions")
+      .withIndex("by_subject_active", q => q.eq("subjectDiscordId", args.subjectDiscordId).eq("active", true))
+      .collect();
+    const active = rows.filter(row => row.startsAt <= now && (!row.expiresAt || row.expiresAt > now))
+      .sort((a, b) => {
+        const rank: Record<string, number> = { Banned: 4, Suspended: 3, Restricted: 2, Warning: 1 };
+        return (rank[b.kind] || 0) - (rank[a.kind] || 0) || b.createdAt - a.createdAt;
+      });
+    const strongest = active[0];
+    if (!strongest) return null;
+    return {
+      id: strongest._id,
+      kind: strongest.kind,
+      reason: strongest.reason,
+      createdAt: strongest.createdAt,
+      expiresAt: strongest.expiresAt ?? null,
+    };
+  },
+});
