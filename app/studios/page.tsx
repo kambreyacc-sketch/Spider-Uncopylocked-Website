@@ -1,5 +1,8 @@
 import Link from "next/link";
 import SpiderSidebar from "../components/SpiderSidebar";
+import { api } from "../../convex/_generated/api";
+import { getSpiderProfile } from "../../lib/session";
+import { getBillingDb } from "../../lib/stripe";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -8,15 +11,31 @@ import {
   Building2,
   CirclePlus,
   Code2,
+  ExternalLink,
   Gamepad2,
   Hammer,
   Palette,
   Users,
 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Studios | Spider Uncopylocked",
-  description: "Manage your Roblox studio workspace, teams, and projects.",
+  description: "Discover Roblox studios, present your team, and organize studio profiles.",
+};
+
+type Studio = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  specialties: string[];
+  ownerDiscordId: string;
+  ownerName: string;
+  ownerAvatar?: string;
+  robloxUrl?: string;
+  discordUrl?: string;
+  createdAt: number;
 };
 
 const starterRoles = [
@@ -25,175 +44,139 @@ const starterRoles = [
   { label: "UI & GFX artists", icon: Palette },
 ];
 
-export default function StudiosPage() {
+function StudioCard({ studio, owned = false }: { studio: Studio; owned?: boolean }) {
+  return (
+    <article className="studios-directory-card">
+      <div className="studios-directory-top">
+        <div className="studios-directory-avatar">
+          {studio.ownerAvatar ? (
+            <img src={studio.ownerAvatar} alt="" loading="lazy" onError={event => { event.currentTarget.style.display = "none"; }} />
+          ) : (
+            <Building2 size={23} />
+          )}
+        </div>
+        <div className="studios-directory-title">
+          <h3>{studio.name}</h3>
+          <span>@{studio.slug}</span>
+        </div>
+        {owned && <span className="studios-owner-chip"><BadgeCheck size={13} /> Owner</span>}
+      </div>
+      <p className="studios-directory-description">{studio.description}</p>
+      <div className="studios-directory-specialties">
+        {studio.specialties.map(tag => <span key={tag}>{tag}</span>)}
+      </div>
+      <div className="studios-directory-footer">
+        <span><Users size={14} /> {studio.ownerName}</span>
+        <div>
+          {studio.robloxUrl && <a href={studio.robloxUrl} target="_blank" rel="noreferrer" aria-label={studio.name + " Roblox link"}><Gamepad2 size={15} /></a>}
+          {studio.discordUrl && <a href={studio.discordUrl} target="_blank" rel="noreferrer" aria-label={studio.name + " Discord invite"}><ExternalLink size={15} /></a>}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default async function StudiosPage() {
+  const profile = await getSpiderProfile();
+  const db = getBillingDb();
+  let myStudios: Studio[] = [];
+  let publicStudios: Studio[] = [];
+  let databaseAvailable = !!db;
+  if (db) {
+    try {
+      const [mine, all] = await Promise.all([
+        profile
+          ? db.client.query(api.studios.mine, { adminSecret: db.secret, ownerDiscordId: profile.id })
+          : Promise.resolve([]),
+        db.client.query(api.studios.publicList, { adminSecret: db.secret }),
+      ]);
+      myStudios = mine as Studio[];
+      publicStudios = all as Studio[];
+    } catch (error) {
+      console.error("Studios page data lookup failed:", error);
+      databaseAvailable = false;
+    }
+  }
+  const ownedIds = new Set(myStudios.map(studio => studio.id));
+  const discovered = publicStudios.filter(studio => !ownedIds.has(studio.id));
+
   return (
     <main className="market-shell studios-page">
       <SpiderSidebar />
       <section className="market-content studios-content">
         <header className="studios-page-header">
           <div>
-            <span className="spider-eyebrow">SPIDER / WORKSPACE</span>
+            <span className="spider-eyebrow">SPIDER / CREATOR WORKSPACES</span>
             <h1>Studios</h1>
-            <p>
-              Manage your studio space, bring your team together, and organize
-              the games you build.
-            </p>
+            <p>Discover teams building Roblox experiences, see what they specialize in, and create a home for your own studio.</p>
           </div>
-          <Link
-            href="/studios/create"
-            className="hire-primary studios-create-button"
-          >
+          <Link href="/studios/create" className="hire-primary studios-create-button">
             <CirclePlus size={16} /> Create a studio
           </Link>
         </header>
 
-        <div className="studios-toolbar">
-          <nav
-            className="studios-view-tabs"
-            aria-label="Studio workspace views"
-          >
-            <a href="#my-studios" className="studios-view-tab active">
-              My studios
-            </a>
-            <a href="#studio-guide" className="studios-view-tab">
-              Getting started
-            </a>
-          </nav>
-          <Link href="/developers" className="studios-quiet-link">
-            Explore developers <ArrowUpRight size={14} />
-          </Link>
-        </div>
+        {!profile && (
+          <div className="studios-notice">
+            <Users size={18} />
+            <span><strong>Looking to start a studio?</strong> Sign in with Discord to save a studio to your account.</span>
+            <Link href="/api/auth/discord/login">Sign in <ArrowUpRight size={14} /></Link>
+          </div>
+        )}
+        {!databaseAvailable && (
+          <div className="studios-notice" role="status">
+            <Building2 size={18} />
+            <span><strong>Studio storage unavailable.</strong> Existing studio records could not be loaded. Creating or publishing records is not reported as successful until the database connection works.</span>
+          </div>
+        )}
 
-        <div className="studios-dashboard-grid">
-          <section className="studios-main-column">
-            <div id="my-studios" className="studios-panel studios-owned-panel">
-              <div className="studios-panel-heading">
-                <div>
-                  <h2>Your studios</h2>
-                  <p>Studios you own or are a member of will be shown here.</p>
-                </div>
-                <span className="studios-panel-count">
-                  <Building2 size={14} /> Studio workspace
-                </span>
-              </div>
-
-              <div className="studios-empty-state">
-                <span className="studios-empty-icon">
-                  <Building2 size={26} />
-                </span>
-                <h3>No studio records yet</h3>
-                <p>
-                  Studio publishing and membership records are not connected to
-                  the live database yet. You can prepare a studio profile, but
-                  it will not appear as a published studio until that connection
-                  is enabled.
-                </p>
-                <Link href="/studios/create" className="hire-primary">
-                  <CirclePlus size={15} /> Start a studio profile
-                </Link>
-              </div>
-            </div>
-
-            <div className="studios-panel studios-team-panel">
-              <div className="studios-panel-heading">
-                <div>
-                  <h2>Build your team</h2>
-                  <p>
-                    Find the skills you need before your next project starts.
-                  </p>
-                </div>
-                <Link href="/developers" className="studios-inline-link">
-                  Browse all <ArrowRight size={14} />
-                </Link>
-              </div>
-              <div className="studios-role-grid">
-                {starterRoles.map(({ label, icon: Icon }) => (
-                  <Link
-                    href="/developers"
-                    key={label}
-                    className="studios-role-card"
-                  >
-                    <span>
-                      <Icon size={18} />
-                    </span>
-                    <strong>{label}</strong>
-                    <ArrowUpRight size={14} className="studios-role-arrow" />
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <aside id="studio-guide" className="studios-side-column">
-            <section className="studios-panel studios-guide-panel">
-              <span className="studios-guide-icon">
-                <Blocks size={18} />
-              </span>
-              <h2>Set up your workspace</h2>
-              <p>
-                A studio profile gives your team one place to present its
-                identity and the projects it works on.
-              </p>
-              <ol className="studios-steps">
-                <li>
-                  <span>01</span>
-                  <div>
-                    <strong>Create your profile</strong>
-                    <small>
-                      Add a name, description, specialties, and branding.
-                    </small>
-                  </div>
-                </li>
-                <li>
-                  <span>02</span>
-                  <div>
-                    <strong>Gather your team</strong>
-                    <small>
-                      Find developers and agree on responsibilities.
-                    </small>
-                  </div>
-                </li>
-                <li>
-                  <span>03</span>
-                  <div>
-                    <strong>Showcase your games</strong>
-                    <small>
-                      Connect real projects when studio publishing is available.
-                    </small>
-                  </div>
-                </li>
-              </ol>
-              <Link href="/studios/create" className="studios-guide-cta">
-                Create studio profile <ArrowRight size={15} />
+        <section id="my-studios" className="studios-section">
+          <div className="studios-section-heading">
+            <div><span className="spider-eyebrow">YOUR WORKSPACE</span><h2>Your studios</h2><p>Studios connected to your signed-in Discord account.</p></div>
+            <span className="studios-panel-count"><Building2 size={14} /> {myStudios.length} {myStudios.length === 1 ? "studio" : "studios"}</span>
+          </div>
+          {myStudios.length ? (
+            <div className="studios-directory-grid">{myStudios.map(studio => <StudioCard key={studio.id} studio={studio} owned />)}</div>
+          ) : (
+            <div className="studios-empty-state">
+              <span className="studios-empty-icon"><Building2 size={26} /></span>
+              <h3>{profile ? "Your studio workspace starts here" : "Sign in to create your workspace"}</h3>
+              <p>{profile ? "Create a studio profile to save your team's name, description, specialties, and Roblox or Discord links to Spider." : "Your own studios will appear here after you sign in and create one."}</p>
+              <Link href={profile ? "/studios/create" : "/api/auth/discord/login"} className="hire-primary">
+                <CirclePlus size={15} /> {profile ? "Create your first studio" : "Sign in with Discord"}
               </Link>
-            </section>
+            </div>
+          )}
+        </section>
 
-            <section className="studios-panel studios-tip-panel">
-              <span className="studios-tip-icon">
-                <BadgeCheck size={17} />
-              </span>
-              <div>
-                <h3>Keep it authentic</h3>
-                <p>
-                  Use real project thumbnails and list the people who actually
-                  work with your studio.
-                </p>
-              </div>
-            </section>
-            <section className="studios-project-prompt">
-              <Gamepad2 size={18} />
-              <div>
-                <strong>Working on a game already?</strong>
-                <small>
-                  Browse real resources to help move your project forward.
-                </small>
-              </div>
-              <Link href="/resources" aria-label="Browse resources">
-                <ArrowUpRight size={16} />
+        <section className="studios-section">
+          <div className="studios-section-heading">
+            <div><span className="spider-eyebrow">COMMUNITY DIRECTORY</span><h2>Discover studios</h2><p>Explore published studio profiles and follow their external project links.</p></div>
+            <span className="studios-panel-count"><Users size={14} /> {discovered.length} listed</span>
+          </div>
+          {discovered.length ? (
+            <div className="studios-directory-grid">{discovered.map(studio => <StudioCard key={studio.id} studio={studio} />)}</div>
+          ) : (
+            <div className="studios-empty-state studios-empty-compact">
+              <span className="studios-empty-icon"><Blocks size={25} /></span>
+              <h3>No other studios published yet</h3>
+              <p>When creators publish studio profiles, they will appear here. No placeholder studios are shown.</p>
+            </div>
+          )}
+        </section>
+
+        <section className="studios-panel studios-team-panel">
+          <div className="studios-panel-heading">
+            <div><h2>Build your team</h2><p>Find the skills you need before your next project starts.</p></div>
+            <Link href="/developers" className="studios-inline-link">Browse developers <ArrowRight size={14} /></Link>
+          </div>
+          <div className="studios-role-grid">
+            {starterRoles.map(({ label, icon: Icon }) => (
+              <Link href="/developers" key={label} className="studios-role-card">
+                <span><Icon size={18} /></span><strong>{label}</strong><ArrowUpRight size={14} className="studios-role-arrow" />
               </Link>
-            </section>
-          </aside>
-        </div>
+            ))}
+          </div>
+        </section>
       </section>
     </main>
   );
