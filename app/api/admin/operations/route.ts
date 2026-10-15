@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { api } from "../../../../convex/_generated/api";
-import { getSpiderProfile, isSpiderAdmin } from "../../../../lib/session";
+import { getSpiderProfile, isSpiderAdmin, type SpiderProfile } from "../../../../lib/session";
 import { hasStaffCapability } from "../../../../lib/staff-permissions";
 import { getServiceConvex } from "../../../../lib/service-convex";
 
@@ -12,11 +12,11 @@ type Section = typeof sections[number];
 const restrictionKinds = ["Warning", "Restricted", "Suspended", "Banned"] as const;
 const settingKeys = ["announcement", "announcementEnabled", "homepageFeaturedText"] as const;
 
-async function canView(section: Section, actor: { id: string; username: string; displayName: string }) {
+async function canView(section: Section, actor: SpiderProfile) {
   if (await isSpiderAdmin()) return true;
   return section === "restrictions" && await hasStaffCapability("restrictions.view", actor);
 }
-async function canManageRestrictions(actor: { id: string; username: string; displayName: string }) {
+async function canManageRestrictions(actor: SpiderProfile) {
   return (await isSpiderAdmin()) || await hasStaffCapability("restrictions.manage", actor);
 }
 
