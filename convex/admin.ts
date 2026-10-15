@@ -83,15 +83,18 @@ export const listPendingContent = query({
   args: { adminSecret: v.string() },
   handler: async (ctx, args) => {
     assertAdminSecret(args.adminSecret);
-    const [resources, listings] = await Promise.all([
+    const [resources, listings, recentJobs] = await Promise.all([
       ctx.db.query("resources").withIndex("by_status_createdAt", q => q.eq("status", "pending")).order("desc").take(250),
       ctx.db.query("listings").withIndex("by_status_createdAt", q => q.eq("status", "pending")).order("desc").take(250),
+      ctx.db.query("jobs").order("desc").take(250),
     ]);
+    const jobs = recentJobs.filter(job => job.moderationStatus === "pending");
     // Do not return storage URLs for unreviewed files. Review metadata first; actual
     // file/image screening remains unavailable until a scanner and protected preview proxy are configured.
     return {
       resources: resources.map(({ _id, _creationTime, thumbnailStorageId, previewStorageIds, fileStorageId, ...item }) => ({ id: _id, ...item })),
       listings: listings.map(({ _id, _creationTime, imageStorageId, ...item }) => ({ id: _id, ...item })),
+      jobs: jobs.map(({ _id, _creationTime, ...item }) => ({ id: _id, ...item })),
       scannerConfigured: false,
     };
   },
@@ -138,5 +141,38 @@ export const reviewListing = mutation({
     await ctx.db.patch(listing._id, { status: args.status, updatedAt: now });
     await ctx.db.insert("moderationAuditEvents", { actorDiscordId: args.reviewerDiscordId, actorName: args.reviewerName.slice(0, 100), action: "listing_" + args.status, targetType: "listing", targetId: String(listing._id), details: reason, createdAt: now });
     return { success: true, id: listing._id, status: args.status };
+  },
+});
+
+
+export const reviewJob = mutation({
+  args: {
+    adminSecret: v.string(),
+    jobId: v.id("jobs"),
+    status: contentStatusValidator,
+    reason: v.optional(v.string()),
+    reviewerDiscordId: v.string(),
+    reviewerName: v.string(),
+  },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const job = await ctx.db.get(args.jobId);
+    if (!job) throw new Error("Job submission not found.");
+    if (job.moderationStatus !== "pending") throw new Error("This job is no longer waiting for moderation.");
+    const reason = args.reason?.trim();
+    if (args.status === "rejected" && (!reason || reason.length < 3 || reason.length > 1000)) throw new Error("Enter a rejection reason between 3 and 1,000 characters.");
+    if (args.status === "pending") throw new Error("Choose Approve or Reject.");
+    const now = Date.now();
+    await ctx.db.patch(job._id, {
+      moderationStatus: args.status,
+      status: args.status === "active" ? "open" : "closed",
+      updatedAt: now,
+    });
+    await ctx.db.insert("moderationAuditEvents", {
+      actorDiscordId: args.reviewerDiscordId, actorName: args.reviewerName.slice(0, 100),
+      action: "job_" + args.status, targetType: "job", targetId: String(job._id),
+      details: reason, createdAt: now,
+    });
+    return { success: true, id: job._id, status: args.status };
   },
 });
