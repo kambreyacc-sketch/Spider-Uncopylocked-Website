@@ -111,6 +111,12 @@ export const createTicket = mutation({
       actorName: args.ownerName.trim().slice(0, 100), action: "ticket_created",
       details: args.category, createdAt: now,
     });
+    await ctx.db.insert("userNotifications", {
+      recipientDiscordId: args.ownerDiscordId, category: "support",
+      title: "Ticket #" + ticketNumber + " submitted",
+      body: "Your support request is saved. You can review updates and reply in My Tickets.",
+      href: "/tickets/" + ticketNumber, createdAt: now,
+    });
     return { success: true, ticketNumber };
   },
 });
@@ -191,6 +197,14 @@ export const replyAsMember = mutation({
     const nextStatus = ticket.status === "Resolved" ? "Open" : ticket.status;
     await ctx.db.patch(ticket._id, { status: nextStatus, updatedAt: now, lastActivityAt: now, closedAt: undefined });
     await ctx.db.insert("supportAuditEvents", { ticketId: ticket._id, ticketNumber: ticket.ticketNumber, actorDiscordId: args.ownerDiscordId, actorName: args.ownerName.slice(0, 100), action: "member_reply", details: nextStatus !== ticket.status ? "Ticket reopened by member reply" : undefined, createdAt: now });
+    if (ticket.assignedToDiscordId && ticket.assignedToDiscordId !== args.ownerDiscordId) {
+      await ctx.db.insert("userNotifications", {
+        recipientDiscordId: ticket.assignedToDiscordId, category: "support",
+        title: "New reply on ticket #" + ticket.ticketNumber,
+        body: ticket.ownerName + " replied to: " + ticket.subject.slice(0, 140),
+        href: "/admin/support?ticket=" + ticket.ticketNumber, createdAt: now,
+      });
+    }
     return { success: true, status: nextStatus };
   },
 });
@@ -224,6 +238,12 @@ export const staffUpdate = mutation({
       patch.closedAt = args.status === "Closed" ? now : undefined;
       if (args.status !== ticket.status) {
         await ctx.db.insert("supportAuditEvents", { ticketId: ticket._id, ticketNumber: ticket.ticketNumber, actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0, 100), action: "status_changed", details: ticket.status + " → " + args.status, createdAt: now });
+        await ctx.db.insert("userNotifications", {
+          recipientDiscordId: ticket.ownerDiscordId, category: "support",
+          title: "Ticket #" + ticket.ticketNumber + " updated",
+          body: "Status changed to " + args.status + ".",
+          href: "/tickets/" + ticket.ticketNumber, createdAt: now,
+        });
       }
     }
     if (args.priority) patch.priority = args.priority;
@@ -247,6 +267,14 @@ export const staffUpdate = mutation({
       const visibility = args.visibility || "public";
       await ctx.db.insert("supportMessages", { ticketId: ticket._id, authorDiscordId: args.actorDiscordId, authorName: args.actorName.slice(0, 100), body: reply, visibility, kind: visibility === "internal" ? "internal_note" : "reply", createdAt: now });
       await ctx.db.insert("supportAuditEvents", { ticketId: ticket._id, ticketNumber: ticket.ticketNumber, actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0, 100), action: visibility === "internal" ? "internal_note_added" : "staff_reply", createdAt: now });
+      if (visibility === "public") {
+        await ctx.db.insert("userNotifications", {
+          recipientDiscordId: ticket.ownerDiscordId, category: "support",
+          title: "Staff replied to ticket #" + ticket.ticketNumber,
+          body: reply.slice(0, 180),
+          href: "/tickets/" + ticket.ticketNumber, createdAt: now,
+        });
+      }
     }
     return { success: true };
   },
