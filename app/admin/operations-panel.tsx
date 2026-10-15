@@ -79,7 +79,7 @@ export default function AdminOperationsPanel({section}:{section:Section}) {
         <label className="admin-setting-toggle"><input type="checkbox" checked={announcementEnabled} onChange={e=>setAnnouncementEnabled(e.target.checked)}/> Show announcement</label>
         <label>Announcement text<textarea maxLength={1000} rows={3} value={announcement} onChange={e=>setAnnouncement(e.target.value)} placeholder="Maintenance notice or community announcement."/></label>
         <button className="hire-primary" type="button" disabled={busy} onClick={()=>void mutate("saveSetting",{key:"announcement",value:announcement},"Save the homepage announcement text?")}>Save announcement text</button>
-        <button className="hire-secondary" type="button" disabled={busy} onClick={()=>void mutate("saveSetting",{key:"announcementEnabled",value:announcementEnabled?"true":"false"},"Change whether the homepage announcement is visible?")}>{announcementEnabled?"Enable announcement":"Keep announcement hidden"}</button>
+        <button className="hire-secondary" type="button" disabled={busy} onClick={()=>void mutate("saveSetting",{key:"announcementEnabled",value:announcementEnabled?"true":"false"},"Change whether the homepage announcement is visible?")}>{announcementEnabled?"Save visibility: shown":"Save visibility: hidden"}</button>
       </section>
       <section className="admin-setting-editor"><div className="admin-form-title"><Activity size={18}/><div><h3>Featured homepage text</h3><p>Optional editorial line. Leave blank to hide it.</p></div></div>
         <label>Featured text<input maxLength={300} value={featuredText} onChange={e=>setFeaturedText(e.target.value)} placeholder="Explore this week's community releases"/></label>
