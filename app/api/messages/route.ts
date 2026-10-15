@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { api } from "../../../convex/_generated/api";
 import { getSpiderProfile } from "../../../lib/session";
 import { getBillingDb } from "../../../lib/stripe";
+import { checkAccountRestriction } from "../../../lib/account-restrictions";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -44,6 +45,12 @@ export async function POST(request: Request) {
   let body: Record<string, unknown>;
   try { body = await request.json(); }
   catch { return NextResponse.json({ error: "Send a valid message request." }, { status: 400 }); }
+
+  if (body.action === "start" || body.action === "send") {
+    const restriction = await checkAccountRestriction(profile.id, "message");
+    if (restriction.status === "unavailable") return NextResponse.json({ error: "Could not verify your account standing. Messaging is temporarily unavailable." }, { status: 503 });
+    if (restriction.status === "blocked") return NextResponse.json({ error: "Messaging is blocked by an active " + restriction.kind.toLowerCase() + " action: " + restriction.reason }, { status: 403 });
+  }
 
   try {
     if (body.action === "start") {
