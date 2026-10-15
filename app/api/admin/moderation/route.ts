@@ -27,7 +27,7 @@ export async function PATCH(request: Request) {
   if (!actor || !db) return NextResponse.json({ error: "Admin session or moderation storage unavailable." }, { status: 503 });
   let body: Record<string, unknown>;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
-  if (!["resource", "listing"].includes(String(body.contentType))) return NextResponse.json({ error: "Choose a valid content type." }, { status: 400 });
+  if (!["resource", "listing", "job"].includes(String(body.contentType))) return NextResponse.json({ error: "Choose a valid content type." }, { status: 400 });
   if (typeof body.contentId !== "string" || !body.contentId) return NextResponse.json({ error: "Missing content identifier." }, { status: 400 });
   if (typeof body.status !== "string" || !statuses.includes(body.status as typeof statuses[number])) return NextResponse.json({ error: "Invalid moderation status." }, { status: 400 });
   if (body.status === "active" && !body.confirmed) return NextResponse.json({ error: "Explicit confirmation is required before publishing." }, { status: 400 });
@@ -36,7 +36,9 @@ export async function PATCH(request: Request) {
     const common = { adminSecret: db.secret, status: body.status as typeof statuses[number], reviewerDiscordId: actor.id, reviewerName: actor.displayName || actor.username, ...(typeof body.reason === "string" ? { reason: body.reason } : {}) };
     const result = body.contentType === "resource"
       ? await db.client.mutation(api.admin.reviewResource, { ...common, resourceId: body.contentId as any })
-      : await db.client.mutation(api.admin.reviewListing, { ...common, listingId: body.contentId as any });
+      : body.contentType === "listing"
+        ? await db.client.mutation(api.admin.reviewListing, { ...common, listingId: body.contentId as any })
+        : await db.client.mutation(api.admin.reviewJob, { ...common, jobId: body.contentId as any });
     return NextResponse.json(result, { headers: { "Cache-Control": "no-store, max-age=0" } });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Moderation action failed.";
