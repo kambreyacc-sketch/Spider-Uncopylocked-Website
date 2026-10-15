@@ -16,7 +16,7 @@ const types = [
   "Commission / hiring access",
 ] as const;
 type AppType = typeof types[number];
-type Field = { key: string; label: string; placeholder: string; required?: boolean; multiline?: boolean; type?: string };
+type Field = { key: string; label: string; placeholder: string; required?: boolean; multiline?: boolean; type?: string; min?: number; max?: number; options?: { value: string; label: string }[] };
 const fields: Record<AppType, Field[]> = {
   "Studio registration": [
     {key:"studioName",label:"Studio name",placeholder:"Your studio name",required:true},
@@ -38,11 +38,17 @@ const fields: Record<AppType, Field[]> = {
     {key:"ownership",label:"Proof of ownership / authority",placeholder:"Explain your ownership or permission to represent this listing.",required:true,multiline:true},
   ],
   "Developer profile": [
-    {key:"roles",label:"Development roles",placeholder:"Scripter, builder, UI designer",required:true},
-    {key:"experience",label:"Experience",placeholder:"What have you built and what do you specialize in?",required:true,multiline:true},
-    {key:"portfolio",label:"Portfolio URL",placeholder:"https://...",required:true,type:"url"},
-    {key:"rate",label:"Rate or budget preference",placeholder:"Hourly, fixed project, or negotiable"},
-    {key:"availability",label:"Availability",placeholder:"Available, busy, not taking commissions",required:true},
+    {key:"username",label:"Public creator handle",placeholder:"e.g. coolscripter",required:true},
+    {key:"headline",label:"Profile headline",placeholder:"Luau scripter focused on simulator systems",required:true},
+    {key:"roles",label:"Development roles",placeholder:"Scripting, building, UI/UX",required:true},
+    {key:"skills",label:"Skills and tools",placeholder:"Luau, Knit, UI systems, Blender"},
+    {key:"experience",label:"Experience and bio",placeholder:"What have you built, what do you specialize in, and what work do you want?",required:true,multiline:true},
+    {key:"portfolioUrl",label:"Portfolio URL",placeholder:"https://...",required:true,type:"url"},
+    {key:"robloxUrl",label:"Roblox profile URL",placeholder:"https://www.roblox.com/users/...",required:true,type:"url"},
+    {key:"discordUsername",label:"Discord username for contact",placeholder:"Your Discord username",required:true},
+    {key:"rateType",label:"Pricing model",placeholder:"Choose a pricing model",required:true,options:[{value:"hourly",label:"Hourly"},{value:"project",label:"Fixed project"},{value:"negotiable",label:"Negotiable"}]},
+    {key:"rateAmount",label:"Starting rate / project price (USD)",placeholder:"Leave blank if negotiable",type:"number",min:0,max:1000000},
+    {key:"availability",label:"Availability",placeholder:"Choose availability",required:true,options:[{value:"Available",label:"Available for work"},{value:"Busy",label:"Busy / limited availability"},{value:"Not taking commissions",label:"Not taking commissions"}]},
   ],
   "Content creator": [
     {key:"platforms",label:"Platforms",placeholder:"YouTube, Twitch, TikTok",required:true},
@@ -84,7 +90,7 @@ export default function ApplyPage(){
   {!checked?<p className="support-feedback">Checking your sign-in…</p>:!user?<div className="support-signin-gate"><ShieldCheck size={24}/><h3>Sign in with Discord</h3><p>Applications must be linked to your authenticated account.</p><Link href="/api/auth/discord/login" className="hire-primary">Sign in with Discord <ArrowRight size={15}/></Link></div>:<form className="support-ticket-form" onSubmit={e=>{e.preventDefault();void save("submit")}}>
    <label>Application type<select value={type} onChange={e=>changeType(e.target.value as AppType)}>{types.map(t=><option key={t}>{t}</option>)}</select></label>
    <label>Application title<input required minLength={4} maxLength={120} value={subject} onChange={e=>setSubject(e.target.value)} placeholder={"e.g. "+type}/></label>
-   <div className="application-dynamic-fields">{fields[type].map(f=><label key={f.key}>{f.label}{f.required&&" *"}{f.multiline?<textarea required={!!f.required} rows={4} value={answers[f.key]||""} onChange={e=>setAnswers(p=>({...p,[f.key]:e.target.value}))} placeholder={f.placeholder}/>:<input required={!!f.required} type={f.type||"text"} value={answers[f.key]||""} onChange={e=>setAnswers(p=>({...p,[f.key]:e.target.value}))} placeholder={f.placeholder}/>}</label>)}</div>
+   <div className="application-dynamic-fields">{fields[type].map(f=><label key={f.key}>{f.label}{f.required&&" *"}{f.options?<select required={!!f.required} value={answers[f.key]||""} onChange={e=>setAnswers(p=>({...p,[f.key]:e.target.value}))}><option value="">Choose an option…</option>{f.options.map(option=><option value={option.value} key={option.value}>{option.label}</option>)}</select>:f.multiline?<textarea required={!!f.required} rows={4} value={answers[f.key]||""} onChange={e=>setAnswers(p=>({...p,[f.key]:e.target.value}))} placeholder={f.placeholder}/>:<input required={!!f.required} type={f.type||"text"} min={f.min} max={f.max} value={answers[f.key]||""} onChange={e=>setAnswers(p=>({...p,[f.key]:e.target.value}))} placeholder={f.placeholder}/>}</label>)}</div>
    <aside className="support-evidence-notice"><FileCheck2 size={17}/><span>Staff decisions are recorded in your application history. Approval only enables the specific workflow connected to that application; submitting does not automatically grant access.</span></aside>
    {message&&<p className="support-feedback" role="status">{message}</p>}
    <div className="application-form-actions"><button type="button" className="hire-secondary" onClick={()=>void save("draft")} disabled={busy}><Save size={14}/> {busy?"Saving…":"Save draft"}</button><button type="submit" className="hire-primary" disabled={busy}>{busy?"Submitting…":"Submit application"} <ArrowRight size={15}/></button></div>
