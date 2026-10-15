@@ -266,6 +266,16 @@ export default defineSchema({
     updatedAt: v.number(),
     updatedByDiscordId: v.string(),
     updatedByName: v.string(),
-  }).index("by_key", ["key"])
+  }).index("by_key", ["key"]),
+  userNotifications: defineTable({
+    recipientDiscordId: v.string(),
+    category: v.union(v.literal("support"), v.literal("application"), v.literal("moderation"), v.literal("system")),
+    title: v.string(),
+    body: v.string(),
+    href: v.optional(v.string()),
+    createdAt: v.number(),
+    readAt: v.optional(v.number()),
+  }).index("by_recipient_createdAt", ["recipientDiscordId", "createdAt"])
+    .index("by_recipient_readAt", ["recipientDiscordId", "readAt"])
 
 });
