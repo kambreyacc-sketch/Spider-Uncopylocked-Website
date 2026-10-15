@@ -278,15 +278,66 @@ export const review = mutation({
       createdAt: now,
     });
 
-    // Keep the pre-existing developer directory consistent with its approval state.
+    // An approved developer application creates or updates the actual public profile.
     if (application.type === "Developer profile" && (args.status === "Approved" || args.status === "Rejected")) {
       const developer = await ctx.db.query("developers")
         .withIndex("by_discord", (q: any) => q.eq("discordId", application.applicantDiscordId)).unique();
-      if (developer) {
-        await ctx.db.patch(developer._id, {
-          status: args.status === "Approved" ? "approved" : "rejected",
-          reviewReason: args.status === "Rejected" ? reason : undefined,
+      if (args.status === "Rejected") {
+        if (developer) await ctx.db.patch(developer._id, { status: "rejected", reviewReason: reason, updatedAt: now });
+      } else {
+        const answers = (application.answers && typeof application.answers === "object" ? application.answers : {}) as Record<string, unknown>;
+        const read = (key: string, max: number) => typeof answers[key] === "string" ? (answers[key] as string).trim().slice(0, max) : "";
+        const username = read("username", 32).toLowerCase();
+        const headline = read("headline", 120);
+        const bio = read("experience", 2000);
+        const roles = read("roles", 500).split(",").map(item => item.trim()).filter(Boolean).slice(0, 10);
+        const skills = read("skills", 800).split(",").map(item => item.trim()).filter(Boolean).slice(0, 20);
+        const portfolioUrl = read("portfolioUrl", 500);
+        const robloxUrl = read("robloxUrl", 500);
+        const discordUsername = read("discordUsername", 80);
+        const rateType = read("rateType", 20);
+        const availability = read("availability", 40);
+        const rateText = read("rateAmount", 30);
+        const rateAmount = rateText ? Number(rateText) : undefined;
+        if (!/^[a-z0-9_-]{3,24}$/.test(username)) throw new Error("Developer profile handle must be 3–24 letters, numbers, underscores, or hyphens.");
+        if (headline.length < 3 || bio.length < 20 || roles.length === 0) throw new Error("Developer application needs a headline, experience bio, and at least one development role.");
+        if (!/^https:\/\//i.test(portfolioUrl) || !/^https:\/\//i.test(robloxUrl) || !/roblox\.com\//i.test(robloxUrl)) throw new Error("Submit a valid HTTPS portfolio URL and Roblox profile URL.");
+        if (!discordUsername) throw new Error("Provide a Discord contact username before the developer profile can be approved.");
+        if (!["hourly", "project", "negotiable"].includes(rateType)) throw new Error("Choose a valid developer pricing model.");
+        if (!["Available", "Busy", "Not taking commissions"].includes(availability)) throw new Error("Choose a valid availability status.");
+        if (rateAmount !== undefined && (!Number.isFinite(rateAmount) || rateAmount < 0 || rateAmount > 1000000)) throw new Error("Developer rate must be between $0 and $1,000,000.");
+        const handleOwner = await ctx.db.query("developers").withIndex("by_username", (q: any) => q.eq("username", username)).unique();
+        if (handleOwner && handleOwner.discordId !== application.applicantDiscordId) throw new Error("That developer handle is already in use. Request a different handle before approving.");
+        const value = {
+          username,
+          displayName: application.applicantName.slice(0, 80),
+          discordId: application.applicantDiscordId,
+          avatarUrl: application.applicantAvatar || "/spider-uncopylocked-pfp.webp",
+          headline,
+          bio,
+          crafts: roles,
+          skills,
+          services: [],
+          rateType: rateType as "hourly" | "project" | "negotiable",
+          ...(rateAmount !== undefined ? { rateAmount } : {}),
+          availability: availability as "Available" | "Busy" | "Not taking commissions",
+          portfolio: [{ url: portfolioUrl, caption: "Portfolio" }],
+          discordUsername,
+          robloxUrl,
+          status: "approved" as const,
+          verified: developer?.verified ?? false,
           updatedAt: now,
+          reviewReason: undefined,
+        };
+        if (developer) {
+          await ctx.db.patch(developer._id, value);
+        } else {
+          await ctx.db.insert("developers", { ...value, createdAt: now });
+        }
+        await ctx.db.insert("moderationAuditEvents", {
+          actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0, 100),
+          action: "developer_profile_published_from_application", targetType: "developer",
+          targetId: username, details: "Application #" + application.applicationNumber, createdAt: now,
         });
       }
     }
