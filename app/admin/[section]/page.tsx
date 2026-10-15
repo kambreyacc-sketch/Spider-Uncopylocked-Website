@@ -4,6 +4,8 @@ import { isSpiderAdmin } from "../../../lib/session";
 import SpiderSidebar from "../../components/SpiderSidebar";
 import DeveloperApplicationsPanel from "../applications-panel";
 import BillingAdminPanel from "../billing-panel";
+import SupportAdminPanel from "../support-panel";
+import ResourceModerationPanel from "../resource-moderation-panel";
 
 const pages: Record<string, { title: string; description: string }> = {
   reports: { title: "Scam reports", description: "Review submitted reports, supporting evidence, and moderation decisions." },
@@ -17,6 +19,7 @@ const pages: Record<string, { title: string; description: string }> = {
   matches: { title: "Match requests", description: "Review real developer profiles, project requirements, and matching explanations." },
   invitations: { title: "Project invitations", description: "Track pending, accepted, declined, and withdrawn invitations." },
   support: { title: "Messages & support", description: "Manage support requests and explicitly reported content. Ordinary DMs remain private." },
+  uploads: { title: "Resource moderation", description: "Review unpublished asset submissions before anything is made available to members." },
   activity: { title: "Admin activity log", description: "Review recorded administrative actions and their reasons." },
   content: { title: "Website content", description: "Manage supported announcements, featured content, and policy pages." },
 };
@@ -39,7 +42,11 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
             <p>{page.description}</p>
           </div>
         </header>
-        {section === "applications" ? (
+        {section === "support" ? (
+          <SupportAdminPanel />
+        ) : section === "uploads" ? (
+          <ResourceModerationPanel />
+        ) : section === "applications" ? (
           <DeveloperApplicationsPanel />
         ) : section === "billing" ? (
           <BillingAdminPanel />
