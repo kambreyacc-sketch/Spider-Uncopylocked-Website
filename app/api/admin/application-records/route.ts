@@ -41,11 +41,10 @@ export async function PATCH(request: Request) {
   if (body.decisionReason !== undefined && (typeof body.decisionReason !== "string" || body.decisionReason.length > 2000)) return NextResponse.json({ error: "Decision reason is too long." }, { status: 400 });
   if (body.staffNote !== undefined && (typeof body.staffNote !== "string" || body.staffNote.length > 4000)) return NextResponse.json({ error: "Private note is too long." }, { status: 400 });
   try {
-    if (body.status === "Approved") {
-      const target = await db.client.query(api.applications.getForStaff, { adminSecret: db.secret, applicationNumber: Number(body.applicationNumber) });
-      if (!target) return NextResponse.json({ error: "Application not found." }, { status: 404 });
-      if (target.application.type === "Discord staff role" && !(await isSpiderAdmin())) return NextResponse.json({ error: "Only the repository owner can approve staff role grants." }, { status: 403 });
-    }
+    const target = await db.client.query(api.applications.getForStaff, { adminSecret: db.secret, applicationNumber: Number(body.applicationNumber) });
+    if (!target) return NextResponse.json({ error: "Application not found." }, { status: 404 });
+    if (target.application.applicantDiscordId === actor.id) return NextResponse.json({ error: "You cannot review your own application." }, { status: 403 });
+    if (body.status === "Approved" && target.application.type === "Discord staff role" && !(await isSpiderAdmin())) return NextResponse.json({ error: "Only the repository owner can approve staff role grants." }, { status: 403 });
     const result = await db.client.mutation(api.applications.review, {
       adminSecret: db.secret, applicationNumber: Number(body.applicationNumber),
       actorDiscordId: actor.id, actorName: actor.displayName || actor.username,
