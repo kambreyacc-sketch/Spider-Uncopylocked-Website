@@ -485,9 +485,9 @@ export const getActiveRestriction = query({
     assertAdminSecret(args.adminSecret);
     const now = Date.now();
     const rows = await ctx.db.query("accountRestrictions")
-      .withIndex("by_subject_active", q => q.eq("subjectDiscordId", args.subjectDiscordId).eq("active", true))
-      .collect();
-    const active = rows.filter(row => row.startsAt <= now && (!row.expiresAt || row.expiresAt > now))
+      .withIndex("by_subject_createdAt", q => q.eq("subjectDiscordId", args.subjectDiscordId))
+      .order("desc").take(100);
+    const active = rows.filter(row => row.active && row.startsAt <= now && (!row.expiresAt || row.expiresAt > now))
       .sort((a, b) => {
         const rank: Record<string, number> = { Banned: 4, Suspended: 3, Restricted: 2, Warning: 1 };
         return (rank[b.kind] || 0) - (rank[a.kind] || 0) || b.createdAt - a.createdAt;
