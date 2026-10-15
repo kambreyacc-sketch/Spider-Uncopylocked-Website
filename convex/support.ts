@@ -218,7 +218,7 @@ export const staffUpdate = mutation({
       // Closing without a reply is permitted, but remains audit logged below.
     }
     const now = Date.now();
-    const patch: Record<string, unknown> = { updatedAt: now, lastActivityAt: now };
+    const patch: any = { updatedAt: now, lastActivityAt: now };
     if (args.status) {
       patch.status = args.status;
       patch.closedAt = args.status === "Closed" ? now : undefined;
