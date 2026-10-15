@@ -40,6 +40,52 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_status_createdAt", ["status", "createdAt"]).index("by_poster", ["posterDiscordId"]),
 
+  supportTickets: defineTable({
+    ticketNumber: v.string(),
+    category: v.union(v.literal("Account Appeal"), v.literal("Report a Scammer"), v.literal("Report Content"), v.literal("Technical Support"), v.literal("Studio Request"), v.literal("General Support")),
+    subject: v.string(),
+    reference: v.optional(v.string()),
+    department: v.optional(v.string()),
+    actionTaken: v.optional(v.string()),
+    description: v.string(),
+    applicantDiscordId: v.string(),
+    applicantName: v.string(),
+    status: v.union(v.literal("open"), v.literal("in_review"), v.literal("waiting_on_user"), v.literal("escalated"), v.literal("resolved"), v.literal("closed")),
+    priority: v.union(v.literal("low"), v.literal("normal"), v.literal("high"), v.literal("urgent")),
+    assignedTo: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    lastMessageAt: v.number(),
+    resolvedAt: v.optional(v.number()),
+    closedAt: v.optional(v.number()),
+  }).index("by_applicant_createdAt", ["applicantDiscordId", "createdAt"])
+    .index("by_status_updatedAt", ["status", "updatedAt"])
+    .index("by_ticketNumber", ["ticketNumber"]),
+  supportMessages: defineTable({
+    ticketId: v.id("supportTickets"),
+    authorDiscordId: v.string(),
+    authorName: v.string(),
+    body: v.string(),
+    visibility: v.union(v.literal("public"), v.literal("internal")),
+    createdAt: v.number(),
+  }).index("by_ticket_createdAt", ["ticketId", "createdAt"]),
+  supportAuditLogs: defineTable({
+    ticketId: v.id("supportTickets"),
+    actorDiscordId: v.string(),
+    actorName: v.string(),
+    action: v.string(),
+    reason: v.optional(v.string()),
+    createdAt: v.number(),
+  }).index("by_ticket_createdAt", ["ticketId", "createdAt"]),
+  adminAuditLogs: defineTable({
+    actorDiscordId: v.string(),
+    actorName: v.string(),
+    action: v.string(),
+    entityType: v.string(),
+    entityId: v.string(),
+    reason: v.optional(v.string()),
+    createdAt: v.number(),
+  }).index("by_createdAt", ["createdAt"]).index("by_entity", ["entityType", "entityId"]),
   // Stripe customer mappings contain provider identifiers only; never store card numbers or CVCs.
   billingCustomers: defineTable({
     discordId: v.string(),
