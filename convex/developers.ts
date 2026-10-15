@@ -90,9 +90,12 @@ export const report = mutation({
   },
 });
 
+function assertAdminSecret(secret: string) { const expected = process.env.ADMIN_API_SECRET; if (!expected || secret.length !== expected.length || secret !== expected) throw new Error("Unauthorized job submission."); }
+
 export const postJob = mutation({
-  args: { title: v.string(), description: v.string(), craft: v.string(), budgetMin: v.number(), budgetMax: v.number(), deadline: v.optional(v.string()), discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string() },
+  args: { adminSecret: v.string(), title: v.string(), description: v.string(), craft: v.string(), budgetMin: v.number(), budgetMax: v.number(), deadline: v.optional(v.string()), discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string() },
   handler: async (ctx,args) => {
+    assertAdminSecret(args.adminSecret);
     if (!args.posterDiscordId.trim()) throw new Error("Sign in with Discord before posting a job.");
     if (args.title.trim().length < 5 || args.title.length > 100) throw new Error("Job title must be 5–100 characters.");
     if (!args.description.trim() || args.description.length > 3000) throw new Error("Description is required and must be 3,000 characters or fewer.");
@@ -100,7 +103,9 @@ export const postJob = mutation({
     if (!Number.isFinite(args.budgetMin) || !Number.isFinite(args.budgetMax) || args.budgetMin < 0 || args.budgetMax < args.budgetMin || args.budgetMax > 1000000) throw new Error("Enter a valid budget range.");
     if (!args.discordContact.trim() || args.discordContact.length > 80) throw new Error("Add a Discord contact.");
     if (args.deadline && !/^\d{4}-\d{2}-\d{2}$/.test(args.deadline)) throw new Error("Choose a valid deadline.");
-    return await ctx.db.insert("jobs", { ...args, title: args.title.trim(), status: "open", createdAt: Date.now() });
+    const { adminSecret, ...job } = args;
+    const now = Date.now();
+    return await ctx.db.insert("jobs", { ...job, title: args.title.trim(), status: "open", moderationStatus: "pending", createdAt: now, updatedAt: now });
   },
 });
 
@@ -109,6 +114,6 @@ export const jobsList = query({
   handler: async (ctx,args) => {
     const rows = await ctx.db.query("jobs").withIndex("by_status_createdAt", q => q.eq("status","open")).order("desc").collect();
     const term=args.search?.trim().toLowerCase();
-    return rows.filter(j => (!args.craft || args.craft === "All" || j.craft === args.craft) && (!term || (j.title+" "+j.description+" "+j.craft).toLowerCase().includes(term)));
+    return rows.filter(j => j.moderationStatus !== "pending" && j.moderationStatus !== "rejected" && (!args.craft || args.craft === "All" || j.craft === args.craft) && (!term || (j.title+" "+j.description+" "+j.craft).toLowerCase().includes(term)));
   },
 });
