@@ -40,6 +40,21 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_status_createdAt", ["status", "createdAt"]).index("by_poster", ["posterDiscordId"]),
 
+  studios: defineTable({
+    name: v.string(),
+    slug: v.string(),
+    description: v.string(),
+    specialties: v.array(v.string()),
+    ownerDiscordId: v.string(),
+    ownerName: v.string(),
+    ownerAvatar: v.optional(v.string()),
+    robloxUrl: v.optional(v.string()),
+    discordUrl: v.optional(v.string()),
+    status: v.union(v.literal("active"), v.literal("archived")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_slug", ["slug"]).index("by_owner", ["ownerDiscordId"]).index("by_status_createdAt", ["status", "createdAt"]),
+
   // Stripe customer mappings contain provider identifiers only; never store card numbers or CVCs.
   billingCustomers: defineTable({
     discordId: v.string(),
