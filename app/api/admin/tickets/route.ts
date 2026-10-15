@@ -55,7 +55,7 @@ export async function PATCH(request: Request) {
       actorDiscordId: actor.id, actorName: actor.displayName || actor.username,
       ...(typeof body.status === "string" ? { status: body.status as typeof statuses[number] } : {}),
       ...(typeof body.priority === "string" ? { priority: body.priority as typeof priorities[number] } : {}),
-      ...(typeof body.assignedToDiscordId === "string" ? { assignedToDiscordId: body.assignedToDiscordId, assignedToName: typeof body.assignedToName === "string" ? body.assignedToName : undefined } : {}),
+      ...(body.assignToMe === true ? { assignedToDiscordId: actor.id, assignedToName: actor.displayName || actor.username } : typeof body.assignedToDiscordId === "string" ? { assignedToDiscordId: body.assignedToDiscordId, assignedToName: typeof body.assignedToName === "string" ? body.assignedToName : undefined } : {}),
       ...(typeof body.reply === "string" && body.reply.trim() ? { reply: body.reply.trim(), visibility: (body.visibility === "internal" ? "internal" : "public") as "public" | "internal" } : {}),
     });
     return NextResponse.json(result, { headers: { "Cache-Control": "no-store, max-age=0" } });
