@@ -1,5 +1,190 @@
 "use client";
-import Link from "next/link";import {useEffect,useState} from "react";import {useMutation,useQuery} from "convex/react";import {api} from "../../convex/_generated/api";import SpiderSidebar from "../components/SpiderSidebar";import {ArrowLeft,Plus,Send,Trash2} from "lucide-react";
-const crafts=["Scripting","Building","UI/UX","3D Modeling","Animation","VFX","GFX","Audio"];
-type Service={title:string;description:string;price:number};type Portfolio={url:string;caption:string};
-export default function BecomeDeveloperPage(){const submitProfile=useMutation(api.developers.submit);const [user,setUser]=useState<any>(null),[error,setError]=useState(""),[busy,setBusy]=useState(false),[done,setDone]=useState(false);const [f,setF]=useState({username:"",displayName:"",avatarUrl:"",headline:"",bio:"",crafts:["Scripting"] as string[],skills:"",services:[{title:"",description:"",price:0}] as Service[],rateType:"project",rateAmount:"25",availability:"Available",portfolio:[{url:"",caption:""},{url:"",caption:""},{url:"",caption:""}] as Portfolio[],videoUrl:"",discordUsername:"",robloxUrl:"",ownWork:false});const mine=useQuery(api.developers.mine,user?{discordId:user.id}:"skip" as any);useEffect(()=>{fetch("/api/auth/discord/me").then(r=>r.json()).then(d=>{setUser(d.user);if(d.user)setF(x=>({...x,displayName:d.user.displayName,discordUsername:d.user.username,avatarUrl:d.user.avatar||""}))}).catch(()=>{});},[]);function set(k:string,v:any){setF(x=>({...x,[k]:v}))}function toggle(c:string){setF(x=>({...x,crafts:x.crafts.includes(c)?x.crafts.filter(y=>y!==c):[...x.crafts,c]}))}async function submit(e:any){e.preventDefault();setError("");if(!user){window.location.href="/api/auth/discord/login";return}if(!f.ownWork){setError("Confirm that this is your own work.");return}setBusy(true);try{await submitProfile({username:f.username,displayName:f.displayName,discordId:user.id,avatarUrl:f.avatarUrl,headline:f.headline,bio:f.bio,crafts:f.crafts,skills:f.skills.split(",").map(s=>s.trim()).filter(Boolean),services:f.services.filter(s=>s.title.trim()),rateType:f.rateType as any,rateAmount:f.rateType==="negotiable"?undefined:Number(f.rateAmount),availability:f.availability as any,portfolio:f.portfolio,videoUrl:f.videoUrl||undefined,discordUsername:f.discordUsername,robloxUrl:f.robloxUrl});setDone(true)}catch(e:any){setError(e.message||"Could not submit profile.")}finally{setBusy(false)}}return <main className="market-shell"><SpiderSidebar/><section className="market-content form-page"><Link href="/developers" className="hire-back"><ArrowLeft size={15}/> Back to developers</Link><div className="hire-page-head"><div><span className="spider-eyebrow">CREATOR PROFILE</span><h1>Become a developer</h1><p>Create a profile so Roblox creators can find and commission your work.</p></div></div>{!user?<div className="hire-empty"><h2>Sign in to continue</h2><p>Your developer profile is connected to your Discord account.</p><a className="hire-primary" href="/api/auth/discord/login">Sign in with Discord</a></div>:done?<div className="hire-empty"><h2>Your developer profile is live</h2><p>Your profile is now published in the developer directory. You can edit your details any time by updating your profile.</p><Link href="/developers" className="hire-primary">Browse developers</Link></div>:<><section className="hire-panel dashboard-panel"><h2>Your developer dashboard</h2>{mine===undefined?"Loading your profile...":mine.length===0?<p className="muted-copy">You have not submitted a profile yet.</p>:mine.map((d:any)=><div className="dashboard-profile" key={d._id}><span><b>@{d.username}</b><small>Status: {d.status==="approved"?"Live":d.status}</small></span><span className="craft-badge">{d.status==="approved"?"Live":d.status==="pending"?"Pending review":"Rejected"}</span></div>)}</section><form className="hire-form" onSubmit={submit}><h2>Profile details</h2><div className="form-two"><label>Display name<input required maxLength={40} value={f.displayName} onChange={e=>set("displayName",e.target.value)}/></label><label>Username<input required minLength={3} maxLength={20} pattern="[A-Za-z0-9_]+" value={f.username} onChange={e=>set("username",e.target.value)} placeholder="yourname"/></label></div><label>Avatar image URL (HTTPS)<input type="url" required value={f.avatarUrl} onChange={e=>set("avatarUrl",e.target.value)} placeholder="https://..."/></label><label>Headline<input required minLength={5} maxLength={100} value={f.headline} onChange={e=>set("headline",e.target.value)} placeholder="Roblox scripter specializing in gameplay systems"/></label><label>Bio<textarea required rows={5} maxLength={2000} value={f.bio} onChange={e=>set("bio",e.target.value)} placeholder="Experience, approach, and what you enjoy building..."/></label><span className="form-label">Crafts</span><div className="hire-chips form-chips">{crafts.map(c=><button type="button" key={c} className={f.crafts.includes(c)?"selected":""} onClick={()=>toggle(c)}>{c}</button>)}</div><label>Custom skills (comma separated)<input value={f.skills} onChange={e=>set("skills",e.target.value)} placeholder="Luau, DataStore, UI animation"/></label><div className="form-section-title"><h2>Services</h2><button type="button" className="subtle-button" onClick={()=>set("services",[...f.services,{title:"",description:"",price:0}])}><Plus size={14}/> Add service</button></div>{f.services.map((s,i)=><div className="service-form-row" key={i}><label>Title<input required maxLength={80} value={s.title} onChange={e=>set("services",f.services.map((x,j)=>i===j?{...x,title:e.target.value}:x))}/></label><label>Description<input maxLength={240} value={s.description} onChange={e=>set("services",f.services.map((x,j)=>i===j?{...x,description:e.target.value}:x))}/></label><label>Price<input type="number" min="0" max="100000" value={s.price} onChange={e=>set("services",f.services.map((x,j)=>i===j?{...x,price:Number(e.target.value)}:x))}/></label>{f.services.length>1&&<button type="button" className="remove-button" onClick={()=>set("services",f.services.filter((_,j)=>j!==i))}><Trash2 size={14}/></button>}</div>)}<div className="form-two"><label>Rate type<select value={f.rateType} onChange={e=>set("rateType",e.target.value)}><option value="hourly">Hourly</option><option value="project">Per project</option><option value="negotiable">Negotiable</option></select></label>{f.rateType!=="negotiable"&&<label>Rate amount (USD)<input type="number" min="0" max="100000" value={f.rateAmount} onChange={e=>set("rateAmount",e.target.value)}/></label>}</div><label>Availability<select value={f.availability} onChange={e=>set("availability",e.target.value)}><option>Available</option><option>Busy</option><option>Not taking commissions</option></select></label><div className="form-section-title"><h2>Portfolio</h2><span className="muted-copy">Add 3–9 HTTPS image links</span></div>{f.portfolio.map((p,i)=><div className="portfolio-form-row" key={i}><label>Image URL<input required type="url" value={p.url} onChange={e=>set("portfolio",f.portfolio.map((x,j)=>i===j?{...x,url:e.target.value}:x))} placeholder="https://..."/></label><label>Caption<input maxLength={120} value={p.caption} onChange={e=>set("portfolio",f.portfolio.map((x,j)=>i===j?{...x,caption:e.target.value}:x))} placeholder="What did you create?"/></label>{f.portfolio.length>3&&<button type="button" className="remove-button" onClick={()=>set("portfolio",f.portfolio.filter((_,j)=>j!==i))}><Trash2 size={14}/></button>}</div>)}{f.portfolio.length<9&&<button type="button" className="subtle-button" onClick={()=>set("portfolio",[...f.portfolio,{url:"",caption:""}])}><Plus size={14}/> Add portfolio image</button>}<label>Optional video link<input type="url" value={f.videoUrl} onChange={e=>set("videoUrl",e.target.value)} placeholder="https://..."/></label><div className="form-two"><label>Discord username<input required maxLength={80} value={f.discordUsername} onChange={e=>set("discordUsername",e.target.value)}/></label><label>Roblox profile URL<input required type="url" value={f.robloxUrl} onChange={e=>set("robloxUrl",e.target.value)} placeholder="https://www.roblox.com/users/.../profile"/></label></div><label className="own-work-check"><input type="checkbox" checked={f.ownWork} onChange={e=>set("ownWork",e.target.checked)}/> I confirm this is my own work and I have permission to share these images.</label>{error&&<p className="form-error">{error}</p>}<p className="form-disclaimer">Profiles start as Pending and need approval. Spider does not process payments.</p><button className="hire-primary" disabled={busy}>{busy?"Submitting...":"Submit for review"} <Send size={14}/></button></form></>}</section></main>}
+
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import type { FormEvent } from "react";
+import SpiderSidebar from "../components/SpiderSidebar";
+import { ArrowLeft, Plus, Send, Trash2, Save, ShieldCheck } from "lucide-react";
+
+const crafts = ["Scripting", "Building", "UI/UX", "3D Modeling", "Animation", "VFX", "GFX", "Audio"];
+type Service = { title: string; description: string; price: number };
+type Portfolio = { url: string; caption: string };
+type Application = { applicationNumber: number; type: string; subject: string; status: string; decisionReason?: string; updatedAt: number };
+
+export default function BecomeDeveloperPage() {
+  const [user, setUser] = useState<any>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [applicationNumber, setApplicationNumber] = useState<number | undefined>(undefined);
+  const [error, setError] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [f, setF] = useState({
+    username: "", displayName: "", avatarUrl: "", headline: "", bio: "", crafts: ["Scripting"] as string[],
+    skills: "", services: [{ title: "", description: "", price: 0 }] as Service[], rateType: "project",
+    rateAmount: "25", availability: "Available", portfolio: [{ url: "", caption: "" }, { url: "", caption: "" }, { url: "", caption: "" }] as Portfolio[],
+    videoUrl: "", discordUsername: "", robloxUrl: "", ownWork: false,
+  });
+
+  const loadApplications = useCallback(async () => {
+    try {
+      const response = await fetch("/api/applications", { cache: "no-store" });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Application history is unavailable.");
+      const mine = (data.applications || []).filter((item: Application) => item.type === "Developer profile");
+      setApplications(mine);
+      const latestDraft = mine.find((item: Application) => item.status === "Draft");
+      if (latestDraft) setApplicationNumber(latestDraft.applicationNumber);
+    } catch (caught) {
+      if (caught instanceof Error) setError(caught.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/auth/discord/me", { cache: "no-store" })
+      .then(response => response.json())
+      .then(data => {
+        if (!active) return;
+        setUser(data.user || null);
+        if (data.user) setF(current => ({
+          ...current,
+          displayName: data.user.displayName || data.user.username || "",
+          discordUsername: data.user.username || "",
+          avatarUrl: data.user.avatar || "",
+        }));
+      })
+      .catch(() => { if (active) setUser(null); })
+      .finally(() => { if (active) setAuthLoading(false); });
+    return () => { active = false; };
+  }, []);
+
+  useEffect(() => { if (user) void loadApplications(); }, [user, loadApplications]);
+
+  function set<K extends keyof typeof f>(key: K, value: (typeof f)[K]) {
+    setF(current => ({ ...current, [key]: value }));
+  }
+  function toggleCraft(craft: string) {
+    setF(current => ({ ...current, crafts: current.crafts.includes(craft) ? current.crafts.filter(item => item !== craft) : [...current.crafts, craft] }));
+  }
+
+  function makeAnswers() {
+    return {
+      username: f.username.trim(), displayName: f.displayName.trim(), avatarUrl: f.avatarUrl.trim(),
+      headline: f.headline.trim(), experience: f.bio.trim(), roles: f.crafts.join(", "),
+      skills: f.skills.split(",").map(item => item.trim()).filter(Boolean).join(", "),
+      services: f.services.filter(service => service.title.trim()).slice(0, 12),
+      rateType: f.rateType, rateAmount: f.rateType === "negotiable" ? "" : f.rateAmount,
+      availability: f.availability, portfolio: f.portfolio.filter(item => item.url.trim()).slice(0, 9),
+      portfolioUrl: f.portfolio.find(item => item.url.trim())?.url.trim() || "",
+      videoUrl: f.videoUrl.trim(), discordUsername: f.discordUsername.trim(), robloxUrl: f.robloxUrl.trim(),
+    };
+  }
+
+  async function save(intent: "draft" | "submit", event?: FormEvent) {
+    event?.preventDefault();
+    if (busy) return;
+    setError(""); setFeedback("");
+    if (!user) { window.location.href = "/api/auth/discord/login"; return; }
+    if (intent === "submit" && !f.ownWork) { setError("Confirm that this is your own work before submitting."); return; }
+    setBusy(true);
+    try {
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "Developer profile",
+          subject: "Developer profile: " + (f.displayName.trim() || f.username.trim() || user.username || "new applicant"),
+          answers: makeAnswers(),
+          ...(applicationNumber ? { applicationNumber } : {}),
+          intent,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Your application could not be saved.");
+      setApplicationNumber(result.applicationNumber);
+      setFeedback(intent === "draft"
+        ? "Draft #" + result.applicationNumber + " saved privately. You can return to finish it."
+        : "Application #" + result.applicationNumber + " submitted for staff review. Your profile will not be published unless approved.");
+      await loadApplications();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Your application could not be saved.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const inputClass = "hire-input";
+  return (
+    <main className="market-shell">
+      <SpiderSidebar />
+      <section className="market-content form-page">
+        <Link href="/developers" className="hire-back"><ArrowLeft size={15} /> Back to developers</Link>
+        <header className="hire-page-head">
+          <div><span className="spider-eyebrow">CREATOR APPLICATION</span><h1>Become a developer</h1><p>Submit your portfolio for review. Profiles are published only after an authorized reviewer approves the application.</p></div>
+        </header>
+        {authLoading ? <div className="hire-empty">Checking your account…</div> : !user ? (
+          <div className="hire-empty"><h2>Sign in to continue</h2><p>Your application is linked to your signed-in Discord account.</p><Link className="hire-primary" href="/api/auth/discord/login">Sign in with Discord</Link></div>
+        ) : (
+          <>
+            <section className="hire-panel dashboard-panel">
+              <div className="developer-application-heading"><div><h2>Your developer applications</h2><p>Track review decisions and resume drafts.</p></div><ShieldCheck size={20}/></div>
+              {applications.length === 0 ? <p className="muted-copy">No developer application has been submitted yet.</p> : applications.map(item => (
+                <div className="dashboard-profile" key={item.applicationNumber}>
+                  <span><b>Application #{item.applicationNumber}</b><small>{item.subject} · Updated {new Date(item.updatedAt).toLocaleString()}</small>{item.decisionReason && <small>Reviewer feedback: {item.decisionReason}</small>}</span>
+                  <span className={"support-status-chip status-" + item.status.toLowerCase().replaceAll(" ", "-")}>{item.status}</span>
+                  {item.status === "Draft" && <button type="button" className="hire-secondary" onClick={() => { setApplicationNumber(item.applicationNumber); setFeedback("Draft #" + item.applicationNumber + " selected. Your fields remain in this form while you finish them."); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Resume draft</button>}
+                </div>
+              ))}
+            </section>
+            <form className="hire-form" onSubmit={event => void save("submit", event)}>
+              <h2>Profile details</h2>
+              <div className="form-two">
+                <label>Display name<input required maxLength={40} value={f.displayName} onChange={e => set("displayName", e.target.value)} /></label>
+                <label>Username<input required minLength={3} maxLength={24} pattern="[A-Za-z0-9_-]+" value={f.username} onChange={e => set("username", e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""))} placeholder="yourname" /></label>
+              </div>
+              <label>Avatar image URL (HTTPS)<input required type="url" value={f.avatarUrl} onChange={e => set("avatarUrl", e.target.value)} placeholder="https://…" /></label>
+              <label>Headline<input required minLength={5} maxLength={100} value={f.headline} onChange={e => set("headline", e.target.value)} placeholder="Roblox scripter specializing in gameplay systems" /></label>
+              <label>Experience and bio<textarea required minLength={20} maxLength={2000} rows={5} value={f.bio} onChange={e => set("bio", e.target.value)} placeholder="Relevant experience, approach, and what you enjoy building…" /></label>
+              <span className="form-label">Development roles</span>
+              <div className="hire-chips form-chips">{crafts.map(craft => <button type="button" key={craft} className={f.crafts.includes(craft) ? "selected" : ""} onClick={() => toggleCraft(craft)}>{craft}</button>)}</div>
+              <label>Custom skills (comma separated)<input value={f.skills} onChange={e => set("skills", e.target.value)} placeholder="Luau, DataStore, UI animation" /></label>
+              <div className="form-section-title"><h2>Services</h2><button type="button" className="subtle-button" onClick={() => set("services", [...f.services, { title: "", description: "", price: 0 }].slice(0, 12))} disabled={f.services.length >= 12}><Plus size={14} /> Add service</button></div>
+              {f.services.map((service, index) => <div className="service-form-row" key={index}>
+                <label>Title<input required maxLength={80} value={service.title} onChange={e => set("services", f.services.map((item, i) => i === index ? { ...item, title: e.target.value } : item))} /></label>
+                <label>Description<input maxLength={240} value={service.description} onChange={e => set("services", f.services.map((item, i) => i === index ? { ...item, description: e.target.value } : item))} /></label>
+                <label>Starting price (USD)<input type="number" min="0" max="100000" value={service.price} onChange={e => set("services", f.services.map((item, i) => i === index ? { ...item, price: Number(e.target.value) } : item))} /></label>
+                {f.services.length > 1 && <button type="button" className="remove-button" onClick={() => set("services", f.services.filter((_, i) => i !== index))} aria-label="Remove service"><Trash2 size={14}/></button>}
+              </div>)}
+              <div className="form-two">
+                <label>Rate type<select value={f.rateType} onChange={e => set("rateType", e.target.value)}><option value="hourly">Hourly</option><option value="project">Per project</option><option value="negotiable">Negotiable</option></select></label>
+                {f.rateType !== "negotiable" && <label>Rate amount (USD)<input type="number" min="0" max="100000" value={f.rateAmount} onChange={e => set("rateAmount", e.target.value)} /></label>}
+              </div>
+              <label>Availability<select value={f.availability} onChange={e => set("availability", e.target.value)}><option>Available</option><option>Busy</option><option>Not taking commissions</option></select></label>
+              <div className="form-section-title"><h2>Portfolio</h2><span className="muted-copy">3–9 HTTPS image links</span></div>
+              {f.portfolio.map((item, index) => <div className="portfolio-form-row" key={index}>
+                <label>Image URL<input required type="url" value={item.url} onChange={e => set("portfolio", f.portfolio.map((p, i) => i === index ? { ...p, url: e.target.value } : p))} placeholder="https://…" /></label>
+                <label>Caption<input maxLength={120} value={item.caption} onChange={e => set("portfolio", f.portfolio.map((p, i) => i === index ? { ...p, caption: e.target.value } : p))} placeholder="What did you create?" /></label>
+                {f.portfolio.length > 3 && <button type="button" className="remove-button" onClick={() => set("portfolio", f.portfolio.filter((_, i) => i !== index))} aria-label="Remove portfolio item"><Trash2 size={14}/></button>}
+              </div>)}
+              {f.portfolio.length < 9 && <button type="button" className="subtle-button" onClick={() => set("portfolio", [...f.portfolio, { url: "", caption: "" }])}><Plus size={14}/> Add portfolio image</button>}
+              <label>Optional video link<input type="url" value={f.videoUrl} onChange={e => set("videoUrl", e.target.value)} placeholder="https://…" /></label>
+              <div className="form-two">
+                <label>Discord username<input required maxLength={80} value={f.discordUsername} onChange={e => set("discordUsername", e.target.value)} /></label>
+                <label>Roblox profile URL<input required type="url" value={f.robloxUrl} onChange={e => set("robloxUrl", e.target.value)} placeholder="https://www.roblox.com/users/…/profile" /></label>
+              </div>
+              <label className="own-work-check"><input type="checkbox" checked={f.ownWork} onChange={e => set("ownWork", e.target.checked)} /> I confirm this is my own work and I have permission to share these images.</label>
+              {error && <p className="form-error" role="alert">{error}</p>}
+              {feedback && <p className="form-disclaimer" role="status">{feedback}</p>}
+              <p className="form-disclaimer">Applications are stored privately. No public developer profile is created until approval.</p>
+              <div className="developer-application-actions">
+                <button type="button" className="hire-secondary" disabled={busy} onClick={() => void save("draft")}><Save size={14}/>{busy ? "Saving…" : "Save draft"}</button>
+                <button className="hire-primary" disabled={busy}>{busy ? "Submitting…" : "Submit for review"} <Send size={14}/></button>
+              </div>
+            </form>
+          </>
+        )}
+      </section>
+    </main>
+  );
+}
