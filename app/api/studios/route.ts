@@ -71,9 +71,9 @@ export async function POST(request: Request) {
       specialties,
       ownerDiscordId: profile.id,
       ownerName: profile.displayName || profile.username,
-      ownerAvatar: profile.avatar || undefined,
-      robloxUrl: stringValue("robloxUrl", 500) || undefined,
-      discordUrl: stringValue("discordUrl", 500) || undefined,
+      ...(profile.avatar ? { ownerAvatar: profile.avatar } : {}),
+      ...(stringValue("robloxUrl", 500) ? { robloxUrl: stringValue("robloxUrl", 500) } : {}),
+      ...(stringValue("discordUrl", 500) ? { discordUrl: stringValue("discordUrl", 500) } : {}),
     });
     return NextResponse.json({ success: true, studio: result }, { status: 201 });
   } catch (error) {
