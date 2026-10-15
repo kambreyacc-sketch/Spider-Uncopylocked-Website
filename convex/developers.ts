@@ -36,18 +36,21 @@ export const byUsername = query({
 
 export const mine = query({
   args: { discordId: v.string() },
-  handler: async (ctx, args) => await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).collect(),
+  handler: async (ctx, args) => (await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).collect()).filter(d => d.status === "approved"),
 });
 
 export const submit = mutation({
   args: {
-    username: v.string(), displayName: v.string(), discordId: v.string(), avatarUrl: v.string(), headline: v.string(), bio: v.string(),
+    adminSecret: v.string(), username: v.string(), displayName: v.string(), discordId: v.string(), avatarUrl: v.string(), headline: v.string(), bio: v.string(),
     crafts: v.array(craft), skills: v.array(v.string()), services: v.array(service),
     rateType: v.union(v.literal("hourly"),v.literal("project"),v.literal("negotiable")), rateAmount: v.optional(v.number()),
     availability: v.union(v.literal("Available"),v.literal("Busy"),v.literal("Not taking commissions")),
     portfolio: v.array(portfolioItem), videoUrl: v.optional(v.string()), discordUsername: v.string(), robloxUrl: v.string(),
   },
   handler: async (ctx,args) => {
+    const expected = process.env.ADMIN_API_SECRET;
+    if (!expected || args.adminSecret.length !== expected.length || args.adminSecret !== expected) throw new Error("Unauthorized developer profile service request.");
+    const { adminSecret, ...profileArgs } = args;
     const username = args.username.trim().toLowerCase().replace(/^@/,"");
     if (!/^[a-z0-9_]{3,20}$/.test(username)) throw new Error("Username must be 3–20 letters, numbers, or underscores.");
     if (!args.discordId.trim() || !args.displayName.trim()) throw new Error("Sign in with Discord and add a display name.");
@@ -63,7 +66,7 @@ export const submit = mutation({
     const existingName = await ctx.db.query("developers").withIndex("by_username", q => q.eq("username", username)).first();
     if (existingName && existingName.discordId !== args.discordId) throw new Error("That developer username is already taken.");
     const mine = await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).first();
-    const data = { ...args, username, displayName: args.displayName.trim(), headline: args.headline.trim(), bio: args.bio.trim(), status: "approved" as const, verified: mine?.verified ?? false, createdAt: mine?.createdAt ?? Date.now(), updatedAt: Date.now() };
+    const data = { ...profileArgs, username, displayName: args.displayName.trim(), headline: args.headline.trim(), bio: args.bio.trim(), status: "pending" as const, verified: mine?.verified ?? false, createdAt: mine?.createdAt ?? Date.now(), updatedAt: Date.now() };
     if (mine) return await ctx.db.patch(mine._id, data);
     return await ctx.db.insert("developers", data);
   },
@@ -91,16 +94,25 @@ export const report = mutation({
 });
 
 export const postJob = mutation({
-  args: { title: v.string(), description: v.string(), craft: v.string(), budgetMin: v.number(), budgetMax: v.number(), deadline: v.optional(v.string()), discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string() },
+  args: { adminSecret: v.string(), title: v.string(), description: v.string(), craft: v.string(), budgetMin: v.number(), budgetMax: v.number(), deadline: v.optional(v.string()), discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string() },
   handler: async (ctx,args) => {
-    if (!args.posterDiscordId.trim()) throw new Error("Sign in with Discord before posting a job.");
+    const expected = process.env.ADMIN_API_SECRET;
+    if (!expected || args.adminSecret.length !== expected.length || args.adminSecret !== expected) throw new Error("Unauthorized job posting service request.");
+    if (!/^\\d{5,25}$/.test(args.posterDiscordId)) throw new Error("Sign in with Discord before posting a job.");
+    const activeRestrictions = await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.posterDiscordId)).collect();
+    const now = Date.now();
+    const active = activeRestrictions.filter(r => r.status === "active" && (r.expiresAt === undefined || r.expiresAt > now));
+    if (active.some(r => ["restricted", "temporary_ban", "permanent_ban", "posting_ban"].includes(r.restrictionType))) throw new Error("Your account is not allowed to post jobs while an active restriction applies.");
+    const applications = await ctx.db.query("platformApplications").withIndex("by_applicant_createdAt", q => q.eq("applicantDiscordId", args.posterDiscordId)).collect();
+    if (!applications.some(a => a.applicationType === "Posting Access" && a.status === "approved")) throw new Error("You need approved Posting Access before publishing jobs. Apply at /applications.");
+    const { adminSecret, ...jobArgs } = args;
     if (args.title.trim().length < 5 || args.title.length > 100) throw new Error("Job title must be 5–100 characters.");
     if (!args.description.trim() || args.description.length > 3000) throw new Error("Description is required and must be 3,000 characters or fewer.");
     if (!args.craft.trim() || args.craft.length > 40) throw new Error("Choose a craft.");
     if (!Number.isFinite(args.budgetMin) || !Number.isFinite(args.budgetMax) || args.budgetMin < 0 || args.budgetMax < args.budgetMin || args.budgetMax > 1000000) throw new Error("Enter a valid budget range.");
     if (!args.discordContact.trim() || args.discordContact.length > 80) throw new Error("Add a Discord contact.");
     if (args.deadline && !/^\d{4}-\d{2}-\d{2}$/.test(args.deadline)) throw new Error("Choose a valid deadline.");
-    return await ctx.db.insert("jobs", { ...args, title: args.title.trim(), status: "open", createdAt: Date.now() });
+    return await ctx.db.insert("jobs", { ...jobArgs, title: args.title.trim(), posterName: args.posterName.trim().slice(0, 100), status: "open", createdAt: now });
   },
 });
 
