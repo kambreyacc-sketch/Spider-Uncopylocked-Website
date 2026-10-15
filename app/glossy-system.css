@@ -1,0 +1,451 @@
+/*
+  Spider Uncopylocked — shared glossy finish.
+  This file is imported last so legacy page-level black fills cannot flatten newer surfaces.
+  Neutral reflected graphite: smoky silver highlights, charcoal planes, crisp borders.
+*/
+:root {
+  --spider-canvas: #121315;
+  --spider-glass: #222326;
+  --spider-glass-raised: #2a2b2e;
+  --spider-glass-edge: rgba(255,255,255,.19);
+  --spider-glass-rim: rgba(255,255,255,.34);
+  --spider-glass-light: rgba(255,255,255,.12);
+  --spider-glass-shadow: 0 18px 36px rgba(0,0,0,.24);
+}
+
+/* A single, subtle luminous canvas behind every route. */
+html,
+body {
+  background:
+    radial-gradient(ellipse at 19% -7%, rgba(255,255,255,.105) 0%, rgba(255,255,255,.038) 24%, transparent 48%),
+    radial-gradient(ellipse at 91% 7%, rgba(255,255,255,.065), transparent 32%),
+    radial-gradient(ellipse at 48% 55%, rgba(255,255,255,.022), transparent 58%),
+    linear-gradient(180deg, #1a1b1d 0%, #141517 28%, #101113 72%, #0e0f10 100%) !important;
+  background-attachment: fixed !important;
+}
+body {
+  min-height: 100vh;
+  color: #f3f3f4 !important;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(112deg, rgba(255,255,255,.018), transparent 25%, transparent 72%, rgba(255,255,255,.012)),
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.025), transparent 65%);
+}
+
+/* Full-page canvases: this specifically replaces the old pure-black page fills. */
+main.spider-home,
+main.market-shell,
+main.admin-layout,
+main.admin-denied,
+main.billing-layout,
+main.legal-page,
+main.resource-page,
+main.sell-page,
+main.spai-root,
+.market-shell,
+.marketplace-home,
+.settings-page,
+.admin-layout,
+.admin-denied,
+.billing-layout,
+.legal-page,
+.resource-page,
+.sell-page,
+.spai-root {
+  color: #f3f3f4 !important;
+  background:
+    radial-gradient(ellipse at 14% 0%, rgba(255,255,255,.075), transparent 36%),
+    radial-gradient(ellipse at 88% 10%, rgba(255,255,255,.04), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,.035), transparent 22%),
+    linear-gradient(180deg, #191a1c 0%, #131416 44%, #101113 100%) !important;
+  background-attachment: fixed !important;
+}
+main.market-shell,
+main.spider-home,
+main.billing-layout,
+main.legal-page,
+main.resource-page,
+main.sell-page,
+main.spai-root {
+  isolation: isolate;
+}
+.market-content,
+.admin-main,
+.billing-main,
+.resource-page-main,
+.settings-content,
+.creator-directory-content {
+  min-width: 0;
+  color: #f3f3f4 !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.025) 1px, transparent 3px, transparent 100%),
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.045), transparent 55%),
+    linear-gradient(180deg, rgba(31,32,34,.92), rgba(18,19,21,.96)) !important;
+}
+.spider-home {
+  color: #f3f3f4 !important;
+  background:
+    radial-gradient(ellipse at 14% -3%, rgba(255,255,255,.13), transparent 35%),
+    radial-gradient(ellipse at 88% 4%, rgba(255,255,255,.075), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,.045), transparent 30%),
+    linear-gradient(180deg, #1b1c1e 0%, #141517 44%, #101113 100%) !important;
+}
+.spider-home > .spider-nav {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,.12) 1px, rgba(255,255,255,.035) 3px, rgba(255,255,255,.015) 55%, rgba(255,255,255,.055) 100%),
+    linear-gradient(110deg, rgba(255,255,255,.06), transparent 58%),
+    rgba(31,32,34,.93) !important;
+  border: 1px solid rgba(255,255,255,.19) !important;
+  border-top-color: rgba(255,255,255,.39) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.25) !important;
+}
+
+/* Make the main side rail match the polished Roport-style glass treatment. */
+.spider-sidebar {
+  color: #eeeeef !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.24) 0%, rgba(255,255,255,.085) 1px, rgba(255,255,255,.025) 3px, rgba(255,255,255,.015) 62%, rgba(255,255,255,.04) 100%),
+    radial-gradient(ellipse at 20% 0%, rgba(255,255,255,.09), transparent 45%),
+    linear-gradient(180deg, #28292c 0%, #202123 52%, #1b1c1e 100%) !important;
+  border-right: 1px solid rgba(255,255,255,.19) !important;
+  box-shadow: inset -1px 0 0 rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.2), 12px 0 32px rgba(0,0,0,.18) !important;
+}
+.spider-sidebar .sidebar-head,
+.spider-sidebar .sidebar-bottom {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.17), rgba(255,255,255,.035) 2px, transparent 60%, rgba(255,255,255,.035)),
+    rgba(26,27,29,.7) !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.spider-sidebar .sidebar-user,
+.spider-sidebar .sidebar-account-cta {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.07) 1px, rgba(255,255,255,.025) 3px, rgba(255,255,255,.035) 100%),
+    linear-gradient(110deg, rgba(255,255,255,.06), transparent 65%),
+    #303134 !important;
+  border: 1px solid rgba(255,255,255,.17) !important;
+  border-top-color: rgba(255,255,255,.32) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 7px 20px rgba(0,0,0,.18) !important;
+}
+.spider-sidebar .sidebar-group a:hover,
+.spider-sidebar .sidebar-group a[aria-current="page"],
+.spider-sidebar .sidebar-group a.active {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,.07) 2px, rgba(255,255,255,.025)),
+    #38393c !important;
+  border-color: rgba(255,255,255,.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 4px 12px rgba(0,0,0,.14) !important;
+}
+
+/* Shared surface recipe for page cards that previously remained near-solid black. */
+.feature-card,
+.resource-feature,
+.spider-category-card,
+.spider-home-links > a,
+.spider-upload-banner,
+.spider-hiring-banner,
+.spider-game-preview,
+.float-card,
+.message-placeholder,
+.message-empty-state,
+.job-card,
+.job-listing-card,
+.application-card,
+.developer-card,
+.studio-card,
+.resource-card,
+.marketplace-card,
+.listing-card,
+.listing-panel,
+.listing-no-preview,
+.sell-panel,
+.sell-card,
+.billing-panel,
+.settings-panel,
+.admin-card,
+.admin-panel,
+.dashboard-panel,
+.dashboard-card,
+.spider-panel,
+.spai-card,
+.spai-composer,
+.spai-root .spai-panel,
+.spai-root .spai-message,
+.studio-panel,
+.team-card,
+.settings-card,
+.settings-section,
+.admin-section,
+.billing-section,
+.message-workspace,
+.message-list,
+.message-conversation,
+.hire-panel,
+.hire-empty,
+.hire-form-panel,
+.hire-form-card,
+.safety-card,
+.safety-faq,
+.creator-directory-hero,
+.creator-browse-head,
+.creator-profile-header,
+.creator-profile-card,
+.creator-profile-identity,
+.creator-profile-stats,
+.creator-result-card,
+.resource-upload-card,
+.resource-empty-state,
+.resource-dropzone,
+.resource-upload-panel,
+.studio-empty,
+.studio-create-panel,
+.studio-member-card,
+.studio-overview-card,
+.settings-group,
+.settings-form-card,
+.settings-account-card,
+.settings-notification-card,
+.billing-summary-card,
+.billing-method-card,
+.billing-history-card,
+.admin-stat-card,
+.admin-overview-card,
+.post-job-card,
+.application-panel,
+.messages-inbox,
+.messages-conversation,
+.messages-empty,
+.chat-panel,
+.conversation-panel,
+.inbox-panel,
+.listing-details-panel,
+.listing-sidebar,
+.listing-description-panel,
+.creator-stat-card,
+.directory-filter-panel,
+.resource-list-panel {
+  color: #f0f0f1 !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.09) 1px, rgba(255,255,255,.025) 3px, rgba(255,255,255,.045) 100%),
+    linear-gradient(112deg, rgba(255,255,255,.065), transparent 56%),
+    radial-gradient(ellipse at 16% 0%, rgba(255,255,255,.07), transparent 62%),
+    linear-gradient(145deg, #292a2d 0%, #232427 52%, #1e1f21 100%) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-top-color: rgba(255,255,255,.32) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.17),
+    inset 0 -1px 0 rgba(0,0,0,.48),
+    0 15px 30px rgba(0,0,0,.23) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(122%);
+  backdrop-filter: blur(14px) saturate(122%);
+}
+.feature-card:hover,
+.resource-feature:hover,
+.spider-category-card:hover,
+.spider-home-links > a:hover,
+.job-card:hover,
+.job-listing-card:hover,
+.developer-card:hover,
+.studio-card:hover,
+.resource-card:hover,
+.marketplace-card:hover,
+.listing-card:hover,
+.team-card:hover,
+.hire-panel:hover,
+.creator-profile-card:hover {
+  border-color: rgba(255,255,255,.27) !important;
+  filter: brightness(1.045);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(0,0,0,.44),
+    0 20px 36px rgba(0,0,0,.29) !important;
+}
+
+/* Section headers, empty states, stat tiles and list rows should have a reflective edge too. */
+.market-toolbar,
+.market-filter-bar,
+.market-category-row,
+.market-empty,
+.directory-toolbar,
+.creator-browse-toolbar,
+.admin-top,
+.admin-empty,
+.admin-stat,
+.billing-page-heading,
+.billing-signin-card,
+.settings-heading,
+.settings-profile-card,
+.settings-save-bar,
+.resource-toolbar,
+.resource-page-header,
+.resource-page-intro,
+.studio-page-heading,
+.studio-empty-state,
+.messages-toolbar,
+.message-list-header,
+.conversation-header,
+.legal-topbar,
+.legal-hero,
+.legal-footer,
+.hire-page-head,
+.hire-results-toolbar,
+.form-section,
+.upload-dropzone,
+.upload-preview,
+.resource-upload-dropzone,
+.settings-row,
+.settings-option-row,
+.billing-row,
+.billing-history-row,
+.admin-row {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.19) 0%, rgba(255,255,255,.06) 1px, rgba(255,255,255,.02) 3px, rgba(255,255,255,.035) 100%),
+    linear-gradient(110deg, rgba(255,255,255,.035), transparent 60%),
+    rgba(34,35,37,.88) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  border-top-color: rgba(255,255,255,.27) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.13), 0 9px 22px rgba(0,0,0,.16) !important;
+}
+
+/* Controls: polished silver glass at rest, brighter on hover/focus, no colored accents. */
+.market-search,
+.market-sort,
+.market-search input,
+.market-sort select,
+.resource-search,
+.resource-search input,
+.home-asset-filters button,
+.market-category-row button,
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select,
+textarea {
+  color: #f1f1f2 !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.13) 0%, rgba(255,255,255,.04) 1px, rgba(255,255,255,.015) 3px, rgba(255,255,255,.025) 100%),
+    #252629 !important;
+  border-color: rgba(255,255,255,.18) !important;
+  border-top-color: rgba(255,255,255,.29) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 -1px 0 rgba(0,0,0,.3) !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #a3a3a6 !important;
+}
+select option {
+  color: #f2f2f3;
+  background: #242528;
+}
+button:not(.vip-buy-button):not(.spider-button-primary):not(.hire-primary):not(.spider-upload-nav):not(.spider-signin):not(.sidebar-link) {
+  border-color: rgba(255,255,255,.15);
+}
+button:not(:disabled):hover {
+  filter: brightness(1.055);
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-color: rgba(255,255,255,.62) !important;
+}
+
+/* No old violet/blue selected-state fills; active states use silver graphite. */
+[aria-selected="true"],
+[aria-pressed="true"],
+[aria-current="page"],
+.tab-active,
+.is-active {
+  border-color: rgba(255,255,255,.25) !important;
+}
+.market-category-row button[aria-pressed="true"],
+.home-asset-filters button[aria-pressed="true"],
+[role="tab"][aria-selected="true"] {
+  color: #fff !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.08) 2px, rgba(255,255,255,.025)),
+    #393a3d !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 4px 12px rgba(0,0,0,.15) !important;
+}
+
+/* Consistent text contrast on the page shell without replacing real artwork or videos. */
+.market-content h1,
+.market-content h2,
+.market-content h3,
+.admin-main h1,
+.admin-main h2,
+.billing-main h1,
+.billing-main h2,
+.resource-page h1,
+.resource-page h2,
+.sell-page h1,
+.sell-page h2,
+.legal-page h1,
+.legal-page h2,
+.spai-root h1,
+.spai-root h2 {
+  color: #f5f5f6 !important;
+}
+.market-content p,
+.admin-main p,
+.billing-main p,
+.resource-page p,
+.sell-page p,
+.legal-page p {
+  text-wrap: pretty;
+}
+hr,
+.market-content hr,
+.settings-page hr,
+.resource-page hr {
+  border-color: rgba(255,255,255,.13) !important;
+}
+
+/* Preserve the site’s media, thumbnail and video colors; only glass the frames around them. */
+.resource-card-image,
+.resource-missing-preview,
+.spider-game-preview img,
+.spider-game-preview video,
+.marketplace-card img,
+.listing-card img,
+.studio-card img,
+.developer-card img,
+.creator-profile-avatar img,
+.avatar img {
+  background-color: #202123;
+}
+.resource-card-image img,
+.spider-game-preview img,
+.spider-game-preview video,
+.marketplace-card img,
+.listing-card img,
+.studio-card img,
+.developer-card img {
+  box-shadow: none !important;
+}
+@media (max-width: 800px) {
+  .market-content,
+  .admin-main,
+  .billing-main {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.06), transparent 4px),
+      linear-gradient(180deg, rgba(28,29,31,.9), rgba(17,18,20,.96)) !important;
+  }
+  .spider-sidebar {
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 16px 0 38px rgba(0,0,0,.3) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
+

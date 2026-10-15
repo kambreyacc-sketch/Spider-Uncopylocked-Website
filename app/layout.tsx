@@ -4,6 +4,7 @@ import "./premium-surfaces.css";
 import "./workspace-enhancements.css";
 import "./home-gloss.css";
 import "./vip-gloss.css";
+import "./glossy-system.css";
 import AppConvexProvider from "./convex-provider";
 
 export const metadata: Metadata = {
