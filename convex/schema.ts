@@ -239,4 +239,33 @@ export default defineSchema({
     details: v.optional(v.string()),
     createdAt: v.number(),
   }).index("by_createdAt", ["createdAt"])
+  ,accountRestrictions: defineTable({
+    subjectDiscordId: v.string(),
+    subjectName: v.string(),
+    kind: v.union(v.literal("Warning"), v.literal("Restricted"), v.literal("Suspended"), v.literal("Banned")),
+    reason: v.string(),
+    active: v.boolean(),
+    issuedByDiscordId: v.string(),
+    issuedByName: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    startsAt: v.number(),
+    expiresAt: v.optional(v.number()),
+    liftedAt: v.optional(v.number()),
+    liftedByDiscordId: v.optional(v.string()),
+    liftedByName: v.optional(v.string()),
+    liftReason: v.optional(v.string()),
+    sourceType: v.optional(v.string()),
+    sourceId: v.optional(v.string()),
+  }).index("by_subject_createdAt", ["subjectDiscordId", "createdAt"])
+    .index("by_active_createdAt", ["active", "createdAt"])
+    .index("by_subject_active", ["subjectDiscordId", "active"]),
+  websiteSettings: defineTable({
+    key: v.string(),
+    value: v.string(),
+    updatedAt: v.number(),
+    updatedByDiscordId: v.string(),
+    updatedByName: v.string(),
+  }).index("by_key", ["key"])
+
 });
