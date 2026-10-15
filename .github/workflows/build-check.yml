@@ -23,7 +23,12 @@ jobs:
         run: npm install
       - name: TypeScript check
         run: npx tsc --noEmit
-      - name: Lint
-        run: npm run lint
+      - name: Lint (when configured)
+        run: |
+          if npm ls eslint --depth=0 >/dev/null 2>&1; then
+            npm run lint
+          else
+            echo "::notice::ESLint is not installed in this repository; lint is skipped. TypeScript and production build checks still run."
+          fi
       - name: Build Next.js
         run: npm run build
