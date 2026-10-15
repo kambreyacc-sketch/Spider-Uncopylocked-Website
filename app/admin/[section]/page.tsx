@@ -9,6 +9,7 @@ import SupportAdminPanel from "../support-panel";
 import ApplicationRecordsPanel from "../application-records-panel";
 import ModerationReviewPanel from "../moderation-panel";
 import ReportReviewPanel from "../report-review-panel";
+import AdminOperationsPanel from "../operations-panel";
 
 const pages: Record<string, { title: string; description: string }> = {
   reports: { title: "Scam reports", description: "Review submitted reports, supporting evidence, and moderation decisions." },
@@ -31,6 +32,7 @@ const sectionCapabilities: Record<string, StaffCapability> = {
   applications: "applications.view",
   reports: "reports.view",
   "reported-content": "content.view",
+  restrictions: "restrictions.view",
 };
 
 export default async function AdminSection({ params }: { params: Promise<{ section: string }> }) {
@@ -66,6 +68,18 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
           <ModerationReviewPanel />
         ) : section === "billing" ? (
           <BillingAdminPanel />
+        ) : section === "users" ? (
+          <AdminOperationsPanel section="users" />
+        ) : section === "studios" ? (
+          <AdminOperationsPanel section="studios" />
+        ) : section === "jobs" ? (
+          <AdminOperationsPanel section="jobs" />
+        ) : section === "restrictions" ? (
+          <AdminOperationsPanel section="restrictions" />
+        ) : section === "activity" ? (
+          <AdminOperationsPanel section="activity" />
+        ) : section === "content" ? (
+          <AdminOperationsPanel section="settings" />
         ) : (
           <div className="admin-empty">
             <div className="admin-empty-mark">SU</div>
