@@ -7,7 +7,7 @@ import { getServiceConvex } from "../../../../lib/service-convex";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const sections = ["users", "studios", "jobs", "restrictions", "activity", "settings"] as const;
+const sections = ["users", "studios", "jobs", "restrictions", "activity", "roles", "settings"] as const;
 type Section = typeof sections[number];
 const restrictionKinds = ["Warning", "Restricted", "Suspended", "Banned"] as const;
 const settingKeys = ["announcement", "announcementEnabled", "homepageFeaturedText"] as const;
@@ -86,6 +86,27 @@ export async function POST(request: Request) {
       return NextResponse.json(result, { status: 201, headers: { "Cache-Control": "no-store, max-age=0" } });
     } catch (error) {
       return NextResponse.json({ error: error instanceof Error ? error.message : "Could not issue restriction." }, { status: 400 });
+    }
+  }
+
+  if (action === "setRoleGrant") {
+    if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Only the site owner can manage website staff roles." }, { status: 403 });
+    if (body.confirmed !== true) return NextResponse.json({ error: "Confirm this role change before saving it." }, { status: 400 });
+    const discordId = typeof body.discordId === "string" ? body.discordId.trim() : "";
+    const roleKey = typeof body.roleKey === "string" ? body.roleKey : "";
+    const reason = typeof body.reason === "string" ? body.reason.trim() : "";
+    const allowedRoles = ["support", "review", "moderate", "moderation_manage", "staff_manage"];
+    if (!/^[0-9]{5,32}$/.test(discordId) || !allowedRoles.includes(roleKey) || typeof body.active !== "boolean" || reason.length < 3 || reason.length > 1000) {
+      return NextResponse.json({ error: "Provide a valid Discord ID, assignable role, desired state, and reason (3–1,000 characters)." }, { status: 400 });
+    }
+    try {
+      const result = await db.client.mutation(api.admin.setWebsiteRoleGrant, {
+        adminSecret: db.secret, discordId, roleKey: roleKey as "support" | "review" | "moderate" | "moderation_manage" | "staff_manage",
+        active: body.active, actorDiscordId: actor.id, actorName: actor.displayName || actor.username, reason,
+      });
+      return NextResponse.json(result, { headers: { "Cache-Control": "no-store, max-age=0" } });
+    } catch (error) {
+      return NextResponse.json({ error: error instanceof Error ? error.message : "Could not update staff role." }, { status: 400 });
     }
   }
 
