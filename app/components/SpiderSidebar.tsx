@@ -40,6 +40,7 @@ const workspace: NavigationItem[] = [
   { href: "/messages", label: "Messages", Icon: MessagesSquare },
 ];
 const discover: NavigationItem[] = [
+  { href: "/store", label: "Creator Store", Icon: ShoppingBag },
   { href: "/resources", label: "Resources", Icon: LibraryBig },
   { href: "/marketplace", label: "Game Marketplace", Icon: Users },
   { href: "/developers", label: "Hire Developers", Icon: Search },
