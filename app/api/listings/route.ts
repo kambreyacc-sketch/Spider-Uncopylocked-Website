@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { api } from "../../../convex/_generated/api";
 import { getSpiderProfile } from "../../../lib/session";
 import { getServiceConvex } from "../../../lib/service-convex";
+import { checkAccountRestriction } from "../../../lib/account-restrictions";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -9,6 +10,9 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   const user = await getSpiderProfile();
   if (!user) return NextResponse.json({ error: "Sign in with Discord before creating a listing." }, { status: 401 });
+  const restriction = await checkAccountRestriction(user.id, "publish");
+  if (restriction.status === "unavailable") return NextResponse.json({ error: "Could not verify your account standing. Nothing was submitted." }, { status: 503 });
+  if (restriction.status === "blocked") return NextResponse.json({ error: "Marketplace posting is blocked by an active " + restriction.kind.toLowerCase() + " action: " + restriction.reason }, { status: 403 });
   const db = getServiceConvex();
   if (!db) return NextResponse.json({ error: "Marketplace service is not configured. Nothing was submitted." }, { status: 503 });
   try {
