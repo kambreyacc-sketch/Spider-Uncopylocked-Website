@@ -79,7 +79,7 @@ export const submit = mutation({
     if (args.applicationNumber !== undefined) {
       const draft = await ctx.db.query("applicationRecords").withIndex("by_applicationNumber", (q: any) => q.eq("applicationNumber", args.applicationNumber)).unique();
       if (!draft || draft.applicantDiscordId !== args.applicantDiscordId || draft.status !== "Draft" || draft.type !== args.type) throw new Error("Draft not found or it can no longer be submitted.");
-      const updated = { ...validated, status: "Submitted", submittedAt: now, updatedAt: now, applicantName: args.applicantName.trim().slice(0,100), ...(args.applicantAvatar ? { applicantAvatar: args.applicantAvatar } : {}) };
+      const updated = { ...validated, status: "Submitted" as const, submittedAt: now, updatedAt: now, applicantName: args.applicantName.trim().slice(0,100), ...(args.applicantAvatar ? { applicantAvatar: args.applicantAvatar } : {}) };
       await ctx.db.patch(draft._id, updated);
       await ctx.db.insert("applicationEvents", { applicationId: draft._id, applicationNumber: draft.applicationNumber, actorDiscordId: args.applicantDiscordId, actorName: args.applicantName.trim().slice(0,100), action: "application_submitted", visibility: "applicant", createdAt: now });
       return { success: true, applicationNumber: draft.applicationNumber };
@@ -137,8 +137,9 @@ export const saveDraft = mutation({
       });
     } else {
       applicationNumber = await nextApplicationNumber(ctx);
+      applicationId = const nextNumber = applicationNumber = await nextApplicationNumber(ctx);
       applicationId = await ctx.db.insert("applicationRecords", {
-        applicationNumber, type: args.type, ...validated,
+        applicationNumber: nextNumber, type: args.type, ...validated,
         applicantDiscordId: args.applicantDiscordId,
         applicantName: args.applicantName.trim().slice(0, 100),
         ...(args.applicantAvatar ? { applicantAvatar: args.applicantAvatar } : {}),
@@ -233,7 +234,7 @@ export const review = mutation({
     }
     if (args.staffNote && args.staffNote.length > 4000) throw new Error("Private staff note is limited to 4,000 characters.");
     const now = Date.now();
-    const patch: Record<string, unknown> = { status: args.status, updatedAt: now, reviewedAt: now, decisionReason: reason || undefined };
+    const patch: any = { status: args.status, updatedAt: now, reviewedAt: now, decisionReason: reason || undefined };
     if (args.assignedToDiscordId !== undefined) {
       if (args.assignedToDiscordId.trim()) {
         patch.assignedToDiscordId = args.assignedToDiscordId.trim();
@@ -311,9 +312,9 @@ export const hasApprovedAccess = query({
   args: { adminSecret: v.string(), applicantDiscordId: v.string(), type: applicationType },
   handler: async (ctx, args) => {
     assertServiceSecret(args.adminSecret);
-    const rows = await ctx.db.query("applicationRecords")
-      .withIndex("by_applicant_updatedAt", (q: any) => q.eq("applicantDiscordId", args.applicantDiscordId))
-      .order("desc").take(100);
-    return rows.some((a: any) => a.type === args.type && a.status === "Approved");
+    const approved = await ctx.db.query("applicationRecords")
+      .withIndex("by_applicant_type_status", (q: any) => q.eq("applicantDiscordId", args.applicantDiscordId).eq("type", args.type).eq("status", "Approved"))
+      .first();
+    return !!approved;
   },
 });
