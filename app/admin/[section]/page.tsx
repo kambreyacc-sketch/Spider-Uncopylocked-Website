@@ -8,6 +8,7 @@ import BillingAdminPanel from "../billing-panel";
 import SupportAdminPanel from "../support-panel";
 import ApplicationRecordsPanel from "../application-records-panel";
 import ModerationReviewPanel from "../moderation-panel";
+import ReportReviewPanel from "../report-review-panel";
 
 const pages: Record<string, { title: string; description: string }> = {
   reports: { title: "Scam reports", description: "Review submitted reports, supporting evidence, and moderation decisions." },
@@ -28,6 +29,7 @@ const pages: Record<string, { title: string; description: string }> = {
 const sectionCapabilities: Record<string, StaffCapability> = {
   support: "support.view",
   applications: "applications.view",
+  reports: "reports.view",
   "reported-content": "content.view",
 };
 
@@ -58,6 +60,8 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
           <><ApplicationRecordsPanel /><DeveloperApplicationsPanel /></>
         ) : section === "support" ? (
           <SupportAdminPanel />
+        ) : section === "reports" ? (
+          <ReportReviewPanel />
         ) : section === "reported-content" ? (
           <ModerationReviewPanel />
         ) : section === "billing" ? (
