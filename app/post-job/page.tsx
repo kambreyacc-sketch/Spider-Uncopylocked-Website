@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import SpiderSidebar from "../components/SpiderSidebar";
 import {
   ArrowLeft, ArrowRight, Blocks, Check, Code2, Cuboid, Image, Music2,
@@ -23,7 +21,6 @@ const crafts = [
 const steps = ["Role", "Details", "Budget", "Contact"];
 
 export default function PostJobPage() {
-  const post = useMutation(api.developers.postJob);
   const [user, setUser] = useState<any>(null);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
@@ -100,17 +97,22 @@ export default function PostJobPage() {
     setBusy(true);
     setError("");
     try {
-      await post({
-        ...form,
-        title: form.title.trim(),
-        description: form.description.trim(),
-        budgetMin: Number(form.budgetMin),
-        budgetMax: Number(form.budgetMax),
-        deadline: form.deadline || undefined,
-        discordContact: form.discordContact.trim(),
-        posterDiscordId: user.id,
-        posterName: form.posterName.trim() || user.displayName || user.username,
+      const response = await fetch("/api/jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          title: form.title.trim(),
+          description: form.description.trim(),
+          budgetMin: Number(form.budgetMin),
+          budgetMax: Number(form.budgetMax),
+          deadline: form.deadline || undefined,
+          discordContact: form.discordContact.trim(),
+          posterName: form.posterName.trim() || user.displayName || user.username,
+        }),
       });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Could not post the job.");
       setDone(true);
     } catch (err: any) {
       setError(err?.message || "Could not post the job. Please try again.");
