@@ -4,13 +4,16 @@ import { isSpiderAdmin } from "../../../lib/session";
 import SpiderSidebar from "../../components/SpiderSidebar";
 import DeveloperApplicationsPanel from "../applications-panel";
 import BillingAdminPanel from "../billing-panel";
+import SupportAdminPanel from "../support-panel";
+import ApplicationRecordsPanel from "../application-records-panel";
+import ModerationReviewPanel from "../moderation-panel";
 
 const pages: Record<string, { title: string; description: string }> = {
   reports: { title: "Scam reports", description: "Review submitted reports, supporting evidence, and moderation decisions." },
   restrictions: { title: "User restrictions", description: "Review restrictions, suspensions, reasons, and expiry information." },
-  "reported-content": { title: "Reported content", description: "Review user-submitted reports about profiles, studios, and listings." },
+  "reported-content": { title: "Content moderation", description: "Review pending resource and marketplace submissions before publication." },
   users: { title: "Users", description: "Search accounts and review related studio, job, and moderation history." },
-  applications: { title: "Developer applications", description: "Review developer profiles submitted through Spider Uncopylocked." },
+  applications: { title: "Applications & approvals", description: "Review studio, resource, marketplace, developer, creator, and staff applications." },
   billing: { title: "Billing & subscriptions", description: "Review subscription metadata, invoice references, and Stripe webhook health." },
   studios: { title: "Studios", description: "Review studio submissions, ownership, games, and approval status." },
   jobs: { title: "Job posts", description: "Review job terms, payment disclosures, reports, and listing status." },
@@ -22,8 +25,8 @@ const pages: Record<string, { title: string; description: string }> = {
 };
 
 export default async function AdminSection({ params }: { params: Promise<{ section: string }> }) {
-  if (!(await isSpiderAdmin())) redirect("/admin");
   const { section } = await params;
+  if (!(await isSpiderAdmin())) redirect("/admin");
   const page = pages[section];
   if (!page) notFound();
 
@@ -40,7 +43,11 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
           </div>
         </header>
         {section === "applications" ? (
-          <DeveloperApplicationsPanel />
+          <><ApplicationRecordsPanel /><DeveloperApplicationsPanel /></>
+        ) : section === "support" ? (
+          <SupportAdminPanel />
+        ) : section === "reported-content" ? (
+          <ModerationReviewPanel />
         ) : section === "billing" ? (
           <BillingAdminPanel />
         ) : (
