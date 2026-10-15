@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { api } from "../../../../convex/_generated/api";
 import { getSpiderProfile, isSpiderAdmin } from "../../../../lib/session";
+import { hasStaffCapability } from "../../../../lib/staff-permissions";
 import { getServiceConvex } from "../../../../lib/service-convex";
 
 export const dynamic = "force-dynamic";
@@ -9,7 +10,8 @@ const statuses = ["Open", "In Review", "Waiting on User", "Escalated", "Resolved
 const priorities = ["Low", "Normal", "High", "Urgent"] as const;
 
 export async function GET(request: Request) {
-  if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const actor = await getSpiderProfile();
+  if (!actor || !(await hasStaffCapability("support.view", actor))) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const db = getServiceConvex();
   if (!db) return NextResponse.json({ error: "Support storage is not configured." }, { status: 503 });
   const params = new URL(request.url).searchParams;
@@ -38,8 +40,8 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const actor = await getSpiderProfile();
+  if (!actor || (!(await hasStaffCapability("support.reply", actor)) && !(await hasStaffCapability("support.manage", actor)))) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const db = getServiceConvex();
   if (!actor || !db) return NextResponse.json({ error: "Admin session or support storage is unavailable." }, { status: 503 });
   let body: Record<string, unknown>;
@@ -49,6 +51,8 @@ export async function PATCH(request: Request) {
   if (body.priority !== undefined && !priorities.includes(body.priority as typeof priorities[number])) return NextResponse.json({ error: "Invalid priority." }, { status: 400 });
   if (body.reply !== undefined && (typeof body.reply !== "string" || body.reply.trim().length > 8000)) return NextResponse.json({ error: "Reply must be under 8,000 characters." }, { status: 400 });
   if (body.visibility !== undefined && !["public", "internal"].includes(String(body.visibility))) return NextResponse.json({ error: "Invalid reply visibility." }, { status: 400 });
+  const manages = await hasStaffCapability("support.manage", actor);
+  if (!manages && (body.status !== undefined || body.priority !== undefined || body.assignedToDiscordId !== undefined || body.assignToMe === true || body.visibility === "internal")) return NextResponse.json({ error: "Your staff role can reply but cannot change ticket assignment, priority, status, or add internal notes." }, { status: 403 });
   try {
     const result = await db.client.mutation(api.support.staffUpdate, {
       adminSecret: db.secret, ticketNumber: Number(body.ticketNumber),
