@@ -12,7 +12,21 @@ export async function GET(request: Request) {
   if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const db = getServiceConvex();
   if (!db) return NextResponse.json({ error: "Support storage is not configured." }, { status: 503 });
-  const statusValue = new URL(request.url).searchParams.get("status");
+  const params = new URL(request.url).searchParams;
+  const numberValue = params.get("number");
+  if (numberValue !== null) {
+    const ticketNumber = Number(numberValue);
+    if (!Number.isSafeInteger(ticketNumber) || ticketNumber < 1) return NextResponse.json({ error: "Invalid ticket number." }, { status: 400 });
+    try {
+      const detail = await db.client.query(api.support.getForStaff, { adminSecret: db.secret, ticketNumber });
+      if (!detail) return NextResponse.json({ error: "Ticket not found." }, { status: 404 });
+      return NextResponse.json(detail, { headers: { "Cache-Control": "no-store, max-age=0" } });
+    } catch (error) {
+      console.error("Admin ticket detail failed:", error);
+      return NextResponse.json({ error: "Ticket detail is not ready. Confirm the support functions have been deployed." }, { status: 503 });
+    }
+  }
+  const statusValue = params.get("status");
   if (statusValue && !statuses.includes(statusValue as typeof statuses[number])) return NextResponse.json({ error: "Invalid status filter." }, { status: 400 });
   try {
     const tickets = await db.client.query(api.support.listForStaff, { adminSecret: db.secret, ...(statusValue ? { status: statusValue as typeof statuses[number] } : {}) });
