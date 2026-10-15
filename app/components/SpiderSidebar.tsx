@@ -17,6 +17,7 @@ import {
   Building2,
   MessagesSquare,
   Sparkles,
+  ShoppingBag,
   LogOut,
   LockKeyhole,
   CreditCard,
