@@ -14,7 +14,13 @@ export function getStripe(): Stripe | null {
 }
 
 export function billingIsEnabled(): boolean {
-  return process.env.STRIPE_BILLING_ENABLED === "true";
+  // Two independent switches are required. Stripe credentials alone must never activate purchases.
+  // Keep SPIDER_BILLING_LAUNCH_APPROVED unset until the site owner explicitly approves launch
+  // after verifying live/test mode, configured price IDs, webhook delivery, and entitlement sync.
+  return (
+    process.env.STRIPE_BILLING_ENABLED === "true" &&
+    process.env.SPIDER_BILLING_LAUNCH_APPROVED === "true"
+  );
 }
 
 export function stripeWebhookIsConfigured(): boolean {
