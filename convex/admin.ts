@@ -255,7 +255,7 @@ export const overviewCounts = query({
 
 const operationSection = v.union(
   v.literal("users"), v.literal("studios"), v.literal("jobs"),
-  v.literal("restrictions"), v.literal("activity"), v.literal("settings")
+  v.literal("restrictions"), v.literal("activity"), v.literal("roles"), v.literal("settings")
 );
 
 /** Owner/service-only operational list. Every row is derived from persistent records. */
@@ -336,6 +336,12 @@ export const listOperations = query({
         ...applications.map(row => ({ id: String(row._id), actorDiscordId: row.actorDiscordId, actorName: row.actorName, action: row.action, targetType: "application", targetId: String(row.applicationNumber), details: row.note || "", createdAt: row.createdAt, source: row.visibility === "staff" ? "Private application note" : "Application" })),
       ].filter(row => matches([row.actorDiscordId, row.actorName, row.action, row.targetType, row.targetId, row.details, row.source]));
       rows.sort((a, b) => b.createdAt - a.createdAt);
+    } else if (args.section === "roles") {
+      rows = (await ctx.db.query("websiteRoleGrants").order("desc").take(1000))
+        .filter(row => (!args.status || (args.status === "active" ? row.active : args.status === "inactive" ? !row.active : true))
+          && matches([row.discordId, row.roleKey, row.grantedByDiscordId, row.grantedByName, row.applicationNumber]))
+        .map(({ _id, _creationTime, ...row }) => ({ id: _id, ...row }));
+      rows.sort((a, b) => b.updatedAt - a.updatedAt);
     } else {
       const settings = await ctx.db.query("websiteSettings").order("desc").take(100);
       rows = settings.filter(row => matches([row.key, row.value, row.updatedByName]))
@@ -528,5 +534,62 @@ export const getActiveRestriction = query({
       createdAt: strongest.createdAt,
       expiresAt: strongest.expiresAt ?? null,
     };
+  },
+});
+
+
+const assignableRoleKey = v.union(
+  v.literal("support"), v.literal("review"), v.literal("moderate"),
+  v.literal("moderation_manage"), v.literal("staff_manage")
+);
+
+export const setWebsiteRoleGrant = mutation({
+  args: {
+    adminSecret: v.string(),
+    discordId: v.string(),
+    roleKey: assignableRoleKey,
+    active: v.boolean(),
+    actorDiscordId: v.string(),
+    actorName: v.string(),
+    reason: v.string(),
+  },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const discordId = args.discordId.trim();
+    const reason = args.reason.trim();
+    if (!/^[0-9]{5,32}$/.test(discordId)) throw new Error("Enter a valid Discord user ID.");
+    if (discordId === args.actorDiscordId) throw new Error("You cannot grant, revoke, or change your own staff roles.");
+    if (reason.length < 3 || reason.length > 1000) throw new Error("A reason between 3 and 1,000 characters is required.");
+    const now = Date.now();
+    const existing = await ctx.db.query("websiteRoleGrants")
+      .withIndex("by_discordId_roleKey", q => q.eq("discordId", discordId).eq("roleKey", args.roleKey))
+      .unique();
+    if (!args.active && !existing) throw new Error("This member does not have that role grant.");
+    if (existing) {
+      if (existing.active === args.active) throw new Error(args.active ? "This role is already active." : "This role is already revoked.");
+      await ctx.db.patch(existing._id, {
+        active: args.active, grantedByDiscordId: args.actorDiscordId,
+        grantedByName: args.actorName.slice(0, 100), updatedAt: now,
+      });
+    } else {
+      await ctx.db.insert("websiteRoleGrants", {
+        discordId, roleKey: args.roleKey,
+        grantedByDiscordId: args.actorDiscordId, grantedByName: args.actorName.slice(0, 100),
+        active: true, createdAt: now, updatedAt: now,
+      });
+    }
+    const action = args.active ? "staff_role_granted" : "staff_role_revoked";
+    await ctx.db.insert("moderationAuditEvents", {
+      actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0, 100),
+      action, targetType: "member_role", targetId: discordId,
+      details: args.roleKey + ": " + reason, createdAt: now,
+    });
+    await ctx.db.insert("userNotifications", {
+      recipientDiscordId: discordId, category: "moderation",
+      title: args.active ? "Website staff role granted" : "Website staff role revoked",
+      body: "The " + args.roleKey.replaceAll("_", " ") + " staff role was " + (args.active ? "granted" : "revoked") + ". Reason: " + reason.slice(0, 500),
+      href: "/admin", createdAt: now,
+    });
+    return { success: true, discordId, roleKey: args.roleKey, active: args.active };
   },
 });
