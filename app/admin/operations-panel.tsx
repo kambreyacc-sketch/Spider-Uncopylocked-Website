@@ -41,22 +41,22 @@ export default function AdminOperationsPanel({section}:{section:Section}) {
   },[section,page,search,status]);
   useEffect(()=>{void load();},[load]);
 
-  async function mutate(action:string,fields:Record<string,unknown>,confirmation:string,method?:"POST"|"PATCH"){
-    if(busy||!window.confirm(confirmation))return;
+  async function mutate(action:string,fields:Record<string,unknown>,confirmation:string,method?:"POST"|"PATCH"):Promise<boolean>{
+    if(busy||!window.confirm(confirmation))return false;
     setBusy(true);setError("");setFeedback("");
     try{
       const response=await fetch("/api/admin/operations",{method:method||(action==="saveSetting"||action==="createRestriction"||action==="setRoleGrant"?"POST":"PATCH"),headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...fields,confirmed:true})});
       const result=await response.json();if(!response.ok)throw new Error(result.error||"The operation failed.");
-      setFeedback("Saved. The operation was recorded in the audit history.");await load();
-    }catch(caught){setError(caught instanceof Error?caught.message:"The operation failed.");}finally{setBusy(false);}
+      setFeedback("Saved. The operation was recorded in the audit history.");await load();return true;
+    }catch(caught){setError(caught instanceof Error?caught.message:"The operation failed.");return false;}finally{setBusy(false);}
   }
   function promptReason(label:string){const value=window.prompt("Reason for "+label+" (3–1,000 characters):");if(value===null)return null;const clean=value.trim();if(clean.length<3||clean.length>1000){setError("Enter a reason between 3 and 1,000 characters.");return null;}return clean;}
   async function issueRestriction(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();
     let expiry:string|undefined;
     if(expiresAt){const parsed=new Date(expiresAt);if(Number.isNaN(parsed.getTime())||parsed.getTime()<=Date.now()){setError("Expiration must be a future date and time.");return;}expiry=parsed.toISOString();}
-    await mutate("createRestriction",{kind,subjectDiscordId:discordId.trim(),subjectName:memberName.trim(),reason:reason.trim(),...(expiry?{expiresAt:expiry}:{})},"Issue this account action? It will be audit logged and enforced by protected write endpoints.");
-    setDiscordId("");setMemberName("");setReason("");setExpiresAt("");
+    const saved = await mutate("createRestriction",{kind,subjectDiscordId:discordId.trim(),subjectName:memberName.trim(),reason:reason.trim(),...(expiry?{expiresAt:expiry}:{})},"Issue this account action? It will be audit logged and enforced by protected write endpoints.");
+    if(saved){setDiscordId("");setMemberName("");setReason("");setExpiresAt("");}
   }
   const heading=titles[section];
 
@@ -77,7 +77,7 @@ export default function AdminOperationsPanel({section}:{section:Section}) {
       <button className="hire-primary" disabled={busy}><LockKeyhole size={14}/>{busy?"Saving…":"Issue action"}</button>
     </form>}
 
-    {section==="roles"&&<form className="admin-restriction-form" onSubmit={event=>{event.preventDefault();void mutate("setRoleGrant",{discordId:roleDiscordId.trim(),roleKey,active:roleActive,reason:roleReason.trim()},(roleActive?"Grant":"Revoke")+" the "+roleKey.replaceAll("_"," ")+" role for Discord ID "+roleDiscordId+"? Owner/Admin privileges are not assignable here.");setRoleReason("");}}>
+    {section==="roles"&&<form className="admin-restriction-form" onSubmit={async event=>{event.preventDefault();const saved=await mutate("setRoleGrant",{discordId:roleDiscordId.trim(),roleKey,active:roleActive,reason:roleReason.trim()},(roleActive?"Grant":"Revoke")+" the "+roleKey.replaceAll("_"," ")+" role for Discord ID "+roleDiscordId+"? Owner/Admin privileges are not assignable here.");if(saved)setRoleReason("");}}>
       <div className="admin-form-title"><ShieldCheck size={18}/><div><h3>Manage a website staff grant</h3><p>Only the site owner can manage grants. The recipient cannot grant a role to themselves, and owner/admin privileges are never assignable here.</p></div></div>
       <div className="admin-operation-form-grid">
         <label>Discord user ID<input required inputMode="numeric" pattern="[0-9]{5,32}" maxLength={32} value={roleDiscordId} onChange={event=>setRoleDiscordId(event.target.value)} placeholder="Discord user ID"/></label>
