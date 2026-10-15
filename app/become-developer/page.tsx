@@ -9,7 +9,7 @@ import { ArrowLeft, Plus, Send, Trash2, Save, ShieldCheck } from "lucide-react";
 const crafts = ["Scripting", "Building", "UI/UX", "3D Modeling", "Animation", "VFX", "GFX", "Audio"];
 type Service = { title: string; description: string; price: number };
 type Portfolio = { url: string; caption: string };
-type Application = { applicationNumber: number; type: string; subject: string; status: string; decisionReason?: string; updatedAt: number };
+type Application = { applicationNumber: number; type: string; subject: string; status: string; decisionReason?: string; updatedAt: number; answers?: Record<string, unknown> };
 
 export default function BecomeDeveloperPage() {
   const [user, setUser] = useState<any>(null);
@@ -26,6 +26,45 @@ export default function BecomeDeveloperPage() {
     videoUrl: "", discordUsername: "", robloxUrl: "", ownWork: false,
   });
 
+  function restoreDraft(answers: Record<string, unknown>) {
+    const text = (key: string) => typeof answers[key] === "string" ? String(answers[key]) : "";
+    const rawPortfolio = Array.isArray(answers.portfolio) ? answers.portfolio : [];
+    const portfolio = rawPortfolio.map((item: any) => ({
+      url: typeof item?.url === "string" ? item.url : "",
+      caption: typeof item?.caption === "string" ? item.caption : "",
+    })).slice(0, 9);
+    while (portfolio.length < 3) portfolio.push({ url: "", caption: "" });
+    const rawServices = Array.isArray(answers.services) ? answers.services : [];
+    const services = rawServices.map((item: any) => ({
+      title: typeof item?.title === "string" ? item.title : "",
+      description: typeof item?.description === "string" ? item.description : "",
+      price: Number.isFinite(Number(item?.price)) ? Number(item.price) : 0,
+    })).slice(0, 12);
+    if (!services.length) services.push({ title: "", description: "", price: 0 });
+    const roles = text("roles").split(",").map(item => item.trim()).filter(item => crafts.includes(item));
+    const rateType = ["hourly", "project", "negotiable"].includes(text("rateType")) ? text("rateType") : "project";
+    const availability = ["Available", "Busy", "Not taking commissions"].includes(text("availability")) ? text("availability") : "Available";
+    setF(current => ({
+      ...current,
+      username: text("username"),
+      displayName: text("displayName") || current.displayName,
+      avatarUrl: text("avatarUrl") || current.avatarUrl,
+      headline: text("headline"),
+      bio: text("experience"),
+      crafts: roles.length ? roles : ["Scripting"],
+      skills: text("skills"),
+      services,
+      rateType,
+      rateAmount: text("rateAmount") || "25",
+      availability,
+      portfolio,
+      videoUrl: text("videoUrl"),
+      discordUsername: text("discordUsername") || current.discordUsername,
+      robloxUrl: text("robloxUrl"),
+      ownWork: false,
+    }));
+  }
+
   const loadApplications = useCallback(async () => {
     try {
       const response = await fetch("/api/applications", { cache: "no-store" });
@@ -34,7 +73,8 @@ export default function BecomeDeveloperPage() {
       const mine = (data.applications || []).filter((item: Application) => item.type === "Developer profile");
       setApplications(mine);
       const latestDraft = mine.find((item: Application) => item.status === "Draft");
-      if (latestDraft) setApplicationNumber(latestDraft.applicationNumber);
+      setApplicationNumber(latestDraft?.applicationNumber);
+      if (latestDraft?.answers) restoreDraft(latestDraft.answers);
     } catch (caught) {
       if (caught instanceof Error) setError(caught.message);
     }
@@ -114,7 +154,6 @@ export default function BecomeDeveloperPage() {
     }
   }
 
-  const inputClass = "hire-input";
   return (
     <main className="market-shell">
       <SpiderSidebar />
@@ -133,7 +172,7 @@ export default function BecomeDeveloperPage() {
                 <div className="dashboard-profile" key={item.applicationNumber}>
                   <span><b>Application #{item.applicationNumber}</b><small>{item.subject} · Updated {new Date(item.updatedAt).toLocaleString()}</small>{item.decisionReason && <small>Reviewer feedback: {item.decisionReason}</small>}</span>
                   <span className={"support-status-chip status-" + item.status.toLowerCase().replaceAll(" ", "-")}>{item.status}</span>
-                  {item.status === "Draft" && <button type="button" className="hire-secondary" onClick={() => { setApplicationNumber(item.applicationNumber); setFeedback("Draft #" + item.applicationNumber + " selected. Your fields remain in this form while you finish them."); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Resume draft</button>}
+                  {item.status === "Draft" && <button type="button" className="hire-secondary" onClick={() => { setApplicationNumber(item.applicationNumber); if (item.answers) restoreDraft(item.answers); setFeedback("Draft #" + item.applicationNumber + " loaded. Review your fields and save or submit when ready."); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Resume draft</button>}
                 </div>
               ))}
             </section>
