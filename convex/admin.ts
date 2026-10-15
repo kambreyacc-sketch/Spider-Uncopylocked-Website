@@ -129,7 +129,7 @@ export const getPlatformOverview = query({
   args: { adminSecret: v.string() },
   handler: async (ctx, args) => {
     assertAdminSecret(args.adminSecret);
-    const [developers, listings, resources, jobs, scamReports, developerReports, tickets] = await Promise.all([
+    const [developers, listings, resources, jobs, scamReports, developerReports, tickets, communityApplications] = await Promise.all([
       ctx.db.query("developers").collect(),
       ctx.db.query("listings").collect(),
       ctx.db.query("resources").collect(),
@@ -137,8 +137,10 @@ export const getPlatformOverview = query({
       ctx.db.query("scamReports").collect(),
       ctx.db.query("developerReports").collect(),
       ctx.db.query("supportTickets").collect(),
+      ctx.db.query("platformApplications").collect(),
     ]);
     const pendingDevelopers = developers.filter(x => x.status === "pending").length;
+    const pendingCommunityApplications = communityApplications.filter(x => x.status === "pending").length;
     const pendingResources = resources.filter(x => x.status === "pending").length;
     const openTickets = tickets.filter(x => ["open", "in_review", "waiting_on_user", "escalated"].includes(x.status)).length;
     return {
@@ -147,14 +149,15 @@ export const getPlatformOverview = query({
         listings: listings.length,
         resources: resources.length,
         jobs: jobs.length,
-        applications: developers.length,
+        applications: developers.length + communityApplications.length,
         reports: scamReports.length + developerReports.length,
-        pending: pendingDevelopers + pendingResources,
+        pending: pendingDevelopers + pendingResources + pendingCommunityApplications,
         support: openTickets,
       },
       moderation: {
         pendingResources: pendingResources,
         pendingDevelopers,
+        pendingCommunityApplications,
         openTickets,
       },
       generatedAt: Date.now(),
