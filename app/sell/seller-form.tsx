@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { AlertCircle, ArrowRight, Check, Upload, X } from "lucide-react";
 
 const DRAFT_KEY = "spider-uncopylocked-listing-draft-v1";
@@ -13,13 +11,12 @@ export default function SellerForm() {
   const [draft,setDraft] = useState<Draft>({title:"",type:"Game",robloxUrl:"",price:"",description:"",imageData:"",imageName:"",sellerName:"",sellerRobloxId:"",contactDiscord:"",contactEmail:"",contactPhone:""});
   const [error,setError] = useState("");
   const [saved,setSaved] = useState(false);
+  const [submitted,setSubmitted] = useState(false);
   const [submitting,setSubmitting] = useState(false);
   const [robloxPreview,setRobloxPreview] = useState<RobloxPreview|null>(null);
   const [robloxPreviewStatus,setRobloxPreviewStatus] = useState("");
-  const generateUploadUrl = useMutation(api.listings.generateUploadUrl);
-  const submitListing = useMutation(api.listings.submitListing);
   useEffect(()=>{ try { const raw=window.localStorage.getItem(DRAFT_KEY); if(raw) setDraft(current=>({...current,...JSON.parse(raw)})); } catch {} },[]);
-  function update<K extends keyof Draft>(key:K,value:Draft[K]) { setDraft(current=>({...current,[key]:value})); setSaved(false); if(key==="robloxUrl"){setRobloxPreview(null);setRobloxPreviewStatus("");} }
+  function update<K extends keyof Draft>(key:K,value:Draft[K]) { setDraft(current=>({...current,[key]:value})); setSaved(false); setSubmitted(false); if(key==="robloxUrl"){setRobloxPreview(null);setRobloxPreviewStatus("");} }
   async function loadRobloxPreview() {
     const match=draft.robloxUrl.trim().match(/roblox\.com\/(?:games|places)\/(\d+)/i);
     if(!match){setRobloxPreviewStatus("Paste a public Roblox game URL containing its numeric place ID.");return;}
@@ -49,7 +46,7 @@ export default function SellerForm() {
     try {
       let imageStorageId: string | undefined;
       if(draft.imageData) {
-        const uploadUrl=await generateUploadUrl({});
+        const uploadAuthorization=await fetch("/api/listings/upload-url",{method:"POST",cache:"no-store"}); const uploadAuthorizationData=await uploadAuthorization.json(); if(!uploadAuthorization.ok) throw new Error(uploadAuthorizationData.error||"Listing posting access is required."); const uploadUrl=uploadAuthorizationData.uploadUrl as string;
         const response=await fetch(draft.imageData);
         const blob=await response.blob();
         const uploaded=await fetch(uploadUrl,{method:"POST",headers:{"Content-Type":blob.type},body:blob});
@@ -58,16 +55,19 @@ export default function SellerForm() {
       } else if(robloxPreview?.imageUrl) {
         // Keep the Roblox thumbnail URL as a reference when the seller uses the public game image.
       }
-      await submitListing({
+      const response=await fetch("/api/listings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
         title:draft.title.trim(), type:draft.type, robloxUrl:draft.robloxUrl.trim(),
         price:Number(draft.price), description:draft.description.trim(),
-        imageStorageId: imageStorageId as never,
+        imageStorageId,
         imageUrl: !imageStorageId ? (robloxPreview?.imageUrl || undefined) : undefined,
         sellerName:draft.sellerName.trim(), sellerRobloxId:draft.sellerRobloxId.trim(),
         contactDiscord:draft.contactDiscord.trim()||undefined, contactEmail:draft.contactEmail.trim()||undefined, contactPhone:draft.contactPhone.trim()||undefined
-      });
+      })});
+      const result=await response.json();
+      if(!response.ok) throw new Error(result.error||"Listing could not be submitted.");
       window.localStorage.removeItem(DRAFT_KEY);
-      setSaved(true);
+      setSaved(false);
+      setSubmitted(true);
       setError("");
     } catch(e) { setError(e instanceof Error ? e.message : "Could not submit listing. Make sure the backend has been deployed and try again."); }
     finally { setSubmitting(false); }
@@ -94,8 +94,8 @@ export default function SellerForm() {
       <label className="sell-field">Phone number<input type="tel" value={draft.contactPhone} onChange={e=>update("contactPhone",e.target.value)} placeholder="Optional phone number" /></label><small>At least one contact method is required. Only share contact details you are comfortable showing to potential buyers.</small>
     </section>
     {error&&<div className="sell-message error"><AlertCircle size={17}/>{error}</div>}
-    {saved&&<div className="sell-message success"><Check size={17}/><span><b>Listing published!</b><br/>Your listing is now live in the marketplace.</span></div>}
-    <div className="sell-form-actions"><button type="button" className="sell-secondary" onClick={()=>{setDraft({title:"",type:"Game",robloxUrl:"",price:"",description:"",imageData:"",imageName:"",sellerName:"",sellerRobloxId:"",contactDiscord:"",contactEmail:"",contactPhone:""});setSaved(false);setError("");window.localStorage.removeItem(DRAFT_KEY);}}>Clear form</button><button type="submit" className="sell-secondary">Save draft</button><button className="sell-submit" type="button" onClick={publishListing} disabled={submitting}>{submitting?"Submitting…":"Publish listing"} <ArrowRight size={16}/></button></div>
-    <p className="sell-disclaimer">Listings publish immediately and are not manually reviewed. Roblox ownership is not automatically verified, so buyers should independently verify details before any transfer or payment.</p>
+    {saved&&<div className="sell-message success"><Check size={17}/><span><b>Draft saved</b><br/>Your draft is saved in this browser. It has not been submitted.</span></div>}{submitted&&<div className="sell-message success"><Check size={17}/><span><b>Submitted for moderator review</b><br/>Your listing is saved but will not appear publicly until it is approved.</span></div>}
+    <div className="sell-form-actions"><button type="button" className="sell-secondary" onClick={()=>{setDraft({title:"",type:"Game",robloxUrl:"",price:"",description:"",imageData:"",imageName:"",sellerName:"",sellerRobloxId:"",contactDiscord:"",contactEmail:"",contactPhone:""});setSaved(false);setSubmitted(false);setError("");window.localStorage.removeItem(DRAFT_KEY);}}>Clear form</button><button type="submit" className="sell-secondary">Save draft</button><button className="sell-submit" type="button" onClick={publishListing} disabled={submitting}>{submitting?"Submitting…":"Publish listing"} <ArrowRight size={16}/></button></div>
+    <p className="sell-disclaimer">New listings remain private until moderator approval. Seller-entered Roblox IDs are not independently verified, and marketplace checkout remains disabled until payments are verified.</p>
   </form>;
 }
