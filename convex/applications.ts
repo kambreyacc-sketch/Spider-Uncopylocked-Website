@@ -52,6 +52,7 @@ function validatePayload(subject: string, answers: unknown) {
 export const submit = mutation({
   args: {
     adminSecret: v.string(),
+    applicationNumber: v.optional(v.number()),
     type: applicationType,
     subject: v.string(),
     answers: v.any(),
@@ -75,6 +76,14 @@ export const submit = mutation({
     if (existing.filter((a: any) => now - a.createdAt < 24 * 60 * 60 * 1000 && a.status !== "Draft").length >= 4) {
       throw new Error("You have reached the application limit for today. Please try again later.");
     }
+    if (args.applicationNumber !== undefined) {
+      const draft = await ctx.db.query("applicationRecords").withIndex("by_applicationNumber", (q: any) => q.eq("applicationNumber", args.applicationNumber)).unique();
+      if (!draft || draft.applicantDiscordId !== args.applicantDiscordId || draft.status !== "Draft" || draft.type !== args.type) throw new Error("Draft not found or it can no longer be submitted.");
+      const updated = { ...validated, status: "Submitted", submittedAt: now, updatedAt: now, applicantName: args.applicantName.trim().slice(0,100), ...(args.applicantAvatar ? { applicantAvatar: args.applicantAvatar } : {}) };
+      await ctx.db.patch(draft._id, updated);
+      await ctx.db.insert("applicationEvents", { applicationId: draft._id, applicationNumber: draft.applicationNumber, actorDiscordId: args.applicantDiscordId, actorName: args.applicantName.trim().slice(0,100), action: "application_submitted", visibility: "applicant", createdAt: now });
+      return { success: true, applicationNumber: draft.applicationNumber };
+    }
     const applicationNumber = await nextApplicationNumber(ctx);
     const applicationId = await ctx.db.insert("applicationRecords", {
       applicationNumber,
@@ -92,6 +101,53 @@ export const submit = mutation({
     await ctx.db.insert("applicationEvents", {
       applicationId, applicationNumber, actorDiscordId: args.applicantDiscordId,
       actorName: args.applicantName.trim().slice(0, 100), action: "application_submitted",
+      visibility: "applicant", createdAt: now,
+    });
+    return { success: true, applicationNumber };
+  },
+});
+
+
+export const saveDraft = mutation({
+  args: {
+    adminSecret: v.string(),
+    applicationNumber: v.optional(v.number()),
+    type: applicationType,
+    subject: v.string(),
+    answers: v.any(),
+    applicantDiscordId: v.string(),
+    applicantName: v.string(),
+    applicantAvatar: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    assertServiceSecret(args.adminSecret);
+    const validated = validatePayload(args.subject, args.answers);
+    if (!args.applicantDiscordId.trim()) throw new Error("Sign in with Discord before saving a draft.");
+    const now = Date.now();
+    let applicationNumber = args.applicationNumber;
+    let applicationId: any;
+    if (applicationNumber !== undefined) {
+      const existing = await ctx.db.query("applicationRecords").withIndex("by_applicationNumber", (q: any) => q.eq("applicationNumber", applicationNumber)).unique();
+      if (!existing || existing.applicantDiscordId !== args.applicantDiscordId || existing.status !== "Draft" || existing.type !== args.type) throw new Error("Draft not found or it can no longer be edited.");
+      applicationId = existing._id;
+      await ctx.db.patch(existing._id, {
+        ...validated, answers: validated.answers, updatedAt: now,
+        applicantName: args.applicantName.trim().slice(0, 100),
+        ...(args.applicantAvatar ? { applicantAvatar: args.applicantAvatar } : {}),
+      });
+    } else {
+      applicationNumber = await nextApplicationNumber(ctx);
+      applicationId = await ctx.db.insert("applicationRecords", {
+        applicationNumber, type: args.type, ...validated,
+        applicantDiscordId: args.applicantDiscordId,
+        applicantName: args.applicantName.trim().slice(0, 100),
+        ...(args.applicantAvatar ? { applicantAvatar: args.applicantAvatar } : {}),
+        status: "Draft", createdAt: now, updatedAt: now,
+      });
+    }
+    await ctx.db.insert("applicationEvents", {
+      applicationId, applicationNumber, actorDiscordId: args.applicantDiscordId,
+      actorName: args.applicantName.trim().slice(0, 100), action: "draft_saved",
       visibility: "applicant", createdAt: now,
     });
     return { success: true, applicationNumber };
