@@ -11,6 +11,7 @@ import "./store-gloss.css";
 import "./jobs-gloss.css";
 import "./premium-finish.css";
 import "./premium-component-fixes.css";
+import "./premium-workspace.css";
 import AppConvexProvider from "./convex-provider";
 
 export const metadata: Metadata = {
