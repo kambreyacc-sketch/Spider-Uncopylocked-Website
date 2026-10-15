@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { api } from "../../../convex/_generated/api";
 import { getSpiderProfile } from "../../../lib/session";
 import { getBillingDb } from "../../../lib/stripe";
+import { checkAccountRestriction } from "../../../lib/account-restrictions";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -40,6 +41,9 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const profile = await getSpiderProfile();
   if (!profile) return NextResponse.json({ error: "Sign in with Discord before requesting a studio." }, { status: 401 });
+  const restriction = await checkAccountRestriction(profile.id, "apply");
+  if (restriction.status === "unavailable") return NextResponse.json({ error: "Could not verify your account standing. Nothing was submitted." }, { status: 503 });
+  if (restriction.status === "blocked") return NextResponse.json({ error: "Studio requests are blocked by an active " + restriction.kind.toLowerCase() + " action: " + restriction.reason }, { status: 403 });
   const db = getBillingDb();
   if (!db) return NextResponse.json({ error: "Application storage is not configured. Nothing was submitted." }, { status: 503 });
   let body: Record<string, unknown>;
