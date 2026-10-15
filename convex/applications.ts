@@ -193,7 +193,8 @@ export const listForStaff = query({
         .withIndex("by_status_updatedAt", (q: any) => q.eq("status", args.status))
         .order("desc").take(250);
     }
-    return await ctx.db.query("applicationRecords").order("desc").take(250);
+    const rows = await ctx.db.query("applicationRecords").order("desc").take(250);
+    return args.type ? rows.filter((application: any) => application.type === args.type) : rows;
   },
 });
 
