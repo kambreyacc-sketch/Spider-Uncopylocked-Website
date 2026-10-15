@@ -87,7 +87,10 @@ export const listResourceSubmissions = query({
       ctx.db.query("resources").withIndex("by_status_createdAt", (q) => q.eq("status", s)).order("desc").take(250)
     ));
     return {
-      resources: groups.flat().sort((a, b) => b.createdAt - a.createdAt),
+      resources: await Promise.all(groups.flat().sort((a, b) => b.createdAt - a.createdAt).map(async (item) => ({
+        ...item,
+        thumbnailUrl: await ctx.storage.getUrl(item.thumbnailStorageId),
+      }))),
       counts: { pending: groups[0].length, active: groups[1].length, rejected: groups[2].length },
       limitPerStatus: 250,
     };
