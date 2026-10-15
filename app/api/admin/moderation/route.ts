@@ -30,6 +30,9 @@ export async function PATCH(request: Request) {
   if (!["resource", "listing", "job"].includes(String(body.contentType))) return NextResponse.json({ error: "Choose a valid content type." }, { status: 400 });
   if (typeof body.contentId !== "string" || !body.contentId) return NextResponse.json({ error: "Missing content identifier." }, { status: 400 });
   if (typeof body.status !== "string" || !statuses.includes(body.status as typeof statuses[number])) return NextResponse.json({ error: "Invalid moderation status." }, { status: 400 });
+  if (body.contentType === "resource" && body.status === "active") {
+    return NextResponse.json({ error: "Publishing resource files is paused until the actual malware and sexual-content scanners are configured, verified, and have marked this asset clean. It remains private and unpublished." }, { status: 503 });
+  }
   if (body.status === "active" && !body.confirmed) return NextResponse.json({ error: "Explicit confirmation is required before publishing." }, { status: 400 });
   if (body.reason !== undefined && (typeof body.reason !== "string" || body.reason.length > 1000)) return NextResponse.json({ error: "Reason must be 1,000 characters or fewer." }, { status: 400 });
   try {
