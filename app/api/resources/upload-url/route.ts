@@ -11,6 +11,10 @@ export async function POST() {
   if (!url || !secret) return NextResponse.json({ error: "Upload service is not configured." }, { status: 503 });
   try {
     const client = new ConvexHttpClient(url);
+    const active = await client.query(api.admin.getActiveRestrictionsForUser, { adminSecret: secret, targetDiscordId: user.id });
+    if (active.some((r: { restrictionType: string }) => ["restricted", "temporary_ban", "permanent_ban", "upload_ban"].includes(r.restrictionType))) {
+      return NextResponse.json({ error: "Your account is not allowed to upload while an active restriction applies." }, { status: 403 });
+    }
     const uploadUrl = await client.mutation(api.resources.generateUploadUrl, { adminSecret: secret });
     return NextResponse.json({ url: uploadUrl }, { headers: { "Cache-Control": "no-store, max-age=0" } });
   } catch (error) {
