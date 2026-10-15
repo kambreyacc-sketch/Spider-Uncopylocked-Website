@@ -21,8 +21,11 @@ export const publicListings = query({
   },
 });
 
+function assertAdminSecret(secret: string) { const expected = process.env.ADMIN_API_SECRET; if (!expected || secret.length !== expected.length || secret !== expected) throw new Error("Unauthorized listing submission."); }
+
 export const submitListing = mutation({
   args: {
+    adminSecret: v.string(),
     title: v.string(),
     type: v.union(v.literal("Game"), v.literal("UGC Group")),
     robloxUrl: v.string(),
@@ -37,14 +40,16 @@ export const submitListing = mutation({
     contactPhone: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
     if (!args.title.trim() || args.title.length > 80) throw new Error("Enter a listing title under 80 characters.");
     if (!/^https?:\/\/(www\.)?roblox\.com\//i.test(args.robloxUrl)) throw new Error("Enter a valid Roblox URL.");
     if (!Number.isFinite(args.price) || args.price <= 0) throw new Error("Price must be greater than zero.");
     if (args.description.length > 2000) throw new Error("Description is too long.");
     if (!(args.contactDiscord?.trim() || args.contactEmail?.trim() || args.contactPhone?.trim())) throw new Error("Add at least one contact method: Discord, email, or phone.");
+    const { adminSecret, ...listingArgs } = args;
     return await ctx.db.insert("listings", {
-      ...args,
-      status: "active",
+      ...listingArgs,
+      status: "pending",
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
