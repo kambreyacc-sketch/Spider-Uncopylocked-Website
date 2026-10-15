@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import SpiderSidebar from "../components/SpiderSidebar";
 import {
   ArrowLeft, ArrowRight, Blocks, Check, Code2, Cuboid, Image, Music2,
@@ -23,7 +21,6 @@ const crafts = [
 const steps = ["Role", "Details", "Budget", "Contact"];
 
 export default function PostJobPage() {
-  const post = useMutation(api.developers.postJob);
   const [user, setUser] = useState<any>(null);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
@@ -103,17 +100,21 @@ export default function PostJobPage() {
     setBusy(true);
     setError("");
     try {
-      await post({
-        ...form,
-        title: form.title.trim(),
-        description: [form.description.trim(), "WORK ARRANGEMENT: " + form.workType, form.milestones.trim() ? "MILESTONES & ACCEPTANCE CHECKS:\n" + form.milestones.trim() : ""].filter(Boolean).join("\n\n"),
-        budgetMin: Number(form.budgetMin),
-        budgetMax: Number(form.budgetMax),
-        deadline: form.deadline || undefined,
-        discordContact: form.discordContact.trim(),
-        posterDiscordId: user.id,
-        posterName: form.posterName.trim() || user.displayName || user.username,
+      const response = await fetch("/api/jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: form.title.trim(),
+          description: [form.description.trim(), "WORK ARRANGEMENT: " + form.workType, form.milestones.trim() ? "MILESTONES & ACCEPTANCE CHECKS:\\n" + form.milestones.trim() : ""].filter(Boolean).join("\\n\\n"),
+          craft: form.craft,
+          budgetMin: Number(form.budgetMin),
+          budgetMax: Number(form.budgetMax),
+          deadline: form.deadline || undefined,
+        }),
       });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Could not submit job.");
+
       setDone(true);
     } catch (err: any) {
       setError(err?.message || "Could not post the job. Please try again.");
@@ -144,8 +145,8 @@ export default function PostJobPage() {
         {done ? (
           <div className="hire-empty job-wizard-success">
             <span className="job-wizard-success-icon"><Check size={22} /></span>
-            <h2>Job posted</h2>
-            <p>Your post was submitted to the existing Spider jobs system.</p>
+            <h2>Job submitted for review</h2>
+            <p>Your job is saved privately and will appear on the public Jobs board only after moderator approval.</p>
             <Link href="/jobs" className="hire-primary">View jobs <ArrowRight size={14} /></Link>
           </div>
         ) : (
@@ -243,7 +244,7 @@ export default function PostJobPage() {
                   {form.milestones.trim() && <p className="job-review-milestones"><strong>Milestones & acceptance checks</strong><br/>{form.milestones}</p>}
                   <small>Posting as {form.posterName || user?.displayName || "Your account"} · Contact @{form.discordContact || user?.username || "your Discord"}</small>
                 </div>
-                <p className="job-wizard-note">By publishing, you confirm that your job details are accurate. Never share passwords or .ROBLOSECURITY cookies.</p>
+                <p className="job-wizard-note">By submitting, you confirm that your job details are accurate and agree to moderator review. Never share passwords or .ROBLOSECURITY cookies.</p>
               </section>
             )}
 
@@ -254,7 +255,7 @@ export default function PostJobPage() {
               {step < steps.length - 1 ? (
                 <button type="button" className="hire-primary" onClick={nextStep}>Next <ArrowRight size={15} /></button>
               ) : (
-                <button type="submit" className="hire-primary" disabled={busy}>{busy ? "Publishing…" : "Publish job"} <Send size={14} /></button>
+                <button type="submit" className="hire-primary" disabled={busy}>{busy ? "Submitting…" : "Submit for review"} <Send size={14} /></button>
               )}
             </div>
           </form>
