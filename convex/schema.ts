@@ -37,6 +37,7 @@ export default defineSchema({
   jobs: defineTable({
     title: v.string(), description: v.string(), craft: v.string(), budgetMin: v.number(), budgetMax: v.number(), deadline: v.optional(v.string()),
     discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string(), status: v.union(v.literal("open"), v.literal("closed")),
+    moderationStatus: v.optional(v.union(v.literal("pending"), v.literal("active"), v.literal("rejected"))), updatedAt: v.optional(v.number()),
     createdAt: v.number(),
   }).index("by_status_createdAt", ["status", "createdAt"]).index("by_poster", ["posterDiscordId"]),
 
