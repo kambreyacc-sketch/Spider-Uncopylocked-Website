@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { api } from "../../../../convex/_generated/api";
-import { isSpiderAdmin, getSpiderProfile } from "../../../../lib/session";
+import { getSpiderProfile } from "../../../../lib/session";
+import { hasStaffCapability } from "../../../../lib/staff-permissions";
 import { getServiceConvex } from "../../../../lib/service-convex";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 const statuses = ["active", "rejected", "pending"] as const;
 export async function GET() {
-  if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const actor = await getSpiderProfile();
+  if (!actor || !(await hasStaffCapability("content.view", actor))) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const db = getServiceConvex();
   if (!db) return NextResponse.json({ error: "Moderation database is not configured." }, { status: 503 });
   try {
@@ -19,8 +21,9 @@ export async function GET() {
   }
 }
 export async function PATCH(request: Request) {
-  if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  const actor = await getSpiderProfile(), db = getServiceConvex();
+  const actor = await getSpiderProfile();
+  if (!actor || !(await hasStaffCapability("content.review", actor))) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const db = getServiceConvex();
   if (!actor || !db) return NextResponse.json({ error: "Admin session or moderation storage unavailable." }, { status: 503 });
   let body: Record<string, unknown>;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
