@@ -206,8 +206,11 @@ export const listUserRestrictions = query({
   args: { adminSecret: v.string(), targetDiscordId: v.optional(v.string()) },
   handler: async (ctx, args) => {
     assertAdminSecret(args.adminSecret);
-    if (args.targetDiscordId) return await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.targetDiscordId!).eq("status", "active")).order("desc").take(250);
-    return await ctx.db.query("userRestrictions").withIndex("by_status_createdAt", q => q.eq("status", "active")).order("desc").take(500);
+    const now = Date.now();
+    const rows = args.targetDiscordId
+      ? await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.targetDiscordId!).eq("status", "active")).order("desc").take(250)
+      : await ctx.db.query("userRestrictions").withIndex("by_status_createdAt", q => q.eq("status", "active")).order("desc").take(500);
+    return rows.filter(r => r.expiresAt === undefined || r.expiresAt > now);
   }
 });
 
