@@ -325,16 +325,26 @@ export const listOperations = query({
         .map(({ _id, _creationTime, ...row }) => ({ id: _id, ...row, effectiveStatus: !row.active ? "Lifted" : row.expiresAt && row.expiresAt <= Date.now() ? "Expired" : "Active" }));
       rows.sort((a, b) => b.createdAt - a.createdAt);
     } else if (args.section === "activity") {
-      const [moderation, support, applications] = await Promise.all([
+      const [moderation, support, applicationEvents, tickets, applications] = await Promise.all([
         ctx.db.query("moderationAuditEvents").order("desc").take(250),
         ctx.db.query("supportAuditEvents").order("desc").take(250),
         ctx.db.query("applicationEvents").order("desc").take(250),
+        ctx.db.query("supportTickets").order("desc").take(500),
+        ctx.db.query("applicationRecords").order("desc").take(500),
       ]);
+      const ticketByNumber = new Map(tickets.map(ticket => [ticket.ticketNumber, ticket]));
+      const applicationByNumber = new Map(applications.map(application => [application.applicationNumber, application]));
       rows = [
-        ...moderation.map(row => ({ id: String(row._id), actorDiscordId: row.actorDiscordId, actorName: row.actorName, action: row.action, targetType: row.targetType, targetId: row.targetId, details: row.details || "", createdAt: row.createdAt, source: "Platform" })),
-        ...support.map(row => ({ id: String(row._id), actorDiscordId: row.actorDiscordId, actorName: row.actorName, action: row.action, targetType: "ticket", targetId: String(row.ticketNumber), details: row.details || "", createdAt: row.createdAt, source: "Support" })),
-        ...applications.map(row => ({ id: String(row._id), actorDiscordId: row.actorDiscordId, actorName: row.actorName, action: row.action, targetType: "application", targetId: String(row.applicationNumber), details: row.note || "", createdAt: row.createdAt, source: row.visibility === "staff" ? "Private application note" : "Application" })),
-      ].filter(row => matches([row.actorDiscordId, row.actorName, row.action, row.targetType, row.targetId, row.details, row.source]));
+        ...moderation.map(row => ({ id: String(row._id), actorDiscordId: row.actorDiscordId, actorName: row.actorName, action: row.action, targetType: row.targetType, targetId: row.targetId, audienceDiscordId: row.targetType === "member" ? row.targetId : "", details: row.details || "", createdAt: row.createdAt, source: "Platform" })),
+        ...support.map(row => {
+          const ticket = ticketByNumber.get(row.ticketNumber);
+          return { id: String(row._id), actorDiscordId: row.actorDiscordId, actorName: row.actorName, action: row.action, targetType: "ticket", targetId: String(row.ticketNumber), audienceDiscordId: ticket?.ownerDiscordId || "", details: row.details || "", createdAt: row.createdAt, source: "Support" };
+        }),
+        ...applicationEvents.map(row => {
+          const application = applicationByNumber.get(row.applicationNumber);
+          return { id: String(row._id), actorDiscordId: row.actorDiscordId, actorName: row.actorName, action: row.action, targetType: "application", targetId: String(row.applicationNumber), audienceDiscordId: application?.applicantDiscordId || "", details: row.note || "", createdAt: row.createdAt, source: row.visibility === "staff" ? "Private application note" : "Application" };
+        }),
+      ].filter(row => matches([row.actorDiscordId, row.actorName, row.action, row.targetType, row.targetId, row.audienceDiscordId, row.details, row.source]));
       rows.sort((a, b) => b.createdAt - a.createdAt);
     } else if (args.section === "roles") {
       rows = (await ctx.db.query("websiteRoleGrants").order("desc").take(1000))
