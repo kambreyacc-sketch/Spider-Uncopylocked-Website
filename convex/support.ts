@@ -124,7 +124,7 @@ export const addMessage = mutation({
       ...(args.visibility === "public" ? { status: (isApplicant ? "open" : "waiting_on_user") as typeof ticket.status } : {})
     });
     await ctx.db.insert("supportAuditLogs", {
-      ticketId: args.ticketId, actorDiscordId: args.authorDiscordId, actorName,
+      ticketId: args.ticketId, actorDiscordId: args.authorDiscordId, actorName: authorName,
       action: args.visibility === "internal" ? "internal_note_added" : "message_added", createdAt: now
     });
     return { success: true };
