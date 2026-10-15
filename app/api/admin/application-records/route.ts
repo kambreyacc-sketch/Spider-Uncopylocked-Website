@@ -45,7 +45,7 @@ export async function PATCH(request: Request) {
       status: body.status as typeof decisions[number],
       ...(typeof body.decisionReason === "string" ? { decisionReason: body.decisionReason } : {}),
       ...(typeof body.staffNote === "string" ? { staffNote: body.staffNote } : {}),
-      ...(typeof body.assignedToDiscordId === "string" ? { assignedToDiscordId: body.assignedToDiscordId, assignedToName: typeof body.assignedToName === "string" ? body.assignedToName : undefined } : {}),
+      ...(body.assignToMe === true ? { assignedToDiscordId: actor.id, assignedToName: actor.displayName || actor.username } : typeof body.assignedToDiscordId === "string" ? { assignedToDiscordId: body.assignedToDiscordId, assignedToName: typeof body.assignedToName === "string" ? body.assignedToName : undefined } : {}),
     });
     return NextResponse.json(result, { headers: { "Cache-Control": "no-store, max-age=0" } });
   } catch (error) { console.error("Application decision failed:", error); return NextResponse.json({ error: error instanceof Error ? error.message : "Could not save decision." }, { status: 400 }); }
