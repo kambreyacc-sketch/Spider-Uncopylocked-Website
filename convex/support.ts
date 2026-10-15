@@ -2,7 +2,7 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 function assertAdminSecret(secret: string) {
-  const expected = process.env.CONVEX_ADMIN_API_SECRET;
+  const expected = process.env.ADMIN_API_SECRET;
   if (!expected || secret.length !== expected.length || secret !== expected) throw new Error("Unauthorized support service request.");
 }
 
