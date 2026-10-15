@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { isSpiderAdmin } from "../../../lib/session";
+import { getSpiderProfile, isSpiderAdmin } from "../../../lib/session";
+import { hasStaffCapability, type StaffCapability } from "../../../lib/staff-permissions";
 import SpiderSidebar from "../../components/SpiderSidebar";
 import DeveloperApplicationsPanel from "../applications-panel";
 import BillingAdminPanel from "../billing-panel";
@@ -24,11 +25,22 @@ const pages: Record<string, { title: string; description: string }> = {
   content: { title: "Website content", description: "Manage supported announcements, featured content, and policy pages." },
 };
 
+const sectionCapabilities: Record<string, StaffCapability> = {
+  support: "support.view",
+  applications: "applications.view",
+  "reported-content": "content.view",
+};
+
 export default async function AdminSection({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;
-  if (!(await isSpiderAdmin())) redirect("/admin");
   const page = pages[section];
   if (!page) notFound();
+  const profile = await getSpiderProfile();
+  if (!profile) redirect("/admin");
+  if (!(await isSpiderAdmin())) {
+    const capability = sectionCapabilities[section];
+    if (!capability || !(await hasStaffCapability(capability, profile))) redirect("/admin");
+  }
 
   return (
     <div className="admin-layout">
