@@ -113,6 +113,9 @@ export const reviewResource = mutation({
     assertAdminSecret(args.adminSecret);
     const resource = await ctx.db.get(args.resourceId);
     if (!resource) throw new Error("Resource submission not found.");
+    if (args.status === "active" && resource.scanStatus !== "clean") {
+      throw new Error("Publishing is paused because malware and sexual-content scanning is not configured and this asset has no verified clean scan result. Reject it or keep it pending until scanning is configured and tested.");
+    }
     const reason = args.reason?.trim();
     if (args.status === "rejected" && (!reason || reason.length < 3 || reason.length > 1000)) throw new Error("Enter a rejection reason between 3 and 1,000 characters.");
     const now = Date.now();
