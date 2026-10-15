@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import {
   Home,
+  Ticket,
+  ClipboardList,
   Search,
   BriefcaseBusiness,
   Settings,
