@@ -24,6 +24,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Menu,
+  Bell,
   X,
   LogIn,
   LifeBuoy,
@@ -42,6 +43,7 @@ type NavigationItem = {
 const workspace: NavigationItem[] = [
   { href: "/", label: "Home", Icon: Home },
   { href: "/messages", label: "Messages", Icon: MessagesSquare },
+  { href: "/notifications", label: "Notifications", Icon: Bell },
   { href: "/support", label: "Support Center", Icon: LifeBuoy },
 ];
 const discover: NavigationItem[] = [
