@@ -4,6 +4,7 @@ import { isSpiderAdmin } from "../../../lib/session";
 import SpiderSidebar from "../../components/SpiderSidebar";
 import DeveloperApplicationsPanel from "../applications-panel";
 import BillingAdminPanel from "../billing-panel";
+import SupportAdminPanel from "../support-panel";
 
 const pages: Record<string, { title: string; description: string }> = {
   reports: { title: "Scam reports", description: "Review submitted reports, supporting evidence, and moderation decisions." },
@@ -39,7 +40,9 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
             <p>{page.description}</p>
           </div>
         </header>
-        {section === "applications" ? (
+        {section === "support" ? (
+          <SupportAdminPanel />
+        ) : section === "applications" ? (
           <DeveloperApplicationsPanel />
         ) : section === "billing" ? (
           <BillingAdminPanel />
