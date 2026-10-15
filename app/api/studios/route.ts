@@ -39,50 +39,34 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const profile = await getSpiderProfile();
-  if (!profile) {
-    return NextResponse.json({ error: "Sign in with Discord before creating a studio." }, { status: 401 });
-  }
+  if (!profile) return NextResponse.json({ error: "Sign in with Discord before requesting a studio." }, { status: 401 });
   const db = getBillingDb();
-  if (!db) {
-    return NextResponse.json({ error: "Studio storage is not configured yet. Nothing was published." }, { status: 503 });
-  }
-
+  if (!db) return NextResponse.json({ error: "Application storage is not configured. Nothing was submitted." }, { status: 503 });
   let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Send a valid studio form." }, { status: 400 });
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Send a valid studio request." }, { status: 400 }); }
+  const text = (key: string, max: number) => typeof body[key] === "string" ? (body[key] as string).trim().slice(0, max) : "";
+  const name = text("name", 61), slug = text("slug", 33).toLowerCase(), description = text("description", 1201);
+  const specialties = Array.isArray(body.specialties)
+    ? body.specialties.filter((value): value is string => typeof value === "string").map(value => value.trim()).filter(Boolean).slice(0, 10).join(", ")
+    : text("specialties", 500);
+  if (name.length < 3 || name.length > 60 || description.length < 20 || description.length > 1200 || specialties.length < 2) {
+    return NextResponse.json({ error: "Add a studio name, a 20–1,200 character description, and at least one specialty." }, { status: 400 });
   }
-
-  const stringValue = (key: string, max: number) =>
-    typeof body[key] === "string" ? (body[key] as string).trim().slice(0, max) : "";
-  const specialties = typeof body.specialties === "string"
-    ? body.specialties.split(",").map(value => value.trim()).filter(Boolean).slice(0, 10)
-    : Array.isArray(body.specialties)
-      ? body.specialties.filter((value): value is string => typeof value === "string").map(value => value.trim()).filter(Boolean).slice(0, 10)
-      : [];
-
+  const robloxUrl = text("robloxUrl", 500), discordUrl = text("discordUrl", 500);
   try {
-    const result = await db.client.mutation(api.studios.create, {
+    const result = await db.client.mutation(api.applications.submit, {
       adminSecret: db.secret,
-      name: stringValue("name", 60),
-      slug: stringValue("slug", 32).toLowerCase(),
-      description: stringValue("description", 1200),
-      specialties,
-      ownerDiscordId: profile.id,
-      ownerName: profile.displayName || profile.username,
-      ...(profile.avatar ? { ownerAvatar: profile.avatar } : {}),
-      ...(stringValue("robloxUrl", 500) ? { robloxUrl: stringValue("robloxUrl", 500) } : {}),
-      ...(stringValue("discordUrl", 500) ? { discordUrl: stringValue("discordUrl", 500) } : {}),
+      type: "Studio registration",
+      subject: name + " studio registration",
+      answers: { studioName: name, slug, description, specialties, robloxUrl, discordUrl },
+      applicantDiscordId: profile.id,
+      applicantName: profile.displayName || profile.username,
+      ...(profile.avatar ? { applicantAvatar: profile.avatar } : {}),
     });
-    return NextResponse.json({ success: true, studio: result }, { status: 201 });
+    return NextResponse.json({ success: true, applicationNumber: result.applicationNumber, status: "Submitted", message: "Studio request submitted. A studio is created only after an authorized reviewer approves the application." }, { status: 201, headers: { "Cache-Control": "no-store, max-age=0" } });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Studio creation failed.";
-    const expected = /Studio name|Studio handle|Studio description|Sign in with Discord|specialty|specialties|valid HTTPS|already in use/i.test(message);
-    console.error("Studio creation failed:", message);
-    return NextResponse.json(
-      { error: expected ? message : "Studio creation failed. Please try again." },
-      { status: expected ? 400 : 502 },
-    );
+    const message = error instanceof Error ? error.message : "Studio request failed.";
+    console.error("Studio registration request failed:", error);
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
