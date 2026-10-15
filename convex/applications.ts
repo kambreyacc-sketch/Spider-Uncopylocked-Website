@@ -256,6 +256,14 @@ export const review = mutation({
       note: ["Rejected", "Changes Requested"].includes(args.status) ? reason : "Your application status is now " + args.status + ".",
       createdAt: now,
     });
+    await ctx.db.insert("userNotifications", {
+      recipientDiscordId: application.applicantDiscordId,
+      category: "application",
+      title: "Application #" + application.applicationNumber + " updated",
+      body: args.status + (reason ? ": " + reason.slice(0, 160) : "."),
+      href: "/applications/" + application.applicationNumber,
+      createdAt: now,
+    });
     if (args.staffNote?.trim()) {
       await ctx.db.insert("applicationEvents", {
         applicationId: application._id,
