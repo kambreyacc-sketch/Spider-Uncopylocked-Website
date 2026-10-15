@@ -53,3 +53,148 @@
 :where(.marketplace-home .rq-listing-card,.studios-panel,.pro-benefit-card){transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
 @media(max-width:980px){.pro-benefits-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.pro-page-header{align-items:flex-start;flex-direction:column;padding:24px 18px}.pro-plan-grid{grid-template-columns:1fr}.pro-benefits-grid{grid-template-columns:1fr}.pro-benefit-card p{min-height:0}.pro-preview-banner{align-items:flex-start;flex-wrap:wrap}.pro-preview-banner .pro-setup-state{margin-left:55px}.pro-faq-strip{align-items:flex-start;flex-wrap:wrap}.pro-faq-strip>div{flex:1 1 calc(100% - 60px)}.pro-faq-strip>a{margin-left:55px}}
+
+
+/* Support center, application workflows, admin review queues — shared glossy graphite surfaces. */
+.support-center-content,.application-content{width:100%;max-width:1760px;margin:0 auto;padding:clamp(20px,3.2vw,48px);min-width:0}
+.support-hero-panel{position:relative;overflow:hidden;padding:clamp(28px,4.1vw,58px);margin:6px 0 24px;border:1px solid rgba(255,255,255,.2);border-top-color:rgba(255,255,255,.38);border-radius:15px;background:linear-gradient(180deg,rgba(255,255,255,.31),rgba(255,255,255,.09) 1px,rgba(255,255,255,.03) 3px),radial-gradient(ellipse at 12% 0%,rgba(255,255,255,.105),transparent 55%),linear-gradient(145deg,#343537,#292a2c 58%,#242527)!important;box-shadow:inset 0 1px rgba(255,255,255,.19),inset 0 -1px rgba(0,0,0,.2),0 18px 34px rgba(0,0,0,.17)}
+.support-hero-panel h1{font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-.06em;margin:13px 0}
+.support-hero-panel p{max-width:820px;color:#c1c1c3;line-height:1.72;margin:0;font-size:14px}
+.support-hero-panel.compact{padding:clamp(23px,3vw,38px)}
+.support-hero-panel.compact h1{font-size:clamp(32px,4vw,48px)}
+.support-hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px}
+.support-hero-actions>span{display:inline-flex;align-items:center;gap:7px;color:#c2c2c4;font-size:12px}
+.support-layout-grid{display:grid;grid-template-columns:minmax(260px,.72fr) minmax(0,1.5fr);gap:19px;align-items:start}
+.support-info-panel,.support-form-panel,.support-tickets-panel{min-width:0;padding:clamp(20px,2.5vw,32px);border:1px solid rgba(255,255,255,.18);border-top-color:rgba(255,255,255,.33);border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(255,255,255,.075) 1px,rgba(255,255,255,.02) 3px),radial-gradient(ellipse at 13% 0%,rgba(255,255,255,.06),transparent 57%),linear-gradient(145deg,#2c2d2f,#232426 70%,#202123)!important;box-shadow:inset 0 1px rgba(255,255,255,.15),0 13px 25px rgba(0,0,0,.13)}
+.support-info-icon{width:45px;height:45px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.24);border-top-color:rgba(255,255,255,.4);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.27),rgba(255,255,255,.06) 2px,transparent 4px),#393a3c;box-shadow:inset 0 1px rgba(255,255,255,.18);color:#f0f0f1}
+.support-info-panel h2,.support-form-panel h2,.support-tickets-panel h2{font-size:21px;letter-spacing:-.035em;margin:18px 0 8px;color:#f5f5f6}
+.support-info-panel>p,.support-form-panel>p,.support-tickets-panel>p{color:#bcbcbf;font-size:13px;line-height:1.65}
+.support-info-row{display:flex;align-items:flex-start;gap:9px;color:#c5c5c7;line-height:1.6;font-size:12px;margin:14px 0}
+.support-info-row svg{flex:none;margin-top:2px;color:#e3e3e4}
+.support-category-list{display:grid;gap:7px;margin-top:24px}
+.support-category-list button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.025) 2px,transparent 4px),rgba(28,29,31,.58);color:#dedee0;cursor:pointer;transition:background .16s,border-color .16s}
+.support-category-list button span{font-size:12px;font-weight:600}
+.support-category-list button small{font-size:11px;line-height:1.5;color:#a9a9ab}
+.support-category-list button:hover,.support-category-list button.selected{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.09) 1px,rgba(255,255,255,.025) 3px),#393a3c;border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px rgba(255,255,255,.18)}
+.support-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:23px}
+.support-section-heading h2{margin:7px 0 5px}
+.support-section-heading p{margin:0;color:#b2b2b4;font-size:12px;line-height:1.6}
+.support-ticket-pill{border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 10px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03) 2px,transparent 4px),#292a2c;color:#d1d1d3;font:9px 'DM Mono',monospace;letter-spacing:.1em}
+.support-ticket-form{display:grid;gap:17px}
+.support-ticket-form label,.admin-ticket-controls label,.admin-ticket-reply label,.admin-application-controls label,.moderation-card label{display:grid;gap:8px;min-width:0;color:#ededee;font-size:12px;font-weight:600}
+.support-ticket-form label small{font-size:11px;line-height:1.5;font-weight:400;color:#a6a6a8}
+.support-ticket-form input,.support-ticket-form textarea,.support-ticket-form select,.admin-ticket-controls input,.admin-ticket-controls select,.admin-ticket-reply textarea,.admin-ticket-reply select,.admin-application-controls input,.admin-application-controls select,.admin-application-controls textarea,.moderation-card textarea,.admin-workflow-toolbar input,.admin-workflow-toolbar select{width:100%;min-width:0;padding:12px 13px;border:1px solid rgba(255,255,255,.18);border-top-color:rgba(255,255,255,.26);border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.025) 2px,transparent 4px),#1e1f21;color:#f3f3f4;outline:none;font:inherit;font-weight:400}
+.support-ticket-form textarea,.admin-ticket-reply textarea,.admin-application-controls textarea,.moderation-card textarea{resize:vertical;line-height:1.6}
+.support-ticket-form input:focus,.support-ticket-form textarea:focus,.support-ticket-form select:focus,.admin-ticket-controls input:focus,.admin-ticket-controls select:focus,.admin-ticket-reply textarea:focus,.admin-ticket-reply select:focus,.admin-application-controls textarea:focus,.moderation-card textarea:focus{border-color:rgba(255,255,255,.42);box-shadow:0 0 0 3px rgba(255,255,255,.05),inset 0 1px rgba(255,255,255,.08)}
+.support-appeal-fields{display:grid;gap:17px;padding:18px;border:1px solid rgba(255,255,255,.15);border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.025) 2px,transparent 4px),rgba(24,25,27,.42)}
+.support-optional{float:right;margin-left:auto;color:#aaa;font-size:10px;font-weight:400}
+.support-evidence-notice,.moderation-private-note{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;border:1px solid rgba(255,255,255,.15);border-radius:9px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.03) 2px,transparent 4px),rgba(26,27,29,.63);color:#c4c4c6;font-size:11px;line-height:1.65}
+.support-evidence-notice svg,.moderation-private-note svg{flex:none;margin-top:1px;color:#e0e0e1}
+.support-submit{min-height:45px;justify-self:start;min-width:190px}
+.support-feedback{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:14px 0;padding:12px 14px;border:1px solid rgba(255,255,255,.19);border-radius:9px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.03) 2px,transparent 4px),#2c2d2f;color:#ededee;font-size:12px;line-height:1.6}
+.support-feedback.success{border-color:rgba(255,255,255,.25);background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.04) 2px,transparent 4px),#343537}
+.support-feedback strong,.support-feedback a{display:inline-flex;align-items:center;gap:6px;color:#fff}
+.support-signin-gate,.support-empty{min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:11px;padding:24px;color:#b8b8ba}
+.support-signin-gate h3,.support-empty h3{font-size:18px;color:#f1f1f2;margin:4px 0 0}
+.support-signin-gate p,.support-empty p{max-width:480px;margin:0 0 8px;line-height:1.7;font-size:12px}
+.support-empty svg,.support-signin-gate svg{color:#dedee0}
+.support-back-link{display:inline-flex;align-items:center;gap:8px;color:#d1d1d3;font-size:12px;margin:0 0 18px}
+.support-ticket-list{display:grid}
+.support-ticket-row{display:flex;align-items:center;gap:15px;padding:16px 4px;border-top:1px solid rgba(255,255,255,.12);color:#ededee;min-width:0}
+.support-ticket-row:hover .support-ticket-summary strong{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.support-ticket-number{font:10px 'DM Mono',monospace;color:#c4c4c6;padding:6px 8px;border:1px solid rgba(255,255,255,.2);border-radius:7px;background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.03) 2px,transparent 4px),#303133;white-space:nowrap}
+.support-ticket-summary{display:grid;gap:5px;flex:1;min-width:0}
+.support-ticket-summary strong{font-size:13px;overflow-wrap:anywhere}
+.support-ticket-summary small{font-size:11px;color:#aaa;line-height:1.5}
+.support-status-chip{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;padding:6px 9px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.025) 2px,transparent 4px),#292a2c;color:#ddd;font:10px 'DM Sans',sans-serif}
+.status-open,.status-submitted,.status-in-review,.status-escalated,.status-under-review,.status-changes-requested{border-color:rgba(255,255,255,.29);background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.04) 2px,transparent 4px),#38393b;color:#f7f7f8}
+.status-waiting-on-user,.status-draft{color:#c5c5c7}
+.status-resolved,.status-closed,.status-approved{color:#f1f1f2}
+.status-rejected,.status-withdrawn{color:#aaa}
+.ticket-detail-layout{grid-template-columns:minmax(0,1.45fr) minmax(260px,.65fr)}
+.support-detail-title{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.support-detail-title h1{flex:1;min-width:220px}
+.support-message-list,.admin-ticket-conversation{display:grid;gap:12px;margin:16px 0 24px}
+.support-message{padding:15px;border:1px solid rgba(255,255,255,.15);border-top-color:rgba(255,255,255,.28);border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.04) 2px,transparent 4px),rgba(32,33,35,.9);box-shadow:inset 0 1px rgba(255,255,255,.1)}
+.support-message.internal-note{border-style:dashed;background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.02) 2px,transparent 4px),#222325}
+.support-message-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#f0f0f1;font-size:12px}
+.support-message-meta time{font-size:10px;color:#aaa}
+.support-message p{white-space:pre-wrap;overflow-wrap:anywhere;color:#d1d1d3;line-height:1.7;font-size:12px;margin:12px 0 0}
+.support-detail-list{display:grid;grid-template-columns:minmax(80px,.6fr) minmax(0,1fr);gap:10px;padding:0}
+.support-detail-list dt{color:#aaa;font-size:11px}
+.support-detail-list dd{margin:0;color:#e3e3e4;font-size:12px;overflow-wrap:anywhere}
+.support-history{display:grid;gap:11px;margin-top:18px}
+.support-history p,.admin-audit-trail p{border-left:2px solid rgba(255,255,255,.28);padding:2px 0 3px 12px;margin:0;display:grid;gap:5px;color:#e6e6e7;font-size:11px}
+.support-history small,.admin-audit-trail small{color:#aaa;line-height:1.55;overflow-wrap:anywhere}
+.application-dynamic-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.application-dynamic-fields label{min-width:0}
+.application-dynamic-fields label:has(textarea){grid-column:1/-1}
+.application-form-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.application-answer-list{display:grid;gap:0;margin:0}
+.application-answer-list>div{padding:15px 0;border-top:1px solid rgba(255,255,255,.13)}
+.application-answer-list dt{font-size:11px;color:#aeb0b1;text-transform:capitalize;margin-bottom:7px}
+.application-answer-list dd{margin:0;font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;color:#e6e6e7}
+.application-review-workspace{grid-template-columns:minmax(280px,.75fr) minmax(0,1.35fr)}
+.admin-workflow-panel{min-width:0;margin:22px 0 5px;padding:clamp(16px,2.2vw,28px);border:1px solid rgba(255,255,255,.17);border-top-color:rgba(255,255,255,.29);border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.06) 1px,rgba(255,255,255,.02) 3px),linear-gradient(145deg,#2a2b2d,#222325 78%)!important;box-shadow:inset 0 1px rgba(255,255,255,.13),0 14px 28px rgba(0,0,0,.14)}
+.admin-workflow-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:22px;margin-bottom:22px}
+.admin-workflow-heading h2{font-size:24px;letter-spacing:-.045em;margin:7px 0}
+.admin-workflow-heading p{font-size:12px;line-height:1.6;color:#b1b1b3;margin:0;max-width:730px}
+.admin-workflow-heading>button,.admin-ticket-controls>button,.moderation-actions>button{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 11px;white-space:nowrap;border:1px solid rgba(255,255,255,.21);border-top-color:rgba(255,255,255,.35);border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.04) 2px,transparent 4px),#353638;color:#eee;font-size:11px;cursor:pointer}
+.admin-workflow-heading>button:disabled,.moderation-actions>button:disabled{opacity:.55;cursor:wait}
+.admin-workflow-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.admin-workflow-stats>article{padding:14px;border:1px solid rgba(255,255,255,.14);border-radius:9px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03) 2px,transparent 4px),#252628;display:grid;gap:9px}
+.admin-workflow-stats span{font-size:10px;line-height:1.4;color:#b2b2b4}
+.admin-workflow-stats b{font-size:24px;letter-spacing:-.045em;color:#f2f2f3}
+.admin-workflow-toolbar{display:grid;grid-template-columns:minmax(160px,.75fr) minmax(0,1.3fr) minmax(0,1fr);gap:12px;margin:18px 0}
+.admin-workflow-toolbar label{display:grid;gap:7px;font-size:11px;color:#ddd}
+.admin-workflow-toolbar input,.admin-workflow-toolbar select{padding:10px;font-size:12px}
+.admin-ticket-workspace{display:grid;grid-template-columns:minmax(245px,.72fr) minmax(0,1.5fr);gap:12px;align-items:start}
+.admin-ticket-queue,.admin-ticket-detail{min-width:0;border:1px solid rgba(255,255,255,.14);border-radius:10px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.02) 2px,transparent 4px),rgba(25,26,28,.72)}
+.admin-ticket-queue{max-height:760px;overflow:auto}
+.admin-ticket-queue-row{width:100%;display:flex;align-items:flex-start;gap:9px;padding:13px 11px;text-align:left;border:0;border-bottom:1px solid rgba(255,255,255,.1);background:transparent;color:#eee;cursor:pointer}
+.admin-ticket-queue-row:hover,.admin-ticket-queue-row.selected{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 2px,transparent 4px),#333436}
+.admin-ticket-queue-copy{display:grid;gap:5px;flex:1;min-width:0}
+.admin-ticket-queue-copy b{font-size:11px;line-height:1.45;overflow-wrap:anywhere}
+.admin-ticket-queue-copy small{font-size:10px;line-height:1.5;color:#aaa;overflow-wrap:anywhere}
+.admin-ticket-queue-row .support-status-chip{font-size:9px;padding:5px 6px;white-space:normal}
+.admin-ticket-detail{padding:clamp(13px,2vw,22px);overflow-wrap:anywhere}
+.admin-ticket-detail-head{padding-bottom:17px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:16px}
+.admin-ticket-detail-head h3{font-size:21px;letter-spacing:-.03em;margin:8px 0}
+.admin-ticket-detail-head p{font-size:11px;color:#aaa;line-height:1.6;margin:5px 0}
+.admin-ticket-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:17px}
+.admin-ticket-controls label{font-size:10px}
+.admin-ticket-controls input,.admin-ticket-controls select{font-size:11px;padding:9px}
+.admin-ticket-controls>button{font-size:10px;padding:9px 7px}
+.admin-ticket-reply{display:grid;gap:11px;padding-top:15px;border-top:1px solid rgba(255,255,255,.14)}
+.admin-ticket-reply label,.admin-application-controls label{font-size:11px}
+.admin-ticket-reply textarea,.admin-ticket-reply select,.admin-application-controls textarea,.admin-application-controls select{font-size:12px}
+.admin-ticket-reply>button,.admin-application-controls>.hire-primary{justify-self:start;min-width:160px}
+.admin-audit-trail{display:grid;gap:10px;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;margin-top:20px}
+.admin-audit-trail h4{display:flex;align-items:center;gap:7px;color:#e6e6e7;margin:0;font-size:12px}
+.admin-application-answers{max-height:340px;overflow:auto;padding:13px;margin:15px 0;border:1px solid rgba(255,255,255,.13);border-radius:9px;background:#202123}
+.admin-application-answers h4{font-size:12px;margin:0 0 13px}
+.admin-application-answers>div{padding:10px 0;border-top:1px solid rgba(255,255,255,.1)}
+.admin-application-answers b{font-size:10px;color:#aaa;text-transform:capitalize}
+.admin-application-answers p{margin:5px 0 0;font-size:12px;line-height:1.55;color:#e1e1e2;white-space:pre-wrap;overflow-wrap:anywhere}
+.admin-application-controls{display:grid;gap:12px}
+.moderation-scan-warning{display:flex;align-items:flex-start;gap:11px;padding:14px;margin:0 0 18px;border:1px solid rgba(255,255,255,.21);border-radius:9px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.04) 2px,transparent 4px),#28292b;color:#d5d5d6;font-size:11px;line-height:1.65}
+.moderation-scan-warning svg{flex:none;margin-top:2px}
+.moderation-scan-warning b{color:#fff}
+.moderation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.moderation-card{min-width:0;padding:17px;border:1px solid rgba(255,255,255,.16);border-top-color:rgba(255,255,255,.3);border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.04) 2px,transparent 4px),linear-gradient(145deg,#2b2c2e,#212224)!important;box-shadow:inset 0 1px rgba(255,255,255,.1)}
+.moderation-card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.moderation-kind{display:inline-flex;align-items:center;gap:6px;color:#bcbcbf;font:9px 'DM Mono',monospace;letter-spacing:.045em}
+.moderation-card h3{margin:14px 0 8px;font-size:17px;overflow-wrap:anywhere}
+.moderation-card>p{font-size:12px;line-height:1.65;color:#bfc0c1;white-space:pre-wrap;overflow-wrap:anywhere}
+.moderation-card dl{display:grid;grid-template-columns:minmax(80px,.55fr) minmax(0,1fr);gap:7px;font-size:10px;line-height:1.5;margin:14px 0}
+.moderation-card dt{color:#999}
+.moderation-card dd{margin:0;color:#e0e0e1;overflow-wrap:anywhere}
+.moderation-card dd a{text-decoration:underline;text-underline-offset:3px}
+.moderation-private-note{margin:12px 0;font-size:10px}
+.moderation-card label{margin-top:12px}
+.moderation-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.moderation-actions>button:last-child{background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,.08) 1px,rgba(255,255,255,.03) 3px),#404143}
+.moderation-actions>button:first-child{color:#d0d0d2}
+.support-center-page .market-content,.application-workspace .market-content{overflow:visible}
+@media(max-width:1100px){.support-layout-grid,.ticket-detail-layout,.application-review-workspace,.admin-ticket-workspace{grid-template-columns:1fr}.support-info-panel{order:2}.admin-ticket-queue{max-height:420px}.moderation-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.support-center-content,.application-content{padding:68px 14px 28px}.support-hero-panel{padding:27px 19px}.support-form-panel,.support-info-panel,.support-tickets-panel{padding:17px}.application-dynamic-fields{grid-template-columns:1fr}.application-dynamic-fields label:has(textarea){grid-column:auto}.support-ticket-row{gap:8px;flex-wrap:wrap}.support-ticket-summary{flex-basis:calc(100% - 95px)}.support-ticket-row>.support-status-chip{margin-left:0}.support-detail-title{display:grid}.support-detail-list{grid-template-columns:95px minmax(0,1fr)}.application-form-actions{justify-content:stretch}.application-form-actions>button{flex:1}.admin-workflow-panel{padding:14px}.admin-workflow-heading{flex-direction:column}.admin-workflow-toolbar{grid-template-columns:1fr}.admin-workflow-stats{grid-template-columns:1fr 1fr}.admin-workflow-stats>article:last-child{grid-column:1/-1}.admin-ticket-controls{grid-template-columns:1fr 1fr}.admin-ticket-controls label:nth-child(3){grid-column:1/-1}.moderation-card{padding:13px}}
