@@ -106,7 +106,7 @@ export default function PostJobPage() {
       await post({
         ...form,
         title: form.title.trim(),
-        description: [form.description.trim(), "WORK ARRANGEMENT: " + form.workType, form.milestones.trim() ? "MILESTONES & ACCEPTANCE CHECKS:\\n" + form.milestones.trim() : ""].filter(Boolean).join("\\n\\n"),
+        description: [form.description.trim(), "WORK ARRANGEMENT: " + form.workType, form.milestones.trim() ? "MILESTONES & ACCEPTANCE CHECKS:\n" + form.milestones.trim() : ""].filter(Boolean).join("\n\n"),
         budgetMin: Number(form.budgetMin),
         budgetMax: Number(form.budgetMax),
         deadline: form.deadline || undefined,
