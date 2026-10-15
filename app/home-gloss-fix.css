@@ -1,0 +1,93 @@
+/* Force the reflective graphite theme over legacy home-only black fills. */
+html body main.spider-home aside.spider-sidebar {
+  color:#e8e8e9!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.30),rgba(255,255,255,.13) 1px,rgba(255,255,255,.04) 3px,rgba(255,255,255,.015) 62%,rgba(255,255,255,.065)),
+    radial-gradient(ellipse at 12% 0%,rgba(255,255,255,.13),transparent 45%),
+    linear-gradient(180deg,#2b2c2f,#252629 48%,#1f2022)!important;
+  border-right:1px solid rgba(255,255,255,.24)!important;
+  box-shadow:inset -1px 0 rgba(0,0,0,.26),inset 0 1px rgba(255,255,255,.25),12px 0 32px rgba(0,0,0,.22)!important;
+}
+html body main.spider-home aside.spider-sidebar .sidebar-head,
+html body main.spider-home aside.spider-sidebar .sidebar-bottom {
+  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.055) 2px,transparent 58%,rgba(255,255,255,.04)),rgba(25,26,28,.45)!important;
+  border-color:rgba(255,255,255,.16)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.12)!important;
+}
+html body main.spider-home aside.spider-sidebar .sidebar-brand,
+html body main.spider-home aside.spider-sidebar .sidebar-user,
+html body main.spider-home aside.spider-sidebar .sidebar-account-cta {
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.085) 1px,rgba(255,255,255,.025) 3px,rgba(255,255,255,.04)),linear-gradient(110deg,rgba(255,255,255,.065),transparent 65%),#303134!important;
+  border:1px solid rgba(255,255,255,.2)!important;border-top-color:rgba(255,255,255,.38)!important;border-radius:9px!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.19),inset 0 -1px rgba(0,0,0,.24),0 8px 17px rgba(0,0,0,.17)!important;
+}
+html body main.spider-home aside.spider-sidebar .sidebar-group nav a,
+html body main.spider-home aside.spider-sidebar .sidebar-bottom>a {border:1px solid transparent!important;border-radius:7px!important;background:transparent!important;color:#c9c9cc!important}
+html body main.spider-home aside.spider-sidebar .sidebar-group nav a:hover,
+html body main.spider-home aside.spider-sidebar .sidebar-bottom>a:hover {
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.06) 2px,rgba(255,255,255,.025)),#37383b!important;
+  border-color:rgba(255,255,255,.21)!important;color:#fff!important;box-shadow:inset 0 1px rgba(255,255,255,.19),0 5px 12px rgba(0,0,0,.15)!important;
+}
+html body main.spider-home aside.spider-sidebar .sidebar-group nav a.active,
+html body main.spider-home aside.spider-sidebar .sidebar-bottom>a.active {
+  background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.13) 1px,rgba(255,255,255,.035) 3px,rgba(255,255,255,.055)),linear-gradient(110deg,rgba(255,255,255,.05),transparent 70%),#414245!important;
+  border-color:rgba(255,255,255,.33)!important;color:#fff!important;box-shadow:inset 0 1px rgba(255,255,255,.26),inset 0 -1px rgba(0,0,0,.2),0 5px 13px rgba(0,0,0,.16)!important;
+}
+html body main.spider-home {
+  background:radial-gradient(ellipse at 17% -8%,rgba(255,255,255,.13),transparent 34%),radial-gradient(ellipse at 88% 5%,rgba(255,255,255,.075),transparent 30%),linear-gradient(180deg,#1b1c1e,#141517 46%,#101113)!important;
+}
+html body main.spider-home>header.spider-nav {
+  background:linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,.13) 1px,rgba(255,255,255,.035) 3px,rgba(255,255,255,.02) 65%,rgba(255,255,255,.055)),linear-gradient(110deg,rgba(255,255,255,.07),transparent 60%),rgba(35,36,38,.94)!important;
+  border:1px solid rgba(255,255,255,.21)!important;border-top-color:rgba(255,255,255,.4)!important;border-radius:12px!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.24),inset 0 -1px rgba(0,0,0,.26),0 14px 32px rgba(0,0,0,.22)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(125%)!important;backdrop-filter:blur(18px) saturate(125%)!important;
+}
+html body main.spider-home>header.spider-nav nav a{color:#d4d4d6!important}
+html body main.spider-home>header.spider-nav nav a:hover{color:#fff!important}
+html body main.spider-home>header.spider-nav .spider-upload-nav,
+html body main.spider-home>header.spider-nav .spider-signin {
+  background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(255,255,255,.065) 2px,rgba(255,255,255,.02)),#303134!important;
+  border:1px solid rgba(255,255,255,.22)!important;border-top-color:rgba(255,255,255,.39)!important;color:#f3f3f4!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.19),0 6px 15px rgba(0,0,0,.18)!important;
+}
+/* Soften the black hero veil while preserving the real background video/artwork. */
+html body main.spider-home section.spider-hero {
+  border:1px solid rgba(255,255,255,.22)!important;border-top-color:rgba(255,255,255,.4)!important;border-radius:15px!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.22),inset 0 -1px rgba(0,0,0,.28),0 22px 45px rgba(0,0,0,.2)!important;background-color:#252629!important;
+}
+html body main.spider-home section.spider-hero .spider-hero-shade {
+  background:linear-gradient(90deg,rgba(20,21,23,.44),rgba(20,21,23,.28) 43%,rgba(20,21,23,.12)),linear-gradient(0deg,rgba(20,21,23,.4),rgba(20,21,23,.06) 52%,rgba(20,21,23,.1))!important;
+}
+html body main.spider-home section.spider-hero .spider-hero-search {
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.1) 1px,rgba(255,255,255,.025) 3px,rgba(255,255,255,.04)),linear-gradient(110deg,rgba(255,255,255,.05),transparent 70%),rgba(36,37,39,.91)!important;
+  border:1px solid rgba(255,255,255,.23)!important;border-top-color:rgba(255,255,255,.4)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.21),0 10px 22px rgba(0,0,0,.22)!important;
+  -webkit-backdrop-filter:blur(17px) saturate(125%)!important;backdrop-filter:blur(17px) saturate(125%)!important;
+}
+html body main.spider-home section.spider-hero .spider-hero-search input{background:transparent!important;box-shadow:none!important;border-color:transparent!important;color:#f6f6f7!important}
+html body main.spider-home section.spider-hero .spider-button-secondary {
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.07) 2px,rgba(255,255,255,.025)),#38393c!important;
+  border:1px solid rgba(255,255,255,.25)!important;border-top-color:rgba(255,255,255,.42)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.21),0 7px 16px rgba(0,0,0,.19)!important;
+}
+html body main.spider-home section.spider-hero .spider-button-primary {
+  background:linear-gradient(180deg,#fff,#eee 52%,#d4d4d6)!important;border:1px solid rgba(255,255,255,.82)!important;color:#171719!important;
+  box-shadow:inset 0 1px #fff,0 8px 19px rgba(0,0,0,.21)!important;
+}
+html body main.spider-home .spider-category-section,
+html body main.spider-home .home-assets,
+html body main.spider-home .spider-game-showcase,
+html body main.spider-home .spider-home-links {
+  background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(255,255,255,.09) 1px,rgba(255,255,255,.025) 3px,rgba(255,255,255,.045)),radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.08),transparent 58%),linear-gradient(145deg,#292a2d,#222326 62%,#1e1f21)!important;
+  border:1px solid rgba(255,255,255,.19)!important;border-top-color:rgba(255,255,255,.36)!important;border-radius:13px!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.19),inset 0 -1px rgba(0,0,0,.32),0 18px 36px rgba(0,0,0,.21)!important;
+}
+html body main.spider-home .spider-category-grid>*,
+html body main.spider-home .resource-card,
+html body main.spider-home .spider-game-showcase-grid>*,
+html body main.spider-home .spider-home-links>a {
+  background:linear-gradient(180deg,rgba(255,255,255,.27),rgba(255,255,255,.1) 1px,rgba(255,255,255,.025) 3px,rgba(255,255,255,.045)),linear-gradient(110deg,rgba(255,255,255,.055),transparent 62%),linear-gradient(145deg,#303134,#252629 75%)!important;
+  border:1px solid rgba(255,255,255,.19)!important;border-top-color:rgba(255,255,255,.35)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.19),inset 0 -1px rgba(0,0,0,.28),0 10px 23px rgba(0,0,0,.17)!important;
+}
+
