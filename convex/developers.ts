@@ -101,9 +101,9 @@ export const postJob = mutation({
     const expected = process.env.ADMIN_API_SECRET;
     if (!expected || args.adminSecret.length !== expected.length || args.adminSecret !== expected) throw new Error("Unauthorized job posting service request.");
     if (!/^\\d{5,25}$/.test(args.posterDiscordId)) throw new Error("Sign in with Discord before posting a job.");
-    const activeRestrictions = await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.posterDiscordId).eq("status", "active")).collect();
+    const activeRestrictions = await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.posterDiscordId)).collect();
     const now = Date.now();
-    const active = activeRestrictions.filter(r => r.expiresAt === undefined || r.expiresAt > now);
+    const active = activeRestrictions.filter(r => r.status === "active" && (r.expiresAt === undefined || r.expiresAt > now));
     if (active.some(r => ["restricted", "temporary_ban", "permanent_ban", "posting_ban"].includes(r.restrictionType))) throw new Error("Your account is not allowed to post jobs while an active restriction applies.");
     const applications = await ctx.db.query("platformApplications").withIndex("by_applicant_createdAt", q => q.eq("applicantDiscordId", args.posterDiscordId)).collect();
     if (!applications.some(a => a.applicationType === "Posting Access" && a.status === "approved")) throw new Error("You need approved Posting Access before publishing jobs. Apply at /applications.");
