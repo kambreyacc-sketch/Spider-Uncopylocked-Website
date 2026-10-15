@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import {
   Home, Search, BriefcaseBusiness, Settings, UploadCloud, Users, UserRoundPlus,
-  ShieldCheck, LibraryBig, UsersRound, Building2, MessagesSquare, Sparkles,
+  ShieldCheck, LibraryBig, UsersRound, Building2, MessagesSquare, Sparkles, Ticket, ClipboardList,
   LogOut, LockKeyhole, CreditCard, PanelLeftClose, PanelLeftOpen, Menu, X, LogIn,
 } from "lucide-react";
 
@@ -20,6 +20,8 @@ type NavigationItem = {
 const workspace: NavigationItem[] = [
   { href: "/", label: "Home", Icon: Home },
   { href: "/messages", label: "Messages", Icon: MessagesSquare },
+  { href: "/applications", label: "Applications", Icon: ClipboardList },
+  { href: "/support", label: "Support Center", Icon: Ticket },
 ];
 const discover: NavigationItem[] = [
   { href: "/resources", label: "Resources", Icon: LibraryBig },
