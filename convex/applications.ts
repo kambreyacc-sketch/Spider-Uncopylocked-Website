@@ -293,35 +293,50 @@ export const review = mutation({
         const roles = read("roles", 500).split(",").map(item => item.trim()).filter(Boolean).slice(0, 10);
         const skills = read("skills", 800).split(",").map(item => item.trim()).filter(Boolean).slice(0, 20);
         const portfolioUrl = read("portfolioUrl", 500);
+        const portfolioAnswer = Array.isArray(answers.portfolio) ? answers.portfolio : [];
+        const portfolioItems = portfolioAnswer.map((item: any) => ({
+          url: typeof item?.url === "string" ? item.url.trim().slice(0, 500) : "",
+          caption: typeof item?.caption === "string" ? item.caption.trim().slice(0, 120) : "",
+        })).filter((item: any) => /^https:\/\//i.test(item.url)).slice(0, 9);
         const robloxUrl = read("robloxUrl", 500);
         const discordUsername = read("discordUsername", 80);
         const rateType = read("rateType", 20);
         const availability = read("availability", 40);
         const rateText = read("rateAmount", 30);
         const rateAmount = rateText ? Number(rateText) : undefined;
+        const avatarUrl = read("avatarUrl", 500);
+        const servicesAnswer = Array.isArray(answers.services) ? answers.services : [];
+        const services = servicesAnswer.map((item: any) => ({
+          title: typeof item?.title === "string" ? item.title.trim().slice(0, 80) : "",
+          description: typeof item?.description === "string" ? item.description.trim().slice(0, 240) : "",
+          price: typeof item?.price === "number" ? item.price : Number(item?.price),
+        })).filter((item: any) => item.title && Number.isFinite(item.price) && item.price >= 0).slice(0, 12);
         if (!/^[a-z0-9_-]{3,24}$/.test(username)) throw new Error("Developer profile handle must be 3–24 letters, numbers, underscores, or hyphens.");
         if (headline.length < 3 || bio.length < 20 || roles.length === 0) throw new Error("Developer application needs a headline, experience bio, and at least one development role.");
-        if (!/^https:\/\//i.test(portfolioUrl) || !/^https:\/\//i.test(robloxUrl) || !/roblox\.com\//i.test(robloxUrl)) throw new Error("Submit a valid HTTPS portfolio URL and Roblox profile URL.");
+        if (portfolioAnswer.length > 0 && (portfolioItems.length < 3 || portfolioItems.length !== portfolioAnswer.length)) throw new Error("Developer profile approval requires 3–9 valid HTTPS portfolio images.");
+        if (portfolioItems.length === 0 && !/^https:\/\//i.test(portfolioUrl)) throw new Error("Submit at least three HTTPS portfolio images.");
+        if (!/^https:\/\//i.test(robloxUrl) || !/roblox\.com\//i.test(robloxUrl)) throw new Error("Submit a valid HTTPS Roblox profile URL.");
         if (!discordUsername) throw new Error("Provide a Discord contact username before the developer profile can be approved.");
         if (!["hourly", "project", "negotiable"].includes(rateType)) throw new Error("Choose a valid developer pricing model.");
         if (!["Available", "Busy", "Not taking commissions"].includes(availability)) throw new Error("Choose a valid availability status.");
         if (rateAmount !== undefined && (!Number.isFinite(rateAmount) || rateAmount < 0 || rateAmount > 1000000)) throw new Error("Developer rate must be between $0 and $1,000,000.");
+        if (servicesAnswer.length > 12 || servicesAnswer.some((item: any) => typeof item?.title !== "string" || item.title.trim().length === 0 || !Number.isFinite(Number(item.price)) || Number(item.price) < 0)) throw new Error("Check the submitted service titles and prices.");
         const handleOwner = await ctx.db.query("developers").withIndex("by_username", (q: any) => q.eq("username", username)).unique();
         if (handleOwner && handleOwner.discordId !== application.applicantDiscordId) throw new Error("That developer handle is already in use. Request a different handle before approving.");
         const value = {
           username,
-          displayName: application.applicantName.slice(0, 80),
+          displayName: read("displayName", 80) || application.applicantName.slice(0, 80),
           discordId: application.applicantDiscordId,
-          avatarUrl: application.applicantAvatar || "/spider-uncopylocked-pfp.webp",
+          avatarUrl: /^https:\/\//i.test(avatarUrl) ? avatarUrl : (application.applicantAvatar || "/spider-uncopylocked-pfp.webp"),
           headline,
           bio,
           crafts: roles,
           skills,
-          services: [],
+          services,
           rateType: rateType as "hourly" | "project" | "negotiable",
           ...(rateAmount !== undefined ? { rateAmount } : {}),
           availability: availability as "Available" | "Busy" | "Not taking commissions",
-          portfolio: [{ url: portfolioUrl, caption: "Portfolio" }],
+          portfolio: portfolioItems.length >= 3 ? portfolioItems : [{ url: portfolioUrl, caption: "Portfolio" }],
           discordUsername,
           robloxUrl,
           status: "approved" as const,
