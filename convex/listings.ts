@@ -23,8 +23,6 @@ export const publicListings = query({
   },
 });
 
-function assertAdminSecret(secret: string) { const expected = process.env.ADMIN_API_SECRET; if (!expected || secret.length !== expected.length || secret !== expected) throw new Error("Unauthorized listing submission."); }
-
 export const submitListing = mutation({
   args: {
     adminSecret: v.string(),
