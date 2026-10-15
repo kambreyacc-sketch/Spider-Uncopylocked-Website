@@ -55,6 +55,29 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index("by_slug", ["slug"]).index("by_owner", ["ownerDiscordId"]).index("by_status_createdAt", ["status", "createdAt"]),
 
+  conversations: defineTable({
+    participantOne: v.string(),
+    participantTwo: v.string(),
+    participantOneName: v.string(),
+    participantTwoName: v.string(),
+    participantOneAvatar: v.optional(v.string()),
+    participantTwoAvatar: v.optional(v.string()),
+    contextType: v.optional(v.string()),
+    contextTitle: v.optional(v.string()),
+    lastMessageText: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_participantOne_updatedAt", ["participantOne", "updatedAt"])
+    .index("by_participantTwo_updatedAt", ["participantTwo", "updatedAt"])
+    .index("by_participants", ["participantOne", "participantTwo"]),
+  messages: defineTable({
+    conversationId: v.id("conversations"),
+    senderDiscordId: v.string(),
+    body: v.string(),
+    createdAt: v.number(),
+    readBy: v.array(v.string()),
+  }).index("by_conversation_createdAt", ["conversationId", "createdAt"]),
+
   // Stripe customer mappings contain provider identifiers only; never store card numbers or CVCs.
   billingCustomers: defineTable({
     discordId: v.string(),
