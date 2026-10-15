@@ -30,6 +30,8 @@ export default defineSchema({
   scamReports: defineTable({
     reference: v.string(), reporterDiscordId: v.string(), reportedType: v.string(), targetUrl: v.string(),
     reason: v.string(), details: v.string(), status: v.union(v.literal("submitted"), v.literal("pending"), v.literal("under_investigation"), v.literal("additional_information_requested"), v.literal("action_taken"), v.literal("dismissed"), v.literal("closed")),
+    assignedToDiscordId: v.optional(v.string()), assignedToName: v.optional(v.string()),
+    reviewNotes: v.optional(v.string()), reviewedByDiscordId: v.optional(v.string()), reviewedByName: v.optional(v.string()), reviewedAt: v.optional(v.number()),
     createdAt: v.number(), updatedAt: v.number(),
   }).index("by_reference", ["reference"]).index("by_reporter_createdAt", ["reporterDiscordId", "createdAt"]).index("by_status_createdAt", ["status", "createdAt"]),
   developerReports: defineTable({ developerId: v.id("developers"), reporterDiscordId: v.string(), reason: v.string(), details: v.string(), createdAt: v.number(), status: v.union(v.literal("open"), v.literal("reviewed")) }).index("by_status_createdAt", ["status", "createdAt"]),
