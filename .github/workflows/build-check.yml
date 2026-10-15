@@ -1,7 +1,7 @@
 name: Build check
 on:
   push:
-    branches: [main]
+    branches: [main, build/glossy-platform-foundation]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -21,5 +21,9 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install
+      - name: TypeScript check
+        run: npx tsc --noEmit
+      - name: Lint
+        run: npm run lint
       - name: Build Next.js
         run: npm run build
