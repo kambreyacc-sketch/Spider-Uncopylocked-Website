@@ -136,8 +136,8 @@ export const saveDraft = mutation({
         ...(args.applicantAvatar ? { applicantAvatar: args.applicantAvatar } : {}),
       });
     } else {
-      applicationNumber = await nextApplicationNumber(ctx);
-      applicationId = const nextNumber = applicationNumber = await nextApplicationNumber(ctx);
+      const nextNumber = await nextApplicationNumber(ctx);
+      applicationNumber = nextNumber;
       applicationId = await ctx.db.insert("applicationRecords", {
         applicationNumber: nextNumber, type: args.type, ...validated,
         applicantDiscordId: args.applicantDiscordId,
