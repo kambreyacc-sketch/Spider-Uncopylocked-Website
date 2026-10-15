@@ -202,7 +202,8 @@ export default defineSchema({
   }).index("by_applicationNumber", ["applicationNumber"])
     .index("by_applicant_updatedAt", ["applicantDiscordId", "updatedAt"])
     .index("by_status_updatedAt", ["status", "updatedAt"])
-    .index("by_type_status_updatedAt", ["type", "status", "updatedAt"]),
+    .index("by_type_status_updatedAt", ["type", "status", "updatedAt"])
+    .index("by_applicant_type_status", ["applicantDiscordId", "type", "status"]),
   applicationEvents: defineTable({
     applicationId: v.id("applicationRecords"),
     applicationNumber: v.number(),
@@ -214,6 +215,18 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_application_createdAt", ["applicationId", "createdAt"])
     .index("by_createdAt", ["createdAt"]),
+  websiteRoleGrants: defineTable({
+    discordId: v.string(),
+    roleKey: v.string(),
+    grantedByDiscordId: v.string(),
+    grantedByName: v.string(),
+    applicationNumber: v.optional(v.number()),
+    active: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_discordId", ["discordId"])
+    .index("by_discordId_roleKey", ["discordId", "roleKey"])
+    .index("by_roleKey", ["roleKey", "active"]),
   moderationAuditEvents: defineTable({
     actorDiscordId: v.string(),
     actorName: v.string(),
