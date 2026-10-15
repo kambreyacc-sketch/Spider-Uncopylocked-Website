@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Activity, AlertTriangle, Archive, CheckCircle2, ChevronLeft, ChevronRight, FileText, LockKeyhole, RefreshCw, Search, ShieldAlert, ShieldCheck, UserRoundX, Settings2 } from "lucide-react";
 
-type Section = "users" | "studios" | "jobs" | "restrictions" | "activity" | "settings";
+type Section = "users" | "studios" | "jobs" | "restrictions" | "activity" | "roles" | "settings";
 type Row = Record<string, any>;
 type PageData = { rows: Row[]; page: number; pageSize: number; total: number; totalPages: number; generatedAt: number };
 const titles: Record<Section, { title: string; description: string }> = {
@@ -12,18 +12,21 @@ const titles: Record<Section, { title: string; description: string }> = {
   jobs: { title: "Job post management", description: "Inspect actual job records and close or reopen eligible listings. Pending or rejected posts must be reviewed first." },
   restrictions: { title: "Warnings & restrictions", description: "Issue account actions with a reason. Active restrictions are checked by supported server-side write endpoints." },
   activity: { title: "Audit history", description: "Recent recorded moderation, support, and application events. Private notes are shown only to authorized administrators." },
+  roles: { title: "Staff roles & permissions", description: "Manage website-only staff grants. Owner/Admin privileges cannot be assigned here; each grant and revocation requires a reason and is audit logged." },
   settings: { title: "Website configuration", description: "Manage the homepage announcement and featured text. Unsupported settings are intentionally not shown." },
 };
 const filters: Partial<Record<Section, {value:string;label:string}[]>> = {
   studios: [{value:"active",label:"Active"},{value:"archived",label:"Archived"}],
   jobs: [{value:"open",label:"Open"},{value:"closed",label:"Closed"},{value:"pending",label:"Pending moderation"},{value:"rejected",label:"Rejected"}],
   restrictions: [{value:"active",label:"Active"},{value:"expired",label:"Expired"},{value:"lifted",label:"Lifted"}],
+  roles: [{value:"active",label:"Active grants"},{value:"inactive",label:"Revoked grants"}],
 };
 
 export default function AdminOperationsPanel({section}:{section:Section}) {
   const [data,setData]=useState<PageData|null>(null),[searchDraft,setSearchDraft]=useState(""),[search,setSearch]=useState(""),[status,setStatus]=useState(""),[page,setPage]=useState(1),[loading,setLoading]=useState(true),[busy,setBusy]=useState(false),[error,setError]=useState(""),[feedback,setFeedback]=useState("");
   const [kind,setKind]=useState("Warning"),[discordId,setDiscordId]=useState(""),[memberName,setMemberName]=useState(""),[reason,setReason]=useState(""),[expiresAt,setExpiresAt]=useState("");
   const [announcement,setAnnouncement]=useState(""),[announcementEnabled,setAnnouncementEnabled]=useState(false),[featuredText,setFeaturedText]=useState("");
+  const [roleDiscordId,setRoleDiscordId]=useState(""),[roleKey,setRoleKey]=useState("support"),[roleActive,setRoleActive]=useState(true),[roleReason,setRoleReason]=useState("");
 
   const load=useCallback(async()=>{
     setLoading(true);setError("");
@@ -42,7 +45,7 @@ export default function AdminOperationsPanel({section}:{section:Section}) {
     if(busy||!window.confirm(confirmation))return;
     setBusy(true);setError("");setFeedback("");
     try{
-      const response=await fetch("/api/admin/operations",{method:method||(action==="saveSetting"||action==="createRestriction"?"POST":"PATCH"),headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...fields,confirmed:true})});
+      const response=await fetch("/api/admin/operations",{method:method||(action==="saveSetting"||action==="createRestriction"||action==="setRoleGrant"?"POST":"PATCH"),headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...fields,confirmed:true})});
       const result=await response.json();if(!response.ok)throw new Error(result.error||"The operation failed.");
       setFeedback("Saved. The operation was recorded in the audit history.");await load();
     }catch(caught){setError(caught instanceof Error?caught.message:"The operation failed.");}finally{setBusy(false);}
@@ -74,6 +77,17 @@ export default function AdminOperationsPanel({section}:{section:Section}) {
       <button className="hire-primary" disabled={busy}><LockKeyhole size={14}/>{busy?"Saving…":"Issue action"}</button>
     </form>}
 
+    {section==="roles"&&<form className="admin-restriction-form" onSubmit={event=>{event.preventDefault();void mutate("setRoleGrant",{discordId:roleDiscordId.trim(),roleKey,active:roleActive,reason:roleReason.trim()},(roleActive?"Grant":"Revoke")+" the "+roleKey.replaceAll("_"," ")+" role for Discord ID "+roleDiscordId+"? Owner/Admin privileges are not assignable here.");setRoleReason("");}}>
+      <div className="admin-form-title"><ShieldCheck size={18}/><div><h3>Manage a website staff grant</h3><p>Only the site owner can manage grants. The recipient cannot grant a role to themselves, and owner/admin privileges are never assignable here.</p></div></div>
+      <div className="admin-operation-form-grid">
+        <label>Discord user ID<input required inputMode="numeric" pattern="[0-9]{5,32}" maxLength={32} value={roleDiscordId} onChange={event=>setRoleDiscordId(event.target.value)} placeholder="Discord user ID"/></label>
+        <label>Staff role<select value={roleKey} onChange={event=>setRoleKey(event.target.value)}><option value="support">Support Staff</option><option value="review">Reviewer</option><option value="moderate">Moderator</option><option value="moderation_manage">Senior Moderator</option><option value="staff_manage">Management</option></select></label>
+        <label>Action<select value={roleActive?"grant":"revoke"} onChange={event=>setRoleActive(event.target.value==="grant")}><option value="grant">Grant / reactivate</option><option value="revoke">Revoke active grant</option></select></label>
+        <label className="wide">Reason<textarea required minLength={3} maxLength={1000} rows={3} value={roleReason} onChange={event=>setRoleReason(event.target.value)} placeholder="Why is this grant being changed? Include application context where relevant."/></label>
+      </div>
+      <button className="hire-primary" disabled={busy}><LockKeyhole size={14}/>{busy?"Saving…":roleActive?"Grant role":"Revoke role"}</button>
+    </form>}
+
     {section==="settings"&&<div className="admin-website-settings">
       <section className="admin-setting-editor"><div className="admin-form-title"><Settings2 size={18}/><div><h3>Homepage announcement</h3><p>Stored in Convex and displayed on the public homepage after saving.</p></div></div>
         <label className="admin-setting-toggle"><input type="checkbox" checked={announcementEnabled} onChange={e=>setAnnouncementEnabled(e.target.checked)}/> Show announcement</label>
@@ -100,6 +114,7 @@ export default function AdminOperationsPanel({section}:{section:Section}) {
         :section==="studios"?<><thead><tr><th>Studio</th><th>Owner</th><th>Specialties</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead><tbody>{data.rows.map(row=><tr key={row.id}><td><strong>{row.name}</strong><small>@{row.slug}</small></td><td>{row.ownerName}<small>{row.ownerDiscordId}</small></td><td>{(row.specialties||[]).join(", ")}</td><td><span className="support-status-chip">{row.status}</span></td><td>{new Date(row.updatedAt).toLocaleString()}</td><td><button type="button" className="hire-secondary" disabled={busy} onClick={()=>{const target=row.status==="active"?"archived":"active";const why=promptReason(target+" studio "+row.slug);if(why)void mutate("studioStatus",{id:row.id,status:target,reason:why},(target==="archived"?"Archive":"Reactivate")+" this studio?");}}>{row.status==="active"?<><Archive size={13}/> Archive</>:<><CheckCircle2 size={13}/> Reactivate</>}</button></td></tr>)}</tbody></>
         :section==="jobs"?<><thead><tr><th>Job</th><th>Poster</th><th>Budget</th><th>Status</th><th>Moderation</th><th>Actions</th></tr></thead><tbody>{data.rows.map(row=><tr key={row.id}><td><strong>{row.title}</strong><small>{row.craft} · {row.deadline||"No deadline"}</small></td><td>{row.posterName}<small>{row.posterDiscordId}</small></td><td>{"$"+Number(row.budgetMin).toLocaleString()+"–$"+Number(row.budgetMax).toLocaleString()}</td><td>{row.status}</td><td>{row.moderationStatus||"Legacy record"}</td><td><button type="button" className="hire-secondary" disabled={busy||row.moderationStatus==="pending"||row.moderationStatus==="rejected"} onClick={()=>{const target=row.status==="open"?"closed":"open";const why=promptReason(target+" job "+row.title);if(why)void mutate("jobStatus",{id:row.id,status:target,reason:why},(target==="closed"?"Close":"Reopen")+" this job post?");}}>{row.status==="open"?"Close job":"Reopen job"}</button></td></tr>)}</tbody></>
         :section==="restrictions"?<><thead><tr><th>Member</th><th>Action</th><th>Reason</th><th>Issued by</th><th>Expires</th><th>State</th><th>Actions</th></tr></thead><tbody>{data.rows.map(row=><tr key={row.id}><td><strong>{row.subjectName}</strong><small>{row.subjectDiscordId}</small></td><td>{row.kind}</td><td>{row.reason}</td><td>{row.issuedByName}<small>{new Date(row.createdAt).toLocaleString()}</small></td><td>{row.expiresAt?new Date(row.expiresAt).toLocaleString():"No expiry"}</td><td><span className="support-status-chip">{row.effectiveStatus}</span></td><td>{row.active?<button type="button" className="hire-secondary" disabled={busy} onClick={()=>{const why=promptReason("lift this restriction");if(why)void mutate("liftRestriction",{id:row.id,reason:why},"Lift this restriction?");}}><UserRoundX size={13}/> Lift</button>:"—"}</td></tr>)}</tbody></>
+        :section==="roles"?<><thead><tr><th>Member Discord ID</th><th>Role</th><th>State</th><th>Granted by</th><th>Application</th><th>Updated</th><th>Actions</th></tr></thead><tbody>{data.rows.map(row=><tr key={row.id}><td><strong>{row.discordId}</strong></td><td>{({support:"Support Staff",review:"Reviewer",moderate:"Moderator",moderation_manage:"Senior Moderator",staff_manage:"Management"} as Record<string,string>)[row.roleKey]||row.roleKey}</td><td><span className="support-status-chip">{row.active?"Active":"Revoked"}</span></td><td>{row.grantedByName}<small>{row.grantedByDiscordId}</small></td><td>{row.applicationNumber?"#"+row.applicationNumber:"Manual"}</td><td>{new Date(row.updatedAt).toLocaleString()}</td><td><button type="button" className="hire-secondary" disabled={busy} onClick={()=>{const active=!row.active;const why=promptReason((active?"reactivate ":"revoke ")+row.roleKey+" role for "+row.discordId);if(why)void mutate("setRoleGrant",{discordId:row.discordId,roleKey:row.roleKey,active,reason:why},(active?"Reactivate":"Revoke")+" this staff grant? This action is audit logged.","POST");}}>{row.active?"Revoke":"Reactivate"}</button></td></tr>)}</tbody></>
         :<><thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Target</th><th>Details</th><th>Source</th></tr></thead><tbody>{data.rows.map(row=><tr key={row.id}><td>{new Date(row.createdAt).toLocaleString()}</td><td>{row.actorName}<small>{row.actorDiscordId}</small></td><td>{row.action}</td><td>{row.targetType}: {row.targetId}</td><td>{row.details||"—"}</td><td>{row.source}</td></tr>)}</tbody></>}
       </table></div>}
       {data&&data.totalPages>1&&<nav className="admin-operations-pagination" aria-label="Table pages"><button type="button" className="hire-secondary" disabled={page<=1||loading} onClick={()=>setPage(current=>Math.max(1,current-1))}><ChevronLeft size={14}/> Previous</button><span>Page {data.page} of {data.totalPages} · {data.total.toLocaleString()} records</span><button type="button" className="hire-secondary" disabled={page>=data.totalPages||loading} onClick={()=>setPage(current=>Math.min(data.totalPages,current+1))}>Next <ChevronRight size={14}/></button></nav>}
