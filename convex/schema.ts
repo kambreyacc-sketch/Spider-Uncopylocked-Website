@@ -86,6 +86,39 @@ export default defineSchema({
     reason: v.optional(v.string()),
     createdAt: v.number(),
   }).index("by_createdAt", ["createdAt"]).index("by_entity", ["entityType", "entityId"]),
+  platformApplications: defineTable({
+    applicationType: v.union(v.literal("Studio Registration"), v.literal("Posting Access"), v.literal("Content Creator"), v.literal("Staff Application"), v.literal("Hiring Access")),
+    applicantDiscordId: v.string(),
+    applicantName: v.string(),
+    title: v.string(),
+    summary: v.string(),
+    links: v.array(v.string()),
+    answers: v.array(v.object({ key: v.string(), label: v.string(), value: v.string() })),
+    status: v.union(v.literal("pending"), v.literal("in_review"), v.literal("approved"), v.literal("rejected")),
+    decisionReason: v.optional(v.string()),
+    reviewedBy: v.optional(v.string()),
+    reviewedByName: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    reviewedAt: v.optional(v.number()),
+  }).index("by_applicant_createdAt", ["applicantDiscordId", "createdAt"])
+    .index("by_status_createdAt", ["status", "createdAt"])
+    .index("by_type_status", ["applicationType", "status"]),
+  userRestrictions: defineTable({
+    targetDiscordId: v.string(),
+    targetDisplayName: v.string(),
+    restrictionType: v.union(v.literal("warning"), v.literal("restricted"), v.literal("temporary_ban"), v.literal("permanent_ban"), v.literal("upload_ban"), v.literal("posting_ban")),
+    reason: v.string(),
+    status: v.union(v.literal("active"), v.literal("revoked")),
+    expiresAt: v.optional(v.number()),
+    actorDiscordId: v.string(),
+    actorName: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    revokedAt: v.optional(v.number()),
+    revokedBy: v.optional(v.string()),
+  }).index("by_target_status", ["targetDiscordId", "status"])
+    .index("by_status_createdAt", ["status", "createdAt"]),
   // Stripe customer mappings contain provider identifiers only; never store card numbers or CVCs.
   billingCustomers: defineTable({
     discordId: v.string(),
