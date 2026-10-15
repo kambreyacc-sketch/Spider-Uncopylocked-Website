@@ -36,7 +36,7 @@ export const byUsername = query({
 
 export const mine = query({
   args: { discordId: v.string() },
-  handler: async (ctx, args) => await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).collect(),
+  handler: async (ctx, args) => (await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).collect()).filter(d => d.status === "approved"),
 });
 
 export const submit = mutation({
