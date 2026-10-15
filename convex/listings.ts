@@ -1,9 +1,11 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
+function assertAdminSecret(secret: string) { const expected = process.env.ADMIN_API_SECRET; if (!expected || secret.length !== expected.length || secret !== expected) throw new Error("Unauthorized listing upload."); }
+
 export const generateUploadUrl = mutation({
-  args: {},
-  handler: async (ctx) => await ctx.storage.generateUploadUrl(),
+  args: { adminSecret: v.string() },
+  handler: async (ctx, args) => { assertAdminSecret(args.adminSecret); return await ctx.storage.generateUploadUrl(); },
 });
 
 export const publicListings = query({
