@@ -31,16 +31,21 @@ export async function POST(request: Request) {
   if (typeof body.type !== "string" || !types.includes(body.type as typeof types[number])) return NextResponse.json({ error: "Choose a valid application type." }, { status: 400 });
   if (typeof body.subject !== "string" || typeof body.answers !== "object" || !body.answers || Array.isArray(body.answers)) return NextResponse.json({ error: "Fill in the required application fields." }, { status: 400 });
   try {
-    const result = await db.client.mutation(api.applications.submit, {
+    const intent = body.intent === "draft" ? "draft" : "submit";
+    const args = {
       adminSecret: db.secret,
+      ...(Number.isSafeInteger(body.applicationNumber) && Number(body.applicationNumber) > 0 ? { applicationNumber: Number(body.applicationNumber) } : {}),
       type: body.type as typeof types[number],
       subject: body.subject.trim().slice(0, 121),
       answers: body.answers,
       applicantDiscordId: user.id,
       applicantName: user.displayName || user.username,
       ...(user.avatar ? { applicantAvatar: user.avatar } : {}),
-    });
-    return NextResponse.json(result, { status: 201, headers: { "Cache-Control": "no-store, max-age=0" } });
+    };
+    const result = intent === "draft"
+      ? await db.client.mutation(api.applications.saveDraft, args)
+      : await db.client.mutation(api.applications.submit, args);
+    return NextResponse.json(result, { status: intent === "draft" ? 200 : 201, headers: { "Cache-Control": "no-store, max-age=0" } });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Application submission failed.";
     const expected = /Application title|Application answers|Sign in|active application|application limit|too large/i.test(message);
