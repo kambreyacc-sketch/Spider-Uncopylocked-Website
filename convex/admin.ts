@@ -208,9 +208,9 @@ export const listUserRestrictions = query({
     assertAdminSecret(args.adminSecret);
     const now = Date.now();
     const rows = args.targetDiscordId
-      ? await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.targetDiscordId!).eq("status", "active")).order("desc").take(250)
+      ? await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.targetDiscordId!)).order("desc").take(250)
       : await ctx.db.query("userRestrictions").withIndex("by_status_createdAt", q => q.eq("status", "active")).order("desc").take(500);
-    return rows.filter(r => r.expiresAt === undefined || r.expiresAt > now);
+    return rows.filter(r => r.status === "active" && (r.expiresAt === undefined || r.expiresAt > now));
   }
 });
 
@@ -219,7 +219,7 @@ export const getActiveRestrictionsForUser = query({
   handler: async (ctx, args) => {
     assertAdminSecret(args.adminSecret);
     const now = Date.now();
-    const rows = await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.targetDiscordId).eq("status", "active")).collect();
+    const rows = await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.targetDiscordId)).collect();
     return rows.filter(r => r.expiresAt === undefined || r.expiresAt > now);
   }
 });
