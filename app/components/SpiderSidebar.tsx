@@ -26,6 +26,9 @@ import {
   Menu,
   X,
   LogIn,
+  LifeBuoy,
+  ClipboardList,
+  FileCheck2,
 } from "lucide-react";
 
 const ADMIN_DISCORD_ID = "1337293227820322878";
@@ -39,6 +42,7 @@ type NavigationItem = {
 const workspace: NavigationItem[] = [
   { href: "/", label: "Home", Icon: Home },
   { href: "/messages", label: "Messages", Icon: MessagesSquare },
+  { href: "/support", label: "Support Center", Icon: LifeBuoy },
 ];
 const discover: NavigationItem[] = [
   { href: "/store", label: "Creator Store", Icon: ShoppingBag },
@@ -56,6 +60,9 @@ const work: NavigationItem[] = [
   { href: "/post-job", label: "Post a Job", Icon: UploadCloud },
 ];
 const creatorTools: NavigationItem[] = [
+  { href: "/applications", label: "My Applications", Icon: ClipboardList },
+  { href: "/apply", label: "Apply for Access", Icon: FileCheck2 },
+  { href: "/tickets", label: "My Tickets", Icon: LifeBuoy },
   { href: "/resources/my", label: "My Uploads", Icon: LibraryBig },
   {
     href: "/become-developer",
