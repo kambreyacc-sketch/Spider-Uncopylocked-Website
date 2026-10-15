@@ -289,6 +289,74 @@ export const review = mutation({
         });
       }
     }
+    if (args.status === "Approved" && application.type === "Studio registration") {
+      const answers = (application.answers && typeof application.answers === "object" ? application.answers : {}) as Record<string, unknown>;
+      const read = (key: string, max: number) => typeof answers[key] === "string" ? (answers[key] as string).trim().slice(0, max) : "";
+      const name = read("studioName", 60);
+      const slug = read("slug", 32).toLowerCase();
+      const description = read("description", 1200);
+      const specialties = read("specialties", 500).split(",").map(item => item.trim()).filter(Boolean).slice(0, 10);
+      if (name.length < 3 || !/^[a-z0-9](?:[a-z0-9-]{1,30}[a-z0-9])$/.test(slug) || description.length < 20 || specialties.length === 0) {
+        throw new Error("Studio application is missing a valid name, handle, description, or specialty list. Request changes before approval.");
+      }
+      const existingStudio = await ctx.db.query("studios").withIndex("by_slug", (q: any) => q.eq("slug", slug)).unique();
+      if (existingStudio && existingStudio.ownerDiscordId !== application.applicantDiscordId) {
+        throw new Error("That studio handle is already in use. Request a different handle before approving.");
+      }
+      if (!existingStudio) {
+        const robloxUrl = read("robloxUrl", 500), discordUrl = read("discordUrl", 500);
+        if (robloxUrl && (!/^https:\/\//i.test(robloxUrl) || !/roblox\.com\//i.test(robloxUrl))) throw new Error("The submitted Roblox link is invalid. Request changes before approving.");
+        if (discordUrl && (!/^https:\/\//i.test(discordUrl) || !/(discord\.gg|discord\.com\/invite)/i.test(discordUrl))) throw new Error("The submitted Discord link is invalid. Request changes before approving.");
+        await ctx.db.insert("studios", {
+          name, slug, description, specialties,
+          ownerDiscordId: application.applicantDiscordId,
+          ownerName: application.applicantName,
+          ...(application.applicantAvatar ? { ownerAvatar: application.applicantAvatar } : {}),
+          ...(robloxUrl ? { robloxUrl } : {}),
+          ...(discordUrl ? { discordUrl } : {}),
+          status: "active", createdAt: now, updatedAt: now,
+        });
+        await ctx.db.insert("moderationAuditEvents", {
+          actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0, 100),
+          action: "studio_created_from_approved_application", targetType: "studio",
+          targetId: slug, details: "Application #" + application.applicationNumber, createdAt: now,
+        });
+      }
+    }
+
+    if (args.status === "Approved" && application.type === "Discord staff role") {
+      const answers = (application.answers && typeof application.answers === "object" ? application.answers : {}) as Record<string, unknown>;
+      const requestedRole = typeof answers.role === "string" ? answers.role.trim() : "";
+      const allowedRoles: Record<string, string> = {
+        "Support Staff": "support",
+        "Reviewer": "review",
+        "Moderator": "moderate",
+        "Senior Moderator": "moderation_manage",
+        "Management": "staff_manage",
+      };
+      const roleKey = allowedRoles[requestedRole];
+      if (!roleKey) throw new Error("This staff role is not eligible for application-based approval. Owner/Admin roles can only be configured by the repository owner.");
+      const existingGrant = await ctx.db.query("websiteRoleGrants")
+        .withIndex("by_discordId_roleKey", (q: any) => q.eq("discordId", application.applicantDiscordId).eq("roleKey", roleKey)).unique();
+      if (existingGrant) {
+        await ctx.db.patch(existingGrant._id, {
+          active: true, grantedByDiscordId: args.actorDiscordId, grantedByName: args.actorName.slice(0, 100),
+          applicationNumber: application.applicationNumber, updatedAt: now,
+        });
+      } else {
+        await ctx.db.insert("websiteRoleGrants", {
+          discordId: application.applicantDiscordId, roleKey,
+          grantedByDiscordId: args.actorDiscordId, grantedByName: args.actorName.slice(0, 100),
+          applicationNumber: application.applicationNumber, active: true, createdAt: now, updatedAt: now,
+        });
+      }
+      await ctx.db.insert("moderationAuditEvents", {
+        actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0, 100),
+        action: "staff_role_granted_from_approved_application", targetType: "member_role",
+        targetId: application.applicantDiscordId, details: requestedRole + " · Application #" + application.applicationNumber, createdAt: now,
+      });
+    }
+
     return { success: true, applicationNumber: application.applicationNumber, status: args.status };
   },
 });
