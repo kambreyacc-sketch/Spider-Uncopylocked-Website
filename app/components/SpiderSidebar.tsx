@@ -51,6 +51,7 @@ const discover: NavigationItem[] = [
   { href: "/team", label: "Meet the Team", Icon: UsersRound },
 ];
 const work: NavigationItem[] = [
+  { href: "/commissions", label: "Commissions", Icon: BriefcaseBusiness },
   { href: "/jobs", label: "Jobs", Icon: BriefcaseBusiness },
   { href: "/post-job", label: "Post a Job", Icon: UploadCloud },
 ];
