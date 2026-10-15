@@ -55,10 +55,10 @@ export async function POST(request: Request) {
         adminSecret: db.secret,
         senderDiscordId: profile.id,
         senderName: profile.displayName || profile.username,
-        senderAvatar: profile.avatar || undefined,
+        ...(profile.avatar ? { senderAvatar: profile.avatar } : {}),
         recipientDiscordId,
-        contextType: typeof body.contextType === "string" ? body.contextType.slice(0, 32) : undefined,
-        contextTitle: typeof body.contextTitle === "string" ? body.contextTitle.slice(0, 120) : undefined,
+        ...(typeof body.contextType === "string" ? { contextType: body.contextType.slice(0, 32) } : {}),
+        ...(typeof body.contextTitle === "string" ? { contextTitle: body.contextTitle.slice(0, 120) } : {}),
       });
       return NextResponse.json({ success: true, conversationId: result.id, created: result.created });
     }
