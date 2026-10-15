@@ -27,3 +27,21 @@ export async function POST(request:Request){
   return NextResponse.json({ok:true,reference});
  }catch{return NextResponse.json({error:"The report could not be saved. Check that the latest Convex schema and functions are deployed."},{status:503})}
 }
+
+
+export async function GET() {
+ const secret=process.env.SESSION_SECRET, convexUrl=process.env.NEXT_PUBLIC_CONVEX_URL, writeKey=process.env.REPORT_WRITE_SECRET;
+ const raw=(await cookies()).get("spider_session")?.value;
+ if(!secret||!raw)return NextResponse.json({error:"Sign in with Discord to view your reports."},{status:401});
+ const user=sessionUser(raw,secret);
+ if(!user)return NextResponse.json({error:"Your session expired. Please sign in again."},{status:401});
+ if(!convexUrl||!writeKey)return NextResponse.json({error:"Report storage is not configured yet."},{status:503});
+ try{
+  const client=new ConvexHttpClient(convexUrl);
+  const reports=await client.query(api.scamReports.mine,{writeKey,reporterDiscordId:user.id});
+  return NextResponse.json({reports},{headers:{"Cache-Control":"no-store, max-age=0"}});
+ }catch(error){
+  console.error("Private report history lookup failed:",error);
+  return NextResponse.json({error:"Your report history is temporarily unavailable."},{status:503});
+ }
+}
