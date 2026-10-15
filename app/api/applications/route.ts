@@ -5,7 +5,7 @@ import { getSpiderProfile } from "../../../lib/session";
 export const dynamic = "force-dynamic";
 const types = ["Studio Registration", "Posting Access", "Content Creator", "Staff Application", "Hiring Access"];
 function config() { const url = process.env.NEXT_PUBLIC_CONVEX_URL || process.env.CONVEX_URL; const secret = process.env.CONVEX_ADMIN_API_SECRET; return url && secret ? { url, secret } : null; }
-async function restrictions(client: ConvexHttpClient, secret: string, userId: string) {
+async function restrictions(client: ConvexHttpClient, secret: string, userId: string): Promise<Array<{ restrictionType: string; expiresAt?: number }>> {
   return await client.query(api.admin.getActiveRestrictionsForUser, { adminSecret: secret, targetDiscordId: userId });
 }
 export async function GET() {
