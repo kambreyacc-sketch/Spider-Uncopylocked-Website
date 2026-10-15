@@ -32,15 +32,15 @@ export default function CreateStudioPage() {
       });
       const result = await response.json();
       if (!response.ok) {
-        setMessage(result.error || "We could not create your studio. Please try again.");
+        setMessage(result.error || "We could not submit your studio request. Please try again.");
         return;
       }
       setSuccess(true);
-      setMessage("Studio created and saved to Spider. Opening your studio directory…");
-      router.push("/studios?created=" + encodeURIComponent(result.studio.slug));
+      setMessage("Studio application #" + result.applicationNumber + " submitted. Your studio will be created only after an authorized reviewer approves the request.");
+      router.push("/applications?submitted=" + encodeURIComponent(result.applicationNumber));
       router.refresh();
     } catch {
-      setMessage("The studio service could not be reached. Your form has not been published; please try again.");
+      setMessage("The application service could not be reached. Your request was not saved; please try again.");
     } finally {
       setSaving(false);
     }
@@ -55,7 +55,7 @@ export default function CreateStudioPage() {
           <div>
             <span className="spider-eyebrow">SPIDER / STUDIO SETUP</span>
             <h1>Create a studio</h1>
-            <p>Give your team a home for its identity, specialties, and Roblox projects.</p>
+            <p>Submit a studio profile for review. It will appear in the directory only after approval.</p>
           </div>
         </header>
         <form className="hire-form" onSubmit={submit}>
@@ -88,7 +88,7 @@ export default function CreateStudioPage() {
           </label>
           <button type="submit" className="hire-primary" disabled={saving}>
             {saving ? <LoaderCircle size={15} className="spin" /> : success ? <CheckCircle2 size={15} /> : <Building2 size={15} />}
-            {saving ? "Creating studio…" : "Create studio"}
+            {saving ? "Submitting request…" : "Submit studio request"}
           </button>
           {message && <p role="status" className="form-disclaimer">{message}</p>}
         </form>
