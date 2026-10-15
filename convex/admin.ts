@@ -263,3 +263,12 @@ export const revokeUserRestriction = mutation({
     return { success: true, restrictionId: args.restrictionId };
   }
 });
+
+export const getDeveloperProfileForUser = query({
+  args: { adminSecret: v.string(), discordId: v.string() },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    if (!/^\\d{5,25}$/.test(args.discordId)) throw new Error("Invalid Discord identity.");
+    return await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).collect();
+  },
+});
