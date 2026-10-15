@@ -562,7 +562,7 @@ export const setWebsiteRoleGrant = mutation({
     if (reason.length < 3 || reason.length > 1000) throw new Error("A reason between 3 and 1,000 characters is required.");
     const now = Date.now();
     const existing = await ctx.db.query("websiteRoleGrants")
-      .withIndex("by_discordId_roleKey", q => q.eq("discordId", discordId).eq("roleKey", args.roleKey))
+      .withIndex("by_discordId_roleKey", (q: any) => q.eq("discordId", discordId).eq("roleKey", args.roleKey))
       .unique();
     if (!args.active && !existing) throw new Error("This member does not have that role grant.");
     if (existing) {
