@@ -91,16 +91,25 @@ export const report = mutation({
 });
 
 export const postJob = mutation({
-  args: { title: v.string(), description: v.string(), craft: v.string(), budgetMin: v.number(), budgetMax: v.number(), deadline: v.optional(v.string()), discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string() },
+  args: { adminSecret: v.string(), title: v.string(), description: v.string(), craft: v.string(), budgetMin: v.number(), budgetMax: v.number(), deadline: v.optional(v.string()), discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string() },
   handler: async (ctx,args) => {
-    if (!args.posterDiscordId.trim()) throw new Error("Sign in with Discord before posting a job.");
+    const expected = process.env.ADMIN_API_SECRET;
+    if (!expected || args.adminSecret.length !== expected.length || args.adminSecret !== expected) throw new Error("Unauthorized job posting service request.");
+    if (!/^\\d{5,25}$/.test(args.posterDiscordId)) throw new Error("Sign in with Discord before posting a job.");
+    const activeRestrictions = await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.posterDiscordId).eq("status", "active")).collect();
+    const now = Date.now();
+    const active = activeRestrictions.filter(r => r.expiresAt === undefined || r.expiresAt > now);
+    if (active.some(r => ["restricted", "temporary_ban", "permanent_ban", "posting_ban"].includes(r.restrictionType))) throw new Error("Your account is not allowed to post jobs while an active restriction applies.");
+    const applications = await ctx.db.query("platformApplications").withIndex("by_applicant_createdAt", q => q.eq("applicantDiscordId", args.posterDiscordId)).collect();
+    if (!applications.some(a => a.applicationType === "Posting Access" && a.status === "approved")) throw new Error("You need approved Posting Access before publishing jobs. Apply at /applications.");
+    const { adminSecret, ...jobArgs } = args;
     if (args.title.trim().length < 5 || args.title.length > 100) throw new Error("Job title must be 5–100 characters.");
     if (!args.description.trim() || args.description.length > 3000) throw new Error("Description is required and must be 3,000 characters or fewer.");
     if (!args.craft.trim() || args.craft.length > 40) throw new Error("Choose a craft.");
     if (!Number.isFinite(args.budgetMin) || !Number.isFinite(args.budgetMax) || args.budgetMin < 0 || args.budgetMax < args.budgetMin || args.budgetMax > 1000000) throw new Error("Enter a valid budget range.");
     if (!args.discordContact.trim() || args.discordContact.length > 80) throw new Error("Add a Discord contact.");
     if (args.deadline && !/^\d{4}-\d{2}-\d{2}$/.test(args.deadline)) throw new Error("Choose a valid deadline.");
-    return await ctx.db.insert("jobs", { ...args, title: args.title.trim(), status: "open", createdAt: Date.now() });
+    return await ctx.db.insert("jobs", { ...jobArgs, title: args.title.trim(), posterName: args.posterName.trim().slice(0, 100), status: "open", createdAt: now });
   },
 });
 
