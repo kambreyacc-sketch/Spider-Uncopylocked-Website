@@ -6,6 +6,7 @@ const statusValidator = v.union(
   v.literal("approved"),
   v.literal("rejected")
 );
+const contentStatusValidator = v.union(v.literal("pending"), v.literal("active"), v.literal("rejected"));
 
 function assertAdminSecret(secret: string) {
   const expected = process.env.ADMIN_API_SECRET;
@@ -100,7 +101,7 @@ export const reviewResource = mutation({
   args: {
     adminSecret: v.string(),
     resourceId: v.id("resources"),
-    status: statusValidator,
+    status: contentStatusValidator,
     reason: v.optional(v.string()),
     reviewerDiscordId: v.string(),
     reviewerName: v.string(),
@@ -122,7 +123,7 @@ export const reviewListing = mutation({
   args: {
     adminSecret: v.string(),
     listingId: v.id("listings"),
-    status: statusValidator,
+    status: contentStatusValidator,
     reason: v.optional(v.string()),
     reviewerDiscordId: v.string(),
     reviewerName: v.string(),
