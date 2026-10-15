@@ -35,12 +35,16 @@ export const byUsername = query({
 });
 
 export const mine = query({
-  args: { discordId: v.string() },
-  handler: async (ctx, args) => await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).collect(),
+  args: { adminSecret: v.string(), discordId: v.string() },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    return await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).collect();
+  },
 });
 
 export const submit = mutation({
   args: {
+    adminSecret: v.string(),
     username: v.string(), displayName: v.string(), discordId: v.string(), avatarUrl: v.string(), headline: v.string(), bio: v.string(),
     crafts: v.array(craft), skills: v.array(v.string()), services: v.array(service),
     rateType: v.union(v.literal("hourly"),v.literal("project"),v.literal("negotiable")), rateAmount: v.optional(v.number()),
@@ -48,6 +52,8 @@ export const submit = mutation({
     portfolio: v.array(portfolioItem), videoUrl: v.optional(v.string()), discordUsername: v.string(), robloxUrl: v.string(),
   },
   handler: async (ctx,args) => {
+    assertAdminSecret(args.adminSecret);
+    const { adminSecret: _adminSecret, ...profileArgs } = args;
     const username = args.username.trim().toLowerCase().replace(/^@/,"");
     if (!/^[a-z0-9_]{3,20}$/.test(username)) throw new Error("Username must be 3–20 letters, numbers, or underscores.");
     if (!args.discordId.trim() || !args.displayName.trim()) throw new Error("Sign in with Discord and add a display name.");
@@ -63,15 +69,16 @@ export const submit = mutation({
     const existingName = await ctx.db.query("developers").withIndex("by_username", q => q.eq("username", username)).first();
     if (existingName && existingName.discordId !== args.discordId) throw new Error("That developer username is already taken.");
     const mine = await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).first();
-    const data = { ...args, username, displayName: args.displayName.trim(), headline: args.headline.trim(), bio: args.bio.trim(), status: "approved" as const, verified: mine?.verified ?? false, createdAt: mine?.createdAt ?? Date.now(), updatedAt: Date.now() };
+    const data = { ...profileArgs, username, displayName: args.displayName.trim(), headline: args.headline.trim(), bio: args.bio.trim(), status: "pending" as const, reviewReason: undefined, verified: mine?.verified ?? false, createdAt: mine?.createdAt ?? Date.now(), updatedAt: Date.now() };
     if (mine) return await ctx.db.patch(mine._id, data);
     return await ctx.db.insert("developers", data);
   },
 });
 
 export const removeMine = mutation({
-  args: { discordId: v.string(), developerId: v.id("developers") },
+  args: { adminSecret: v.string(), discordId: v.string(), developerId: v.id("developers") },
   handler: async (ctx,args) => {
+    assertAdminSecret(args.adminSecret);
     const d = await ctx.db.get(args.developerId);
     if (!d || d.discordId !== args.discordId) throw new Error("You can only delete your own developer profile.");
     await ctx.db.delete(args.developerId);
@@ -80,13 +87,15 @@ export const removeMine = mutation({
 });
 
 export const report = mutation({
-  args: { developerId: v.id("developers"), reporterDiscordId: v.string(), reason: v.string(), details: v.string() },
+  args: { adminSecret: v.string(), developerId: v.id("developers"), reporterDiscordId: v.string(), reason: v.string(), details: v.string() },
   handler: async (ctx,args) => {
+    assertAdminSecret(args.adminSecret);
+    const { adminSecret: _adminSecret, ...reportArgs } = args;
     if (!args.reporterDiscordId.trim()) throw new Error("Sign in with Discord to report a profile.");
     if (args.reason.trim().length < 3 || args.reason.length > 100 || args.details.length > 1000) throw new Error("Add a valid report reason.");
     const developer = await ctx.db.get(args.developerId);
     if (!developer || developer.status !== "approved") throw new Error("That profile is unavailable.");
-    return await ctx.db.insert("developerReports", { ...args, createdAt: Date.now(), status: "open" });
+    return await ctx.db.insert("developerReports", { ...reportArgs, createdAt: Date.now(), status: "open" });
   },
 });
 
