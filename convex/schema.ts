@@ -16,6 +16,7 @@ export default defineSchema({
     thumbnailStorageId: v.id("_storage"), previewStorageIds: v.array(v.id("_storage")), fileStorageId: v.id("_storage"),
     fileName: v.string(), fileSize: v.number(), fileLink: v.optional(v.string()), price: v.number(),
     creatorName: v.string(), creatorDiscordId: v.string(), status: v.union(v.literal("pending"),v.literal("active"),v.literal("rejected")),
+    scanStatus: v.optional(v.union(v.literal("not_configured"), v.literal("pending"), v.literal("clean"), v.literal("blocked"), v.literal("needs_review"))),
     reviewReason: v.optional(v.string()), createdAt: v.number(), reviewedAt: v.optional(v.number()),
   }).index("by_status_createdAt", ["status","createdAt"]).index("by_creator_createdAt", ["creatorDiscordId","createdAt"]).index("by_creator_title", ["creatorDiscordId","title"]),
   developers: defineTable({
