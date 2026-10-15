@@ -176,3 +176,63 @@ export const reviewJob = mutation({
     return { success: true, id: job._id, status: args.status };
   },
 });
+
+
+export const overviewCounts = query({
+  args: { adminSecret: v.string() },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const [
+      developers, studios, jobs, applications, scamReports, tickets,
+      resources, listings, newApplications, supportTickets,
+    ] = await Promise.all([
+      ctx.db.query("developers").collect(),
+      ctx.db.query("studios").collect(),
+      ctx.db.query("jobs").collect(),
+      ctx.db.query("applicationRecords").collect(),
+      ctx.db.query("scamReports").collect(),
+      ctx.db.query("supportTickets").collect(),
+      ctx.db.query("resources").collect(),
+      ctx.db.query("listings").collect(),
+      ctx.db.query("applicationRecords").collect(),
+      ctx.db.query("supportTickets").collect(),
+    ]);
+    const knownIds = new Set<string>();
+    for (const row of developers) knownIds.add(row.discordId);
+    for (const row of studios) knownIds.add(row.ownerDiscordId);
+    for (const row of jobs) knownIds.add(row.posterDiscordId);
+    for (const row of applications) knownIds.add(row.applicantDiscordId);
+    for (const row of tickets) knownIds.add(row.ownerDiscordId);
+    for (const row of scamReports) knownIds.add(row.reporterDiscordId);
+    const pendingApplications = newApplications.filter(row => ["Submitted", "Under Review", "Changes Requested", "Escalated"].includes(row.status)).length;
+    const openSupport = supportTickets.filter(row => ["Open", "In Review", "Waiting on User", "Escalated"].includes(row.status)).length;
+    const pendingContent = resources.filter(row => row.status === "pending").length
+      + listings.filter(row => row.status === "pending").length
+      + jobs.filter(row => row.moderationStatus === "pending").length;
+    const pendingDeveloperProfiles = developers.filter(row => row.status === "pending").length;
+    return {
+      stats: {
+        users: knownIds.size,
+        developers: developers.filter(row => row.status === "approved").length,
+        studios: studios.filter(row => row.status === "active").length,
+        jobs: jobs.filter(row => row.status === "open" && row.moderationStatus !== "pending" && row.moderationStatus !== "rejected").length,
+        applications: applications.length,
+        reports: scamReports.length,
+        pending: pendingApplications + pendingContent + pendingDeveloperProfiles,
+        support: openSupport,
+      },
+      definitions: {
+        users: "Distinct Discord IDs found in creator, studio, job, application, support, and report records; not a total of all Discord sign-ins.",
+        developers: "Approved developer profiles",
+        studios: "Active studios",
+        jobs: "Open jobs visible on the public board (legacy records without a moderation status remain visible)",
+        applications: "All persisted application records, including drafts and withdrawn applications",
+        reports: "All persisted scam/safety reports",
+        pending: "Submitted/review/changes-requested/escalated applications plus pending resource, listing, job, and developer-profile records",
+        support: "Support tickets not yet resolved or closed",
+      },
+      generatedAt: Date.now(),
+    };
+  },
+});
+
