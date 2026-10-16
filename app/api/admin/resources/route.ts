@@ -5,7 +5,7 @@ import { getSpiderProfile, isSpiderAdmin } from "../../../../lib/session";
 export const dynamic = "force-dynamic";
 function config() {
   const url = process.env.NEXT_PUBLIC_CONVEX_URL || process.env.CONVEX_URL;
-  const secret = process.env.CONVEX_ADMIN_API_SECRET;
+  const secret = (process.env.CONVEX_ADMIN_API_SECRET || process.env.ADMIN_API_SECRET);
   return url && secret ? { url, secret } : null;
 }
 export async function GET() {
