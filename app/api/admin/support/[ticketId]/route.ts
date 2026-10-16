@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../../convex/_generated/api";
-import { getSpiderProfile, isSpiderAdmin } from "../../../../../lib/session";
+import { getSpiderProfile, isSpiderSupportStaff } from "../../../../../lib/session";
 export const dynamic = "force-dynamic";
 function config() {
   const url = process.env.NEXT_PUBLIC_CONVEX_URL || process.env.CONVEX_URL;
@@ -10,7 +10,7 @@ function config() {
 }
 type Context = { params: Promise<{ ticketId: string }> };
 export async function GET(_request: Request, context: Context) {
-  if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!(await isSpiderSupportStaff())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const cfg = config();
   if (!cfg) return NextResponse.json({ error: "Support database is not configured." }, { status: 503 });
   const { ticketId } = await context.params;
