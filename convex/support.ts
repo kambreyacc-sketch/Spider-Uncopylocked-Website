@@ -22,7 +22,7 @@ export const createTicket = mutation({
   args: {
     adminSecret: v.string(), category, subject: v.string(), reference: v.optional(v.string()),
     department: v.optional(v.string()), actionTaken: v.optional(v.string()), description: v.string(),
-    applicantDiscordId: v.string(), applicantName: v.string()
+    attachments: v.optional(v.array(v.string())), applicantDiscordId: v.string(), applicantName: v.string()
   },
   handler: async (ctx, args) => {
     assertAdminSecret(args.adminSecret);
@@ -41,14 +41,14 @@ export const createTicket = mutation({
       reference: args.reference?.trim().slice(0, 500) || undefined,
       department: args.department?.trim().slice(0, 100) || undefined,
       actionTaken: args.actionTaken?.trim().slice(0, 200) || undefined,
-      description, applicantDiscordId: args.applicantDiscordId,
+      description, attachments: args.attachments?.slice(0, 3), applicantDiscordId: args.applicantDiscordId,
       applicantName: args.applicantName.trim().slice(0, 100) || "Discord member",
       status: "open", priority: "normal", createdAt: now, updatedAt: now, lastMessageAt: now
     });
     await ctx.db.insert("supportMessages", {
       ticketId, authorDiscordId: args.applicantDiscordId,
       authorName: args.applicantName.trim().slice(0, 100) || "Discord member",
-      body: description, visibility: "public", createdAt: now
+      body: description, attachments: args.attachments?.slice(0, 3), visibility: "public", createdAt: now
     });
     await ctx.db.insert("supportAuditLogs", {
       ticketId, actorDiscordId: args.applicantDiscordId,
@@ -103,7 +103,7 @@ export const getTicket = query({
 export const addMessage = mutation({
   args: {
     adminSecret: v.string(), ticketId: v.id("supportTickets"), authorDiscordId: v.string(),
-    authorName: v.string(), body: v.string(), visibility: v.union(v.literal("public"), v.literal("internal"))
+    authorName: v.string(), body: v.string(), attachments: v.optional(v.array(v.string())), visibility: v.union(v.literal("public"), v.literal("internal"))
   },
   handler: async (ctx, args) => {
     assertAdminSecret(args.adminSecret);
@@ -116,7 +116,7 @@ export const addMessage = mutation({
     const authorName = args.authorName.trim().slice(0, 100) || "Spider support";
     await ctx.db.insert("supportMessages", {
       ticketId: args.ticketId, authorDiscordId: args.authorDiscordId, authorName,
-      body, visibility: args.visibility, createdAt: now
+      body, attachments: args.attachments?.slice(0, 3), visibility: args.visibility, createdAt: now
     });
     const isApplicant = args.authorDiscordId === ticket.applicantDiscordId;
     await ctx.db.patch(args.ticketId, {
