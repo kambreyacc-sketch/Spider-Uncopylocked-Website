@@ -89,7 +89,7 @@ export default function MessagesPage() {
     if (!user) return;
     setLoading(true);
     void loadMessages().finally(() => setLoading(false));
-    const timer = window.setInterval(() => { void loadMessages(); }, 5000);
+    const timer = window.setInterval(() => { if (document.visibilityState === "visible") void loadMessages(); }, 15000);
     return () => window.clearInterval(timer);
   }, [user, loadMessages, refreshToken]);
 
