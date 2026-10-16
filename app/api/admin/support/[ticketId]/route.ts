@@ -24,7 +24,7 @@ export async function GET(_request: Request, context: Context) {
   }
 }
 export async function POST(request: Request, context: Context) {
-  if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!(await isSpiderSupportStaff())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const user = await getSpiderProfile();
   const cfg = config();
   if (!user || !cfg) return NextResponse.json({ error: "Support service is not configured." }, { status: 503 });
@@ -38,7 +38,7 @@ export async function POST(request: Request, context: Context) {
   try {
     const result = await new ConvexHttpClient(cfg.url).mutation(api.support.addMessage, {
       adminSecret: cfg.secret, ticketId: ticketId as any, authorDiscordId: user.id,
-      authorName: user.displayName || user.username, body: body.body.trim(), visibility,
+      authorName: user.displayName || user.username, body: body.body.trim(), attachments: Array.isArray(body.attachments) ? body.attachments.filter((x): x is string => typeof x === "string" && /^data:image\/(png|jpeg|webp|gif);base64,/.test(x) && x.length <= 1400000).slice(0, 3) : undefined, visibility,
     });
     return NextResponse.json(result, { headers: { "Cache-Control": "no-store, max-age=0" } });
   } catch (error) {
