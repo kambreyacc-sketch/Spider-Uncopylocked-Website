@@ -65,6 +65,10 @@ function StudioCard({ studio, owned = false }: { studio: Studio; owned?: boolean
       <div className="studios-directory-specialties">
         {studio.specialties.map(tag => <span key={tag}>{tag}</span>)}
       </div>
+      <div className="studio-card-actions">
+        <Link href={"/studios/" + encodeURIComponent(studio.slug)} className="studio-card-link">View studio <ArrowRight size={14} /></Link>
+        {owned && <Link href={"/studios/manage/" + encodeURIComponent(studio.slug)} className="studio-card-link studio-card-manage">Manage studio <ArrowUpRight size={14} /></Link>}
+      </div>
       <div className="studios-directory-footer">
         <span><Users size={14} /> {studio.ownerName}</span>
         <div>
