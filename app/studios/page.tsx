@@ -50,7 +50,7 @@ function StudioCard({ studio, owned = false }: { studio: Studio; owned?: boolean
       <div className="studios-directory-top">
         <div className="studios-directory-avatar">
           {studio.ownerAvatar ? (
-            <img src={studio.ownerAvatar} alt="" loading="lazy" onError={event => { event.currentTarget.style.display = "none"; }} />
+            <img src={studio.ownerAvatar} alt="" loading="lazy" />
           ) : (
             <Building2 size={23} />
           )}
