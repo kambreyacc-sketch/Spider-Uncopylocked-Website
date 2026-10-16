@@ -38,7 +38,7 @@ export async function POST(request: Request, context: Context) {
   try {
     const result = await new ConvexHttpClient(cfg.url).mutation(api.support.addMessage, {
       adminSecret: cfg.secret, ticketId: ticketId as any, authorDiscordId: user.id,
-      authorName: user.displayName || user.username, body: body.body.trim(), attachments: Array.isArray(body.attachments) ? body.attachments.filter((x): x is string => typeof x === "string" && /^data:image\/(png|jpeg|webp|gif);base64,/.test(x) && x.length <= 1400000).slice(0, 3) : undefined, visibility,
+      authorName: user.displayName || user.username, body: body.body.trim(), attachments: Array.isArray(body.attachments) ? body.attachments.filter((x): x is string => typeof x === "string" && /^data:image\/(png|jpeg|webp|gif);base64,/.test(x) && x.length <= 300000).slice(0, 3) : undefined, visibility,
     });
     return NextResponse.json(result, { headers: { "Cache-Control": "no-store, max-age=0" } });
   } catch (error) {
