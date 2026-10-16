@@ -68,7 +68,6 @@ const creatorTools: NavigationItem[] = [
   { href: "/spider-ai", label: "Spider AI", Icon: Sparkles },
 ];
 const safety: NavigationItem[] = [
-  { href: "/support", label: "Support Center / Tickets", Icon: Ticket },
   { href: "/report-scam", label: "Report a Scam", Icon: ShieldCheck },
   { href: "/guidelines", label: "Safety & FAQ", Icon: ShieldCheck },
 ];
@@ -314,6 +313,15 @@ export default function SpiderSidebar() {
         </div>
 
         <div className="sidebar-bottom">
+          <Link
+            href="/support"
+            className={path === "/support" || path.startsWith("/support/") ? "active" : ""}
+            onClick={closeMobile}
+            title={collapsed ? "Support Center / Tickets" : undefined}
+          >
+            <Ticket size={16} />
+            <span className="sidebar-link-label">Support Center / Tickets</span>
+          </Link>
           {user?.id === ADMIN_DISCORD_ID && (
             <>
               <Link
