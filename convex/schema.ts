@@ -55,6 +55,32 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index("by_slug", ["slug"]).index("by_owner", ["ownerDiscordId"]).index("by_status_createdAt", ["status", "createdAt"]),
 
+  studioRoles: defineTable({
+    studioId: v.id("studios"),
+    title: v.string(),
+    description: v.string(),
+    roleType: v.union(v.literal("Full-time"), v.literal("Contract"), v.literal("Commission"), v.literal("Volunteer")),
+    compensation: v.string(),
+    status: v.union(v.literal("open"), v.literal("closed")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_studio_status_createdAt", ["studioId", "status", "createdAt"])
+    .index("by_studio_createdAt", ["studioId", "createdAt"]),
+  studioApplications: defineTable({
+    studioId: v.id("studios"),
+    roleId: v.id("studioRoles"),
+    applicantDiscordId: v.string(),
+    applicantName: v.string(),
+    portfolioUrl: v.optional(v.string()),
+    experience: v.optional(v.string()),
+    message: v.string(),
+    attachments: v.array(v.string()),
+    status: v.union(v.literal("new"), v.literal("reviewing"), v.literal("shortlisted"), v.literal("accepted"), v.literal("declined")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_studio_createdAt", ["studioId", "createdAt"])
+    .index("by_role_createdAt", ["roleId", "createdAt"])
+    .index("by_applicant_createdAt", ["applicantDiscordId", "createdAt"]),
   conversations: defineTable({
     participantOne: v.string(),
     participantTwo: v.string(),
