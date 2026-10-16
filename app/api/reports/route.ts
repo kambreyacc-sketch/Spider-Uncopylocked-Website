@@ -12,7 +12,7 @@ function sessionUser(raw:string,secret:string){
  try{const d=JSON.parse(Buffer.from(payload,"base64url").toString("utf8"));if(d.provider!=="discord"||!d.profile?.id||!d.issuedAt||Date.now()-d.issuedAt>7*24*60*60*1000)return null;return d.profile as {id:string;username:string}}catch{return null}
 }
 export async function POST(request:Request){
- const secret=process.env.SESSION_SECRET, convexUrl=process.env.NEXT_PUBLIC_CONVEX_URL, writeKey=process.env.REPORT_WRITE_SECRET;
+ const secret=process.env.SESSION_SECRET, convexUrl=process.env.NEXT_PUBLIC_CONVEX_URL || process.env.CONVEX_URL, writeKey=process.env.ADMIN_API_SECRET || process.env.REPORT_WRITE_SECRET;
  const raw=(await cookies()).get("spider_session")?.value;
  if(!secret||!raw)return NextResponse.json({error:"Sign in with Discord before submitting a report."},{status:401});
  const user=sessionUser(raw,secret); if(!user)return NextResponse.json({error:"Your session expired. Please sign in again."},{status:401});
