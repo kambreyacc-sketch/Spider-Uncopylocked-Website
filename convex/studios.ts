@@ -99,10 +99,15 @@ export const openRoles = query({
     assertAdminSecret(args.adminSecret);
     const studio = await ctx.db.query("studios").withIndex("by_slug", q => q.eq("slug", args.slug)).unique();
     if (!studio || studio.status !== "active") return [];
+    // Use the studio index and filter status in memory. This avoids the
+    // generated IndexRange typing issue with chained equality constraints.
     const roles = await ctx.db.query("studioRoles")
-      .withIndex("by_studio_status_createdAt", q => q.eq("studioId", studio._id).eq("status", "open"))
-      .order("desc").take(100);
-    return roles.map(({ _id, _creationTime, ...role }) => ({ id: _id, ...role }));
+      .withIndex("by_studio_createdAt", q => q.eq("studioId", studio._id))
+      .order("desc")
+      .take(100);
+    return roles
+      .filter(role => role.status === "open")
+      .map(({ _id, _creationTime, ...role }) => ({ id: _id, ...role }));
   },
 });
 
