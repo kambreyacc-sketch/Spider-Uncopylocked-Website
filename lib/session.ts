@@ -1,6 +1,8 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 export const ADMIN_DISCORD_ID = "1337293227820322878";
+export const SPIDER_ADMIN_DISCORD_IDS = new Set(["1337293227820322878", "1404024989208019086"]);
+export const SPIDER_SUPPORT_DISCORD_IDS = new Set(["1337293227820322878", "1404024989208019086", "1299695683955200051"]);
 export type SpiderProfile = { id:string; username:string; displayName:string; avatar:string };
 export async function getSpiderProfile(): Promise<SpiderProfile|null> {
  const secret=process.env.SESSION_SECRET; const raw=(await cookies()).get("spider_session")?.value;
@@ -14,4 +16,5 @@ export async function getSpiderProfile(): Promise<SpiderProfile|null> {
  if(data.provider!=="discord"||!data.profile?.id||!data.profile.username||!data.issuedAt||Date.now()-data.issuedAt>7*24*60*60*1000||data.issuedAt>Date.now()+60000)return null;
  return data.profile;}catch{return null}
 }
-export async function isSpiderAdmin(){const user=await getSpiderProfile();return !!user&&user.id===ADMIN_DISCORD_ID;}
+export async function isSpiderAdmin(){const user=await getSpiderProfile();return !!user&&SPIDER_ADMIN_DISCORD_IDS.has(user.id);}
+export async function isSpiderSupportStaff(){const user=await getSpiderProfile();return !!user&&SPIDER_SUPPORT_DISCORD_IDS.has(user.id);}
