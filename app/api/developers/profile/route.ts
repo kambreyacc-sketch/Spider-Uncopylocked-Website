@@ -3,7 +3,7 @@ import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../convex/_generated/api";
 import { getSpiderProfile } from "../../../../lib/session";
 export const dynamic = "force-dynamic";
-function config(){const url=process.env.NEXT_PUBLIC_CONVEX_URL||process.env.CONVEX_URL;const secret=process.env.CONVEX_ADMIN_API_SECRET;return url&&secret?{url,secret}:null;}
+function config(){const url=process.env.NEXT_PUBLIC_CONVEX_URL||process.env.CONVEX_URL;const secret=(process.env.CONVEX_ADMIN_API_SECRET || process.env.ADMIN_API_SECRET);return url&&secret?{url,secret}:null;}
 export async function GET(){
  const user=await getSpiderProfile();
  if(!user)return NextResponse.json({error:"Sign in with Discord to view your profile."},{status:401});
