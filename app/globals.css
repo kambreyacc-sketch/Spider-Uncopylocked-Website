@@ -2363,3 +2363,68 @@ a:hover { text-decoration-color: #a2a2a2; }
 .listing-no-preview>span { font:9px 'DM Mono',monospace; letter-spacing:.13em; color:#939393; }
 .listing-no-preview p { color:#8c8c8c; font-size:11px; margin:0; line-height:1.6; }
 @media(max-width:600px) { .listing-no-preview { min-height:135px; padding:16px; } }
+
+
+/* Studio hiring flow */
+.studio-card-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:15px 0 2px}
+.studio-card-link{display:inline-flex;align-items:center;gap:7px;border:1px solid #3a3a3d;border-radius:7px;padding:9px 12px;font-size:12px;font-weight:700;color:#f4f4f5;background:#18181a;transition:background .15s,border-color .15s}
+.studio-card-link:hover{background:#252527;border-color:#69696c}
+.studio-card-manage{background:#f4f4f5;color:#111113;border-color:#f4f4f5}
+.studio-card-manage:hover{background:#d8d8d8;color:#111113}
+.studio-detail-hero{display:flex;align-items:center;gap:18px;padding:28px;border:1px solid #29292d;border-radius:14px;background:linear-gradient(135deg,#171719,#0d0d0f);margin:18px 0 22px}
+.studio-detail-avatar{width:68px;height:68px;display:grid;place-items:center;flex-shrink:0;border:1px solid #3a3a3d;border-radius:12px;background:#202022;color:#c8c8c8;overflow:hidden}
+.studio-detail-avatar img{width:100%;height:100%;object-fit:cover}
+.studio-detail-main{flex:1;min-width:0}
+.studio-detail-main h1{font-size:clamp(26px,4vw,38px);margin:5px 0}
+.studio-detail-main p,.studio-detail-about p{color:#aaa;line-height:1.7;margin:0}
+.studio-detail-about,.studio-manage-panel{padding:23px;border:1px solid #29292d;border-radius:12px;background:#111113;margin:18px 0}
+.studio-detail-about h2,.studio-manage-panel h2{display:flex;align-items:center;gap:9px;margin:0 0 12px;font-size:18px}
+.studio-detail-about .studios-directory-specialties{margin-top:16px}
+.studio-external-links{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.studio-external-links a,.studio-application-links a{display:inline-flex;align-items:center;gap:6px;color:#dedede;font-size:12px;border:1px solid #333;border-radius:7px;padding:8px 10px}
+.studio-role-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.studio-role-card{padding:21px;border:1px solid #2b2b2e;border-radius:12px;background:linear-gradient(145deg,#151517,#0e0e10);min-width:0}
+.studio-role-card-head{display:flex;gap:12px;align-items:center}
+.studio-role-icon{width:38px;height:38px;border-radius:9px;background:#242426;border:1px solid #39393c;display:grid;place-items:center;color:#eee}
+.studio-role-card h3{font-size:16px;margin:0 0 4px}
+.studio-role-card-head p,.studio-manage-panel>p{font-size:12px;color:#999;margin:0}
+.studio-role-description{font-size:13px;line-height:1.7;color:#bcbcbc;white-space:pre-wrap;margin:18px 0}
+.studio-role-card .hire-primary{display:inline-flex;align-items:center;gap:7px;cursor:pointer;border:0}
+.studio-apply-backdrop{position:fixed;inset:0;z-index:1000;background:#000b;display:grid;place-items:center;padding:18px;overflow:auto}
+.studio-apply-modal{position:relative;width:min(650px,100%);max-height:calc(100vh - 36px);overflow:auto;background:#101012;border:1px solid #39393d;border-radius:14px;padding:27px;box-shadow:0 24px 90px #000b}
+.studio-apply-modal h2{font-size:24px;margin:8px 0 20px}
+.studio-modal-close{position:absolute;right:14px;top:12px;width:32px;height:32px;border:1px solid #38383b;background:#1b1b1d;color:#eee;border-radius:8px;font-size:23px;line-height:1;cursor:pointer}
+.studio-apply-form{display:grid;gap:15px;margin-top:18px}
+.studio-apply-form label{display:grid;gap:7px;color:#e5e5e5;font-size:12px;font-weight:600}
+.studio-apply-form input,.studio-apply-form textarea,.studio-apply-form select,.studio-application-card select,.studio-manage-panel select{width:100%;background:#080809;border:1px solid #39393d;border-radius:7px;padding:11px 12px;color:#f4f4f5;font:inherit;font-size:13px;outline:none}
+.studio-apply-form input:focus,.studio-apply-form textarea:focus,.studio-apply-form select:focus{border-color:#858585}
+.studio-apply-form textarea{resize:vertical;line-height:1.6}
+.studio-apply-form .hire-primary{display:flex;justify-content:center;align-items:center;gap:8px;border:0;cursor:pointer}
+.studio-apply-form button:disabled{opacity:.6;cursor:wait}
+.studio-status-note{border:1px solid #444;border-radius:9px;background:#171719;padding:13px 15px;color:#e2e2e2;font-size:13px;line-height:1.6}
+.studio-manage-tabs{display:flex;gap:8px;margin:20px 0;border-bottom:1px solid #29292d;padding-bottom:12px}
+.studio-manage-tabs button{display:inline-flex;align-items:center;gap:8px;padding:10px 13px;border:1px solid #333;background:#141416;color:#aaa;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700}
+.studio-manage-tabs button.active{background:#f4f4f5;color:#111113;border-color:#f4f4f5}
+.studio-manage-grid{display:grid;grid-template-columns:minmax(280px,.9fr) minmax(0,1.1fr);gap:16px;align-items:start}
+.studio-manage-panel .studio-apply-form{margin-top:20px}
+.studio-manage-role{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid #29292d}
+.studio-manage-role:last-child{border-bottom:0}
+.studio-manage-role>div{display:grid;gap:5px;min-width:0}
+.studio-manage-role strong{font-size:13px}
+.studio-manage-role small{font-size:11px;color:#aaa}
+.studio-status-pill{width:max-content;padding:4px 7px;border-radius:5px;font:10px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.07em}
+.studio-status-pill.open{background:#202522;color:#c7e4d0;border:1px solid #35483a}
+.studio-status-pill.closed{background:#242426;color:#aaa;border:1px solid #39393c}
+.studio-secondary-button{white-space:nowrap;background:#19191b;color:#eee;border:1px solid #3a3a3d;border-radius:7px;padding:8px 10px;font-size:11px;cursor:pointer}
+.studio-secondary-button:hover{background:#28282a}
+.studio-inline-empty{padding:20px 0;color:#999;font-size:13px;line-height:1.6}
+.studio-application-card{border:1px solid #303033;background:#151517;border-radius:10px;padding:18px;margin-top:13px}
+.studio-application-card header{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+.studio-application-card h3{font-size:16px;margin:5px 0}
+.studio-application-card small{font-size:11px;color:#999;overflow-wrap:anywhere}
+.studio-application-card select{max-width:150px}
+.studio-application-card>p{white-space:pre-wrap;color:#c8c8c8;font-size:13px;line-height:1.7;margin:16px 0}
+.studio-application-card> a{font-size:12px;text-decoration:underline}
+.studio-application-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:850px){.studio-manage-grid{grid-template-columns:1fr}.studio-role-list{grid-template-columns:1fr}.studio-detail-hero{align-items:flex-start;flex-wrap:wrap}.studio-detail-hero>.hire-primary{margin-left:0}}
+@media(max-width:520px){.studio-detail-hero{padding:18px;gap:12px}.studio-detail-avatar{width:52px;height:52px}.studio-detail-main{width:calc(100% - 70px)}.studio-apply-modal{padding:20px}.studio-manage-panel{padding:16px}.studio-application-card header{flex-direction:column}.studio-application-card select{max-width:100%}.studio-manage-role{align-items:flex-start;flex-direction:column}.studio-manage-role .studio-secondary-button{width:100%}}
