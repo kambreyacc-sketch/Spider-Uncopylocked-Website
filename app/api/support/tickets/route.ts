@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       reference: typeof body.reference === "string" ? body.reference.trim() : undefined,
       department: typeof body.department === "string" ? body.department : undefined,
       actionTaken: typeof body.actionTaken === "string" ? body.actionTaken : undefined,
-      description: body.description.trim(), attachments: Array.isArray(body.attachments) ? body.attachments.filter((x): x is string => typeof x === "string" && /^data:image\/(png|jpeg|webp|gif);base64,/.test(x) && x.length <= 1400000).slice(0, 3) : undefined, applicantDiscordId: user.id,
+      description: body.description.trim(), attachments: Array.isArray(body.attachments) ? body.attachments.filter((x): x is string => typeof x === "string" && /^data:image\/(png|jpeg|webp|gif);base64,/.test(x) && x.length <= 300000).slice(0, 3) : undefined, applicantDiscordId: user.id,
       applicantName: user.displayName || user.username,
     });
     return NextResponse.json(created, { status: 201, headers: { "Cache-Control": "no-store, max-age=0" } });
