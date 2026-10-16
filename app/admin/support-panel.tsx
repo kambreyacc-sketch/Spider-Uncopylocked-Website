@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Clock3, MessageSquare, RefreshCw, Search, Send, ShieldAlert, Ticket, X } from "lucide-react";
-type TicketRow={_id:string;ticketNumber:string;category:string;subject:string;description:string;reference?:string;department?:string;actionTaken?:string;applicantDiscordId:string;applicantName:string;status:string;priority:string;assignedTo?:string;createdAt:number;updatedAt:number;lastMessageAt:number};
+type TicketRow={_id:string;ticketNumber:string;category:string;subject:string;description:string;attachments?:string[];reference?:string;department?:string;actionTaken?:string;applicantDiscordId:string;applicantName:string;status:string;priority:string;assignedTo?:string;createdAt:number;updatedAt:number;lastMessageAt:number};
 type Message={_id:string;authorDiscordId:string;authorName:string;body:string;attachments?:string[];visibility:"public"|"internal";createdAt:number};
 type Audit={_id:string;actorName:string;action:string;reason?:string;createdAt:number};
 type Detail={ticket:TicketRow;messages:Message[];audit:Audit[]};
