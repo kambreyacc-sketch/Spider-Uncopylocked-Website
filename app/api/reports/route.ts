@@ -25,5 +25,5 @@ export async function POST(request:Request){
   const client=new ConvexHttpClient(convexUrl);
   await client.mutation(api.scamReports.submit,{writeKey,reference,reporterDiscordId:user.id,reportedType,targetUrl,reason,details});
   return NextResponse.json({ok:true,reference});
- }catch{return NextResponse.json({error:"The report could not be saved. Check that the latest Convex schema and functions are deployed."},{status:503})}
+ }catch(error){console.error("Report submission failed:",error);const message=error instanceof Error && /Unauthorized report submission/i.test(error.message)?"The report storage secret does not match. Make sure Vercel ADMIN_API_SECRET matches Convex Production ADMIN_API_SECRET, then redeploy.":"The report could not be saved. Check the Convex Production logs for the report submission error.";return NextResponse.json({error:message},{status:503})}
 }
