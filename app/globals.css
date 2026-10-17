@@ -2564,3 +2564,40 @@ a:hover { text-decoration-color: #a2a2a2; }
  .scam-admin-actions button{width:100%!important}
  .scam-evidence-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+
+
+/* Public Scam Logs detail page polish */
+.scam-detail-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:28px;flex-wrap:wrap;margin:28px 0 24px;padding:clamp(22px,4vw,40px);border:1px solid #3b3b40;border-radius:15px;background:radial-gradient(ellipse at 85% 0%,#38383d66,transparent 46%),linear-gradient(145deg,#202023,#111113 78%);box-shadow:0 18px 45px #0003}
+.scam-detail-hero-copy{min-width:0;flex:1}
+.scam-detail-kicker{display:flex;align-items:center;gap:8px;margin:22px 0 9px!important;color:#c7c7cc!important;font:10px 'DM Mono',monospace!important;letter-spacing:.09em}
+.scam-detail-hero h1{font:600 clamp(28px,4vw,46px)/1.08 'Space Grotesk',sans-serif!important;letter-spacing:-.055em!important;margin:0 0 12px!important;overflow-wrap:anywhere}
+.scam-detail-id{display:inline-block!important;margin:0 0 13px!important;padding:9px 12px!important;border:1px solid #424248!important;border-radius:7px!important;background:#09090bcc!important;color:#f0f0f2!important;font:500 13px 'DM Mono',monospace!important;overflow-wrap:anywhere}
+.scam-detail-meta{display:flex!important;flex-wrap:wrap!important;gap:8px!important;margin:0!important;color:#a5a5ad!important;font-size:12px!important;line-height:1.7!important}
+.scam-detail-status{display:inline-flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid #55555c;border-radius:999px;background:#151517;color:#e5e5e8;font-size:12px;font-weight:600;white-space:nowrap}
+.scam-detail-panel{padding:clamp(18px,3vw,30px)!important;border-radius:14px!important;border:1px solid #3a3a40!important;background:linear-gradient(145deg,#1b1b1e,#111113)!important}
+.scam-detail-section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.scam-detail-ref{font:10px 'DM Mono',monospace;color:#a5a5ad;border:1px solid #39393f;border-radius:6px;padding:7px 9px}
+.scam-detail-reason{margin:17px 0 12px!important;font:600 clamp(20px,2.7vw,29px)/1.2 'Space Grotesk',sans-serif!important;letter-spacing:-.035em!important;overflow-wrap:anywhere}
+.scam-detail-panel .scam-log-summary{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px!important;line-height:1.85!important;color:#c4c4ca!important;margin:0 0 24px!important}
+.scam-detail-stat-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+.scam-detail-stat-grid .admin-stat{min-width:0!important;padding:18px!important;border:1px solid #414147!important;border-radius:10px!important;background:linear-gradient(150deg,#222225,#151517)!important;display:flex!important;flex-direction:column!important;gap:12px!important}
+.scam-detail-stat-grid .admin-stat span{font-size:11px!important;color:#a8a8b0!important}
+.scam-detail-stat-grid .admin-stat strong{font:600 clamp(13px,1.6vw,19px)/1.4 'DM Sans',sans-serif!important;letter-spacing:0!important;overflow-wrap:anywhere!important;word-break:break-word!important;min-width:0!important}
+.scam-evidence-privacy{display:flex;align-items:flex-start;gap:13px;margin-top:18px;padding:16px;border:1px solid #3f3f45;border-radius:10px;background:#111113;color:#d7d7dc}
+.scam-evidence-privacy>svg{flex-shrink:0;margin-top:2px;color:#c5c5cc}
+.scam-evidence-privacy b{display:block;font-size:13px;line-height:1.5}
+.scam-evidence-privacy p{margin:5px 0 0!important;color:#a6a6ae;font-size:12px;line-height:1.7}
+.scam-detail-panel .admin-notice{margin-top:18px!important;border-radius:10px!important}
+.scam-comments-panel{margin-top:22px!important;padding:clamp(18px,3vw,28px)!important;border:1px solid #3a3a40!important;border-radius:14px!important;background:#141416!important}
+.scam-comments-panel .admin-section-heading{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:15px!important;flex-wrap:wrap!important;margin-bottom:18px!important}
+.scam-comments-panel .admin-section-heading h2{display:flex!important;align-items:center!important;gap:9px!important;margin:0!important;font-size:20px!important}
+.scam-comments-panel .admin-section-heading p{color:#a5a5ad!important;font-size:12px!important;line-height:1.7!important;max-width:650px}
+.scam-comments-panel .hire-form{display:grid!important;gap:14px!important;margin-top:18px!important}
+.scam-comments-panel .hire-form label{display:grid!important;gap:8px!important;color:#dedee2!important;font-size:13px!important}
+.scam-comments-panel .hire-form textarea{width:100%!important;min-height:100px!important;padding:12px!important;border:1px solid #45454b!important;border-radius:9px!important;background:#09090b!important;color:#f4f4f5!important;resize:vertical!important}
+.scam-comments-panel .hire-form button{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;min-height:42px!important;padding:11px 15px!important;border-radius:8px!important;background:#ededf0!important;color:#111!important;font-weight:600!important;cursor:pointer!important}
+.scam-comments-panel .hire-form button:disabled{opacity:.5!important;cursor:not-allowed!important}
+.scam-comments-panel .admin-tool{display:flex!important;align-items:flex-start!important;gap:12px!important;padding:14px!important;margin:10px 0!important;border:1px solid #39393f!important;border-radius:9px!important;background:#19191c!important;min-width:0!important}
+.scam-comments-panel .admin-tool>span:last-child{min-width:0!important;overflow-wrap:anywhere!important}
+.scam-comments-panel .admin-tool p{white-space:pre-wrap!important;overflow-wrap:anywhere!important;line-height:1.7!important}
+@media(max-width:720px){.scam-detail-hero{padding:20px!important}.scam-detail-status{white-space:normal}.scam-detail-stat-grid{grid-template-columns:1fr!important}.scam-detail-stat-grid .admin-stat{padding:14px!important}.scam-detail-meta{display:block!important}.scam-detail-meta span{padding:0 4px}.scam-evidence-privacy{padding:13px!important}}
