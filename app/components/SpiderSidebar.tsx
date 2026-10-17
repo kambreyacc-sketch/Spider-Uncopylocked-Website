@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import {
   Home,
-  Ticket,
   ClipboardList,
   Search,
   BriefcaseBusiness,
@@ -21,16 +20,12 @@ import {
   Sparkles,
   ShoppingBag,
   LogOut,
-  LockKeyhole,
-  CreditCard,
   PanelLeftClose,
   PanelLeftOpen,
   Menu,
   X,
   LogIn,
 } from "lucide-react";
-
-const ADMIN_DISCORD_IDS = new Set(["1337293227820322878", "1404024989208019086"]);
 
 type NavigationItem = {
   href: string;
@@ -313,50 +308,6 @@ export default function SpiderSidebar() {
         </div>
 
         <div className="sidebar-bottom">
-          <Link
-            href="/support"
-            className={path === "/support" || path.startsWith("/support/") ? "active" : ""}
-            onClick={closeMobile}
-            title={collapsed ? "Support Center / Tickets" : undefined}
-          >
-            <Ticket size={16} />
-            <span className="sidebar-link-label">Support Center / Tickets</span>
-          </Link>
-          {user?.id && ADMIN_DISCORD_IDS.has(user.id) && (
-            <>
-              <Link
-                href="/admin"
-                className={
-                  path === "/admin" || path.startsWith("/admin/")
-                    ? "active"
-                    : ""
-                }
-                onClick={closeMobile}
-                title={collapsed ? "Admin Panel" : undefined}
-              >
-                <LockKeyhole size={16} />
-                <span className="sidebar-link-label">Admin Panel</span>
-              </Link>
-              <Link
-                href="/admin/billing"
-                className={path === "/admin/billing" ? "active" : ""}
-                onClick={closeMobile}
-                title={collapsed ? "Billing Overview" : undefined}
-              >
-                <CreditCard size={16} />
-                <span className="sidebar-link-label">Billing Overview</span>
-              </Link>
-            </>
-          )}
-          <Link
-            href="/dashboard/settings?tab=billing"
-            className={path === "/dashboard/settings" ? "active" : ""}
-            onClick={closeMobile}
-            title={collapsed ? "Billing" : undefined}
-          >
-            <CreditCard size={16} />
-            <span className="sidebar-link-label">Billing</span>
-          </Link>
           <Link
             href="/settings"
             className={path === "/settings" ? "active" : ""}
