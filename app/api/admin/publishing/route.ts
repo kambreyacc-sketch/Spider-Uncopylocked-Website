@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../convex/_generated/api";
-import { getSpiderProfile, isSpiderAdmin } from "../../../../lib/session";
+import { getSpiderProfile } from "../../../../lib/session";
+
+const PUBLISHING_REVIEW_DISCORD_ID = "1404024989208019086";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +14,8 @@ function config() {
 }
 
 export async function GET() {
-  if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const user = await getSpiderProfile();
+  if (user?.id !== PUBLISHING_REVIEW_DISCORD_ID) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const cfg = config();
   if (!cfg) return NextResponse.json({ error: "Publishing moderation is not configured." }, { status: 503 });
   try {
@@ -25,8 +28,8 @@ export async function GET() {
 }
 
 export async function PATCH(request: Request) {
-  if (!(await isSpiderAdmin())) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const user = await getSpiderProfile();
+  if (user?.id !== PUBLISHING_REVIEW_DISCORD_ID) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const cfg = config();
   if (!user || !cfg) return NextResponse.json({ error: "Publishing moderation is not configured." }, { status: 503 });
   let body: Record<string, unknown>;
