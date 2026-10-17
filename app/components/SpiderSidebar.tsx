@@ -30,7 +30,7 @@ import {
   LogIn,
 } from "lucide-react";
 
-const ADMIN_DISCORD_ID = "1337293227820322878";
+const ADMIN_DISCORD_IDS = new Set(["1337293227820322878", "1404024989208019086"]);
 
 type NavigationItem = {
   href: string;
@@ -322,7 +322,7 @@ export default function SpiderSidebar() {
             <Ticket size={16} />
             <span className="sidebar-link-label">Support Center / Tickets</span>
           </Link>
-          {user?.id === ADMIN_DISCORD_ID && (
+          {user?.id && ADMIN_DISCORD_IDS.has(user.id) && (
             <>
               <Link
                 href="/admin"
