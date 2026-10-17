@@ -10,6 +10,8 @@ import {
   BriefcaseBusiness,
   Settings,
   UploadCloud,
+  LifeBuoy,
+  LockKeyhole,
   Users,
   UserRoundPlus,
   ShieldCheck,
@@ -171,6 +173,8 @@ export default function SpiderSidebar() {
 
   const userName = user?.displayName || user?.username || "Discord account";
   const userAvatar = user?.avatar || "/spider-uncopylocked-pfp.webp";
+  const adminIds = new Set(["1404024989208019086", "1337293227820322878"]);
+  const canSeeAdminPanel = Boolean(user?.id && adminIds.has(String(user.id)));
 
   return (
     <>
@@ -308,6 +312,26 @@ export default function SpiderSidebar() {
         </div>
 
         <div className="sidebar-bottom">
+          <Link
+            href="/support"
+            className={path === "/support" || path.startsWith("/support/") ? "active" : ""}
+            onClick={closeMobile}
+            title={collapsed ? "Support Center / Tickets" : undefined}
+          >
+            <LifeBuoy size={16} />
+            <span className="sidebar-link-label">Support Center / Tickets</span>
+          </Link>
+          {canSeeAdminPanel && (
+            <Link
+              href="/admin"
+              className={path === "/admin" || path.startsWith("/admin/") ? "active" : ""}
+              onClick={closeMobile}
+              title={collapsed ? "Admin Panel" : undefined}
+            >
+              <LockKeyhole size={16} />
+              <span className="sidebar-link-label">Admin Panel</span>
+            </Link>
+          )}
           <Link
             href="/settings"
             className={path === "/settings" ? "active" : ""}
