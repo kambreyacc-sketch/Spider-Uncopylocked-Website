@@ -1,0 +1,5 @@
+import {NextResponse} from "next/server";
+import {ConvexHttpClient} from "convex/browser";
+import {api} from "../../../../../convex/_generated/api";
+import {getSpiderProfile,isSpiderAdmin} from "../../../../../lib/session";
+export async function PATCH(request:Request){if(!(await isSpiderAdmin()))return NextResponse.json({error:"Forbidden"},{status:403});const user=await getSpiderProfile();const url=process.env.NEXT_PUBLIC_CONVEX_URL||process.env.CONVEX_URL;const secret=process.env.CONVEX_ADMIN_API_SECRET||process.env.ADMIN_API_SECRET||process.env.REPORT_WRITE_SECRET;if(!user||!url||!secret)return NextResponse.json({error:"Moderation is not configured."},{status:503});try{const b=await request.json();if(typeof b.commentId!=="string"||typeof b.hide!=="boolean")return NextResponse.json({error:"Invalid moderation action."},{status:400});await new ConvexHttpClient(url).mutation(api.scamLogs.moderateComment,{adminSecret:secret,commentId:b.commentId as any,hide:b.hide,moderatorId:user.id});return NextResponse.json({ok:true})}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Could not moderate comment."},{status:400})}}

@@ -6,6 +6,14 @@ function assertSecret(secret: string) {
   if (!expected || secret.length !== expected.length || secret !== expected) throw new Error("Unauthorized scam-log request.");
 }
 
+export const generateUploadUrl = mutation({
+  args: { adminSecret: v.string() },
+  handler: async (ctx, args) => {
+    assertSecret(args.adminSecret);
+    return await ctx.storage.generateUploadUrl();
+  },
+});
+
 export const publicList = query({
   args: { search: v.optional(v.string()) },
   handler: async (ctx, args) => {
