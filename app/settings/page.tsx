@@ -351,6 +351,20 @@ export default function SettingsPage() {
                   </Link>
                 </div>
               )}
+              {account?.id && ["1337293227820322878", "1404024989208019086"].includes(account.id) && (
+                <div className="settings-link-row">
+                  <div className="settings-link-copy">
+                    <LockKeyhole size={17} />
+                    <span>
+                      <strong>Platform billing overview</strong>
+                      <small>Administrator-only Stripe subscription and invoice metadata.</small>
+                    </span>
+                  </div>
+                  <Link href="/admin/billing" className="settings-inline-action">
+                    Open admin billing <ChevronRight size={14} />
+                  </Link>
+                </div>
+              )}
             </section>
 
             <section id="appearance" className="settings-section-card">
