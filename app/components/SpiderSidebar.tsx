@@ -65,6 +65,7 @@ const creatorTools: NavigationItem[] = [
   { href: "/spider-ai", label: "Spider Uncopylocked AI", Icon: Sparkles },
 ];
 const safety: NavigationItem[] = [
+  { href: "/scam-logs", label: "Scam Logs", Icon: ShieldCheck },
   { href: "/report-scam", label: "Report a Scam", Icon: ShieldCheck },
   { href: "/guidelines", label: "Safety & FAQ", Icon: ShieldCheck },
 ];
