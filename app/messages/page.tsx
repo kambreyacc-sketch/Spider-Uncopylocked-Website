@@ -19,6 +19,7 @@ import {
   Send,
   ShieldCheck,
   UserRound,
+  UserPlus,
 } from "lucide-react";
 
 type Account = { id: string; username?: string; displayName?: string; avatar?: string };
@@ -33,6 +34,7 @@ type Conversation = {
   requestStatus?: "pending" | "accepted" | "declined";
   isIncomingRequest?: boolean;
 };
+type MemberResult = { discordId: string; username: string; displayName: string; avatar?: string };
 type Message = {
   id: string;
   senderDiscordId: string;
@@ -50,6 +52,9 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedId, setSelectedId] = useState("");
   const [search, setSearch] = useState("");
+  const [memberSearch, setMemberSearch] = useState("");
+  const [memberResults, setMemberResults] = useState<MemberResult[]>([]);
+  const [memberSearchLoading, setMemberSearchLoading] = useState(false);
   const [draft, setDraft] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -93,6 +98,20 @@ export default function MessagesPage() {
       .finally(() => { if (active) setAccountLoading(false); });
     return () => { active = false; };
   }, []);
+
+  useEffect(() => {
+    if (!user || memberSearch.trim().length < 2) { setMemberResults([]); setMemberSearchLoading(false); return; }
+    let active = true;
+    const timer = window.setTimeout(() => {
+      setMemberSearchLoading(true);
+      fetch("/api/messages/members?search=" + encodeURIComponent(memberSearch.trim()), { cache: "no-store" })
+        .then(response => response.json())
+        .then(data => { if (active) setMemberResults(Array.isArray(data.members) ? data.members : []); })
+        .catch(() => { if (active) setMemberResults([]); })
+        .finally(() => { if (active) setMemberSearchLoading(false); });
+    }, 250);
+    return () => { active = false; window.clearTimeout(timer); };
+  }, [user, memberSearch]);
 
   useEffect(() => {
     if (!user) return;
@@ -188,6 +207,14 @@ export default function MessagesPage() {
               <div className="messages-list-heading">
                 <div className="messages-list-title"><h2>Inbox</h2><span>{conversations.length}</span></div>
                 <label className="messages-search-box"><Search size={15} aria-hidden="true" /><input type="search" aria-label="Search conversations" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search conversations" /></label>
+                <label className="messages-search-box"><UserPlus size={15} aria-hidden="true" /><input type="search" aria-label="Find Spider members" value={memberSearch} onChange={event => setMemberSearch(event.target.value)} placeholder="Find members by username" /></label>
+                {memberSearch.trim().length >= 2 && <div className="messages-member-results" aria-live="polite">
+                  {memberSearchLoading ? <small>Searching members…</small> : memberResults.length ? memberResults.map(member => <button key={member.discordId} type="button" onClick={() => {
+                    fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "start", recipientDiscordId: member.discordId, contextType: "direct" }) })
+                      .then(async response => { const data = await response.json(); if (!response.ok) { setError(data.error || "Could not start a request."); return; } setSelectedId(data.conversationId); setRefreshToken(value => value + 1); setMemberSearch(""); setMemberResults([]); })
+                      .catch(() => setError("Could not start a message request."));
+                  }}><span className="messages-conversation-avatar">{member.avatar ? <img src={member.avatar} alt="" /> : <UserRound size={16} />}</span><span><strong>{member.displayName}</strong><small>@{member.username}</small></span><Send size={13} /></button>) : <small>No matching registered members yet.</small>}
+                </div>}
               </div>
               <div className="messages-conversation-list">
                 {accountLoading || loading && conversations.length === 0 ? (
