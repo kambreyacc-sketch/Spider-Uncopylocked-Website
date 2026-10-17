@@ -36,6 +36,7 @@ type Studio = {
   robloxUrl?: string;
   discordUrl?: string;
   createdAt: number;
+  status?: string;
 };
 
 const starterRoles = [
