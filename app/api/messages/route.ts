@@ -63,6 +63,47 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, conversationId: result.id, created: result.created });
     }
 
+    if (body.action === "accept" || body.action === "decline") {
+      const conversationId = typeof body.conversationId === "string" ? body.conversationId : "";
+      if (!conversationId) return NextResponse.json({ error: "Choose a message request first." }, { status: 400 });
+      const action = body.action === "accept" ? api.messages.acceptRequest : api.messages.declineRequest;
+      await db.client.mutation(action, { adminSecret: db.secret, discordId: profile.id, conversationId });
+      return NextResponse.json({ success: true });
+    }
+
+    if (body.action === "block") {
+      const targetDiscordId = typeof body.targetDiscordId === "string" ? body.targetDiscordId : "";
+      if (!targetDiscordId) return NextResponse.json({ error: "Choose a member to block." }, { status: 400 });
+      await db.client.mutation(api.messages.blockMember, { adminSecret: db.secret, discordId: profile.id, targetDiscordId });
+      return NextResponse.json({ success: true });
+    }
+
+    if (body.action === "report") {
+      const messageId = typeof body.messageId === "string" ? body.messageId : "";
+      const reason = typeof body.reason === "string" ? body.reason : "";
+      const details = typeof body.details === "string" ? body.details : "";
+      if (!messageId || !reason.trim()) return NextResponse.json({ error: "Choose a reason for the report." }, { status: 400 });
+      await db.client.mutation(api.messages.reportMessage, {
+        adminSecret: db.secret, discordId: profile.id, messageId, reason, ...(details ? { details } : {}),
+      });
+      return NextResponse.json({ success: true });
+    }
+
+    if (body.action === "edit") {
+      const messageId = typeof body.messageId === "string" ? body.messageId : "";
+      const message = typeof body.body === "string" ? body.body.trim() : "";
+      if (!messageId || !message || message.length > 2000) return NextResponse.json({ error: "Enter a message of 1–2,000 characters." }, { status: 400 });
+      await db.client.mutation(api.messages.editMessage, { adminSecret: db.secret, discordId: profile.id, messageId, body: message });
+      return NextResponse.json({ success: true });
+    }
+
+    if (body.action === "delete") {
+      const messageId = typeof body.messageId === "string" ? body.messageId : "";
+      if (!messageId) return NextResponse.json({ error: "Choose a message to delete." }, { status: 400 });
+      await db.client.mutation(api.messages.deleteMessage, { adminSecret: db.secret, discordId: profile.id, messageId });
+      return NextResponse.json({ success: true });
+    }
+
     if (body.action === "send") {
       const conversationId = typeof body.conversationId === "string" ? body.conversationId : "";
       const message = typeof body.body === "string" ? body.body.trim() : "";
