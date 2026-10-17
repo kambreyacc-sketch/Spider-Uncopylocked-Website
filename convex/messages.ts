@@ -146,6 +146,12 @@ export const sendMessage = mutation({
     if (isBlockedByEither([...myBlocks, ...theirBlocks], args.discordId, otherDiscordId)) throw new Error("Messaging is unavailable between these accounts.");
     const body = args.body.trim();
     if (!body || body.length > 2000) throw new Error("Messages must contain 1–2,000 characters.");
+    if (requestStatus === "pending" && conversation.requestedBy === args.discordId) {
+      const recentMessages = await ctx.db.query("messages").withIndex("by_conversation_createdAt", q => q.eq("conversationId", args.conversationId)).order("desc").take(100);
+      if (recentMessages.some(message => message.senderDiscordId === args.discordId && message.createdAt >= conversation.updatedAt)) {
+        throw new Error("You’ve sent your introduction. Wait for the member to accept before sending another message.");
+      }
+    }
     const now = Date.now();
     const id = await ctx.db.insert("messages", { conversationId: args.conversationId, senderDiscordId: args.discordId, body, createdAt: now, readBy: [args.discordId] });
     await ctx.db.patch(args.conversationId, { lastMessageText: body.slice(0, 180), updatedAt: now });
