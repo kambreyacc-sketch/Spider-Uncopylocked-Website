@@ -167,7 +167,7 @@ export const blockMember = mutation({
   handler: async (ctx, args) => {
     assertAdminSecret(args.adminSecret);
     if (!args.discordId || args.discordId === args.targetDiscordId) throw new Error("Choose another member.");
-    const existing = await ctx.db.query("messageBlocks").withIndex("by_pair", q => q.eq("blockerDiscordId", args.discordId).eq("blockedDiscordId", args.targetDiscordId)).first();
+    const existing = await ctx.db.query("messageBlocks").withIndex("by_pair", q => q.eq("blockerDiscordId", args.discordId)).filter(q => q.eq(q.field("blockedDiscordId"), args.targetDiscordId)).first();
     if (!existing) await ctx.db.insert("messageBlocks", { blockerDiscordId: args.discordId, blockedDiscordId: args.targetDiscordId, createdAt: Date.now() });
     return { success: true };
   },
