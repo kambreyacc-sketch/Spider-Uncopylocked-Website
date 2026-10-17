@@ -36,7 +36,7 @@ export default function CreateStudioPage() {
         return;
       }
       setSuccess(true);
-      setMessage("Studio created and saved to Spider. Opening your studio directory…");
+      setMessage("Studio submitted for staff review. You can manage your studio after it is approved.");
       router.push("/studios?created=" + encodeURIComponent(result.studio.slug));
       router.refresh();
     } catch {
@@ -53,7 +53,7 @@ export default function CreateStudioPage() {
         <Link href="/studios" className="hire-back"><ArrowLeft size={14} /> Back to studios</Link>
         <header className="hire-page-head">
           <div>
-            <span className="spider-eyebrow">SPIDER / STUDIO SETUP</span>
+            <span className="spider-eyebrow">SPIDER UNCOPYLOCKED / STUDIO SETUP</span>
             <h1>Create a studio</h1>
             <p>Give your team a home for its identity, specialties, and Roblox projects.</p>
           </div>
