@@ -9,9 +9,11 @@ import ResourceModerationPanel from "../resource-moderation-panel";
 import PlatformApplicationsPanel from "../platform-applications-panel";
 import UserRestrictionsPanel from "../user-restrictions-panel";
 import PublishingModerationPanel from "../publishing-panel";
+import ScamLogsAdminPanel from "../scam-logs-panel";
 
 const pages: Record<string, { title: string; description: string }> = {
   reports: { title: "Scam reports", description: "Review submitted reports, supporting evidence, and moderation decisions." },
+  "scam-logs": { title: "Scam Logs moderation", description: "Review evidence and approve public Scam Logs entries." },
   restrictions: { title: "User restrictions", description: "Review restrictions, suspensions, reasons, and expiry information." },
   "reported-content": { title: "Reported content", description: "Review user-submitted reports about profiles, studios, and listings." },
   users: { title: "Users", description: "Search accounts and review related studio, job, and moderation history." },
@@ -47,7 +49,9 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
             <p>{page.description}</p>
           </div>
         </header>
-        {section === "publishing" || section === "jobs" || section === "studios" ? (
+        {section === "scam-logs" ? (
+          <ScamLogsAdminPanel />
+        ) : section === "publishing" || section === "jobs" || section === "studios" ? (
           <PublishingModerationPanel initialTab={section === "jobs" ? "job" : section === "studios" ? "studio" : "listing"} />
         ) : section === "restrictions" ? (
           <UserRestrictionsPanel />
