@@ -136,7 +136,7 @@ export default function PostJobPage() {
         <Link href="/jobs" className="hire-back"><ArrowLeft size={15} /> Back to jobs</Link>
         <div className="job-wizard-page-heading">
           <div>
-            <span className="spider-eyebrow">SPIDER / BUSINESS</span>
+            <span className="spider-eyebrow">SPIDER UNCOPYLOCKED / JOB SUBMISSION</span>
             <h1>Post a job</h1>
             <p>Give creators enough detail to decide whether this project is right for them.</p>
           </div>
@@ -146,8 +146,8 @@ export default function PostJobPage() {
         {done ? (
           <div className="hire-empty job-wizard-success">
             <span className="job-wizard-success-icon"><Check size={22} /></span>
-            <h2>Job posted</h2>
-            <p>Your post was submitted to the existing Spider jobs system.</p>
+            <h2>Submitted for review</h2>
+            <p>Your job is saved privately and will appear on the jobs board after staff approval.</p>
             <Link href="/jobs" className="hire-primary">View jobs <ArrowRight size={14} /></Link>
           </div>
         ) : (
@@ -190,7 +190,7 @@ export default function PostJobPage() {
                 </label>
                 <label className="job-wizard-field">Milestones & acceptance checks <span className="field-optional">Optional</span>
                   <textarea maxLength={2000} rows={4} value={form.milestones} onChange={(event) => update("milestones", event.target.value)} placeholder="1. First playable build — core loop works\n2. Review pass — agreed issues resolved\n3. Final handoff — files and setup notes included" />
-                  <small>These notes are included in the published brief. Spider is not holding money or providing escrow.</small>
+                  <small>These notes are included in your submitted brief. Spider Uncopylocked does not hold money or provide escrow.</small>
                 </label>
               </section>
             )}
@@ -229,7 +229,7 @@ export default function PostJobPage() {
 
             {step === 3 && (
               <section className="job-wizard-step">
-                <div className="job-wizard-step-heading"><span>STEP 04</span><h2>Review and publish</h2><p>Make sure creators know who is hiring and how to contact you.</p></div>
+                <div className="job-wizard-step-heading"><span>STEP 04</span><h2>Review and submit for approval</h2><p>Make sure creators know who is hiring and how to contact you.</p></div>
                 <label className="job-wizard-field">Discord contact
                   <input required maxLength={80} value={form.discordContact} onChange={(event) => update("discordContact", event.target.value)} placeholder="Your Discord username" />
                 </label>
@@ -245,7 +245,7 @@ export default function PostJobPage() {
                   {form.milestones.trim() && <p className="job-review-milestones"><strong>Milestones & acceptance checks</strong><br/>{form.milestones}</p>}
                   <small>Posting as {form.posterName || user?.displayName || "Your account"} · Contact @{form.discordContact || user?.username || "your Discord"}</small>
                 </div>
-                <p className="job-wizard-note">By publishing, you confirm that your job details are accurate. Never share passwords or .ROBLOSECURITY cookies.</p>
+                <p className="job-wizard-note">By submitting, you confirm that your job details are accurate. Never share passwords or .ROBLOSECURITY cookies.</p>
               </section>
             )}
 
@@ -256,7 +256,7 @@ export default function PostJobPage() {
               {step < steps.length - 1 ? (
                 <button type="button" className="hire-primary" onClick={nextStep}>Next <ArrowRight size={15} /></button>
               ) : (
-                <button type="submit" className="hire-primary" disabled={busy}>{busy ? "Publishing…" : "Publish job"} <Send size={14} /></button>
+                <button type="submit" className="hire-primary" disabled={busy}>{busy ? "Submitting…" : "Submit for review"} <Send size={14} /></button>
               )}
             </div>
           </form>
