@@ -50,3 +50,30 @@ export async function POST(request: Request, context: Context) {
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
+
+
+export async function PATCH(_request: Request, context: Context) {
+  const user = await getSpiderProfile();
+  if (!user) return NextResponse.json({ error: "Sign in to close this ticket." }, { status: 401 });
+  const cfg = config();
+  if (!cfg) return NextResponse.json({ error: "Support database is not configured." }, { status: 503 });
+  const { ticketId } = await context.params;
+  try {
+    const client = new ConvexHttpClient(cfg.url);
+    const record = await client.query(api.support.getTicket, { adminSecret: cfg.secret, ticketId: ticketId as any });
+    if (!record || record.ticket.applicantDiscordId !== user.id) return NextResponse.json({ error: "Ticket not found." }, { status: 404 });
+    if (record.ticket.status === "closed") return NextResponse.json({ success: true, status: "closed" });
+    await client.mutation(api.support.updateTicket, {
+      adminSecret: cfg.secret,
+      ticketId: ticketId as any,
+      actorDiscordId: user.id,
+      actorName: user.displayName || user.username,
+      status: "closed",
+      reason: "Closed by ticket opener",
+    });
+    return NextResponse.json({ success: true, status: "closed" }, { headers: { "Cache-Control": "no-store, max-age=0" } });
+  } catch (error) {
+    console.error("Member close support ticket failed:", error);
+    return NextResponse.json({ error: "Could not close this ticket." }, { status: 400 });
+  }
+}
