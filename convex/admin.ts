@@ -336,7 +336,7 @@ export const reviewJobSubmission = mutation({
     const item = await ctx.db.get(args.jobId);
     if (!item) throw new Error("Job post not found.");
     if (args.status === "rejected" && (!args.reason?.trim() || args.reason.trim().length > 1000)) throw new Error("Enter a rejection reason.");
-    await ctx.db.patch(args.jobId, { status: args.status, updatedAt: Date.now() });
+    await ctx.db.patch(args.jobId, { status: args.status });
     await ctx.db.insert("adminAuditLogs", { actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0,100), action: args.status === "open" ? "job_approved" : "job_rejected", entityType: "job", entityId: args.jobId, reason: args.reason?.trim().slice(0,1000) || undefined, createdAt: Date.now() });
     return { success: true, status: args.status };
   },
