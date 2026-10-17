@@ -125,7 +125,19 @@ export default function MessagesPage() {
       .catch(() => setError("Could not start this conversation. Please try again."));
   }, [user]);
 
-  async function messageAction(action: string, extra: Record<string, string>) {\n    if (!selectedId) return;\n    setError("");\n    try {\n      const response = await fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, conversationId: selectedId, ...extra }) });\n      const data = await response.json();\n      if (!response.ok) { setError(data.error || "That action could not be completed."); return; }\n      if (action === "decline" || action === "block") setSelectedId("");\n      setRefreshToken(value => value + 1);\n    } catch { setError("Could not connect to messaging. Please try again."); }\n  }\n\n  async function sendMessage(event: FormEvent<HTMLFormElement>) {
+  async function messageAction(action: string, extra: Record<string, string>) {
+    if (!selectedId) return;
+    setError("");
+    try {
+      const response = await fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, conversationId: selectedId, ...extra }) });
+      const data = await response.json();
+      if (!response.ok) { setError(data.error || "That action could not be completed."); return; }
+      if (action === "decline" || action === "block") setSelectedId("");
+      setRefreshToken(value => value + 1);
+    } catch { setError("Could not connect to messaging. Please try again."); }
+  }
+
+  async function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const body = draft.trim();
     if (!body || !selectedId || sending) return;
@@ -198,9 +210,12 @@ export default function MessagesPage() {
                   <header className="messages-thread-heading">
                     <span className="messages-conversation-avatar">{selected.otherAvatar ? <img src={selected.otherAvatar} alt="" /> : <UserRound size={18} />}</span>
                     <div><h2>{selected.otherName}</h2><p>{selected.contextTitle || "Private conversation"}</p></div>
-                    <span className="messages-private-chip"><ShieldCheck size={13} /> Private</span>\n                    <button type="button" className="messages-tool-button" onClick={() => { if (window.confirm("Block this member from messaging you?")) void messageAction("block", { targetDiscordId: selected.otherDiscordId }); }} title="Block member" aria-label="Block member"><Ban size={15} /></button>
+                    <span className="messages-private-chip"><ShieldCheck size={13} /> Private</span>
+                    <button type="button" className="messages-tool-button" onClick={() => { if (window.confirm("Block this member from messaging you?")) void messageAction("block", { targetDiscordId: selected.otherDiscordId }); }} title="Block member" aria-label="Block member"><Ban size={15} /></button>
                   </header>
-                  {selected.requestStatus === "pending" && selected.isIncomingRequest && <div className="messages-request-banner"><div><strong>Message request</strong><p>Accept to continue this conversation, or decline if you don’t want to hear from this member.</p></div><div className="messages-request-actions"><button type="button" onClick={() => void messageAction("accept", {})}><Check size={14} /> Accept</button><button type="button" onClick={() => void messageAction("decline", {})}><X size={14} /> Decline</button></div></div>}\n                  {selected.requestStatus === "pending" && !selected.isIncomingRequest && <div className="messages-request-banner"><div><strong>Request sent</strong><p>You can send one introductory message while waiting. They must accept before replying.</p></div></div>}\n                  <div className="messages-thread-body">
+                  {selected.requestStatus === "pending" && selected.isIncomingRequest && <div className="messages-request-banner"><div><strong>Message request</strong><p>Accept to continue this conversation, or decline if you don’t want to hear from this member.</p></div><div className="messages-request-actions"><button type="button" onClick={() => void messageAction("accept", {})}><Check size={14} /> Accept</button><button type="button" onClick={() => void messageAction("decline", {})}><X size={14} /> Decline</button></div></div>}
+                  {selected.requestStatus === "pending" && !selected.isIncomingRequest && <div className="messages-request-banner"><div><strong>Request sent</strong><p>You can send one introductory message while waiting. They must accept before replying.</p></div></div>}
+                  <div className="messages-thread-body">
                     {messages.length ? messages.map(message => {
                       const mine = message.senderDiscordId === user?.id;
                       return <div key={message.id} className={"messages-bubble-row" + (mine ? " mine" : "")}><article className="messages-bubble"><p>{message.body}</p><time>{new Date(message.createdAt).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}{message.editedAt ? " · edited" : ""}{mine && message.readBy.length > 1 ? <Check size={12} /> : null}</time><div className="messages-bubble-actions">{mine && !message.deletedAt && <><button type="button" aria-label="Edit message" title="Edit message" onClick={() => { const next = window.prompt("Edit your message", message.body); if (next?.trim()) void fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "edit", messageId: message.id, body: next }) }).then(async response => { const data = await response.json(); if (!response.ok) setError(data.error || "Could not edit message."); else setRefreshToken(value => value + 1); }); }}><Pencil size={12} /></button><button type="button" aria-label="Delete message" title="Delete message" onClick={() => { if (window.confirm("Delete this message? Moderation history will be retained.")) void fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", messageId: message.id }) }).then(async response => { const data = await response.json(); if (!response.ok) setError(data.error || "Could not delete message."); else setRefreshToken(value => value + 1); }); }}><Trash2 size={12} /></button></>}{!mine && !message.deletedAt && <button type="button" aria-label="Report message" title="Report message" onClick={() => { const reason = window.prompt("Why are you reporting this message?"); if (reason?.trim()) void fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "report", messageId: message.id, reason }) }).then(async response => { const data = await response.json(); if (!response.ok) setError(data.error || "Could not report message."); else setError("Message reported to the moderation team."); }); }}><Flag size={12} /></button>}</div></article></div>;
@@ -209,7 +224,7 @@ export default function MessagesPage() {
                   {!(selected.requestStatus === "pending" && selected.isIncomingRequest) && selected.requestStatus !== "declined" ? <form className="messages-compose" onSubmit={sendMessage}>
                     <textarea value={draft} onChange={event => setDraft(event.target.value)} maxLength={2000} rows={2} placeholder="Write a message…" aria-label="Message text" />
                     <div><small>{draft.length}/2,000 · Keep project details and payment terms clear.</small><button type="submit" className="hire-primary" disabled={!draft.trim() || sending}>{sending ? <LoaderCircle size={15} /> : <Send size={15} />} Send</button></div>
-                  </form>
+                  </form> : <div className="messages-compose-locked">Accept this request to reply. You can block or decline it at any time.</div>}
                 </>
               ) : (
                 <div className="messages-thread-empty"><span className="messages-empty-icon"><MessagesSquare size={27} /></span><h2>Select a conversation</h2><p>Choose someone from your inbox or open a developer profile to start a new conversation. Messages are stored privately and checked against account membership.</p><Link href="/developers" className="hire-primary">Browse developers <ArrowUpRight size={14} /></Link></div>
