@@ -138,8 +138,12 @@ export const sendMessage = mutation({
     const requestStatus = conversation.requestStatus ?? "accepted";
     if (requestStatus === "declined") throw new Error("This message request was declined.");
     if (requestStatus === "pending" && conversation.requestedBy !== args.discordId) throw new Error("Accept this message request before replying.");
-    const blocks = await ctx.db.query("messageBlocks").withIndex("by_blocker", q => q.eq("blockerDiscordId", args.discordId)).collect();
-    if (blocks.some(block => block.blockedDiscordId === (conversation.participantOne === args.discordId ? conversation.participantTwo : conversation.participantOne))) throw new Error("You have blocked this member.");
+    const otherDiscordId = conversation.participantOne === args.discordId ? conversation.participantTwo : conversation.participantOne;
+    const [myBlocks, theirBlocks] = await Promise.all([
+      ctx.db.query("messageBlocks").withIndex("by_blocker", q => q.eq("blockerDiscordId", args.discordId)).collect(),
+      ctx.db.query("messageBlocks").withIndex("by_blocker", q => q.eq("blockerDiscordId", otherDiscordId)).collect(),
+    ]);
+    if (isBlockedByEither([...myBlocks, ...theirBlocks], args.discordId, otherDiscordId)) throw new Error("Messaging is unavailable between these accounts.");
     const body = args.body.trim();
     if (!body || body.length > 2000) throw new Error("Messages must contain 1–2,000 characters.");
     const now = Date.now();
