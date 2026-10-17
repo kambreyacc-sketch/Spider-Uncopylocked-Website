@@ -277,3 +277,80 @@ export const getDeveloperProfileForUser = query({
     return await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.discordId)).collect();
   },
 });
+
+
+/** Combined publishing queue for games, job posts, and studio registrations. */
+export const listPublishingSubmissions = query({
+  args: { adminSecret: v.string() },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const [listingGroups, jobGroups, studioGroups] = await Promise.all([
+      Promise.all((["pending", "active", "rejected"] as const).map(status =>
+        ctx.db.query("listings").withIndex("by_status_createdAt", q => q.eq("status", status)).order("desc").take(250)
+      )),
+      Promise.all((["pending", "open", "rejected", "closed"] as const).map(status =>
+        ctx.db.query("jobs").withIndex("by_status_createdAt", q => q.eq("status", status)).order("desc").take(250)
+      )),
+      Promise.all((["pending", "active", "rejected"] as const).map(status =>
+        ctx.db.query("studios").withIndex("by_status_createdAt", q => q.eq("status", status)).order("desc").take(250)
+      )),
+    ]);
+    const listings = await Promise.all(listingGroups.flat().map(async item => ({
+      ...item,
+      entityType: "listing" as const,
+      imageUrl: item.imageStorageId ? await ctx.storage.getUrl(item.imageStorageId) : item.imageUrl,
+    })));
+    const jobs = jobGroups.flat().map(item => ({ ...item, entityType: "job" as const }));
+    const studios = studioGroups.flat().map(item => ({ ...item, entityType: "studio" as const }));
+    return {
+      listings: listings.sort((a,b) => b.createdAt-a.createdAt),
+      jobs: jobs.sort((a,b) => b.createdAt-a.createdAt),
+      studios: studios.sort((a,b) => b.createdAt-a.createdAt),
+      counts: {
+        listings: { pending: listingGroups[0].length, active: listingGroups[1].length, rejected: listingGroups[2].length },
+        jobs: { pending: jobGroups[0].length, open: jobGroups[1].length, rejected: jobGroups[2].length, closed: jobGroups[3].length },
+        studios: { pending: studioGroups[0].length, active: studioGroups[1].length, rejected: studioGroups[2].length },
+      },
+    };
+  },
+});
+
+export const reviewListingSubmission = mutation({
+  args: { adminSecret: v.string(), listingId: v.id("listings"), status: v.union(v.literal("active"), v.literal("rejected")), actorDiscordId: v.string(), actorName: v.string(), reason: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const item = await ctx.db.get(args.listingId);
+    if (!item) throw new Error("Marketplace listing not found.");
+    if (args.status === "rejected" && (!args.reason?.trim() || args.reason.trim().length > 1000)) throw new Error("Enter a rejection reason.");
+    const now = Date.now();
+    await ctx.db.patch(args.listingId, { status: args.status, updatedAt: now });
+    await ctx.db.insert("adminAuditLogs", { actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0,100), action: args.status === "active" ? "listing_approved" : "listing_rejected", entityType: "listing", entityId: args.listingId, reason: args.reason?.trim().slice(0,1000) || undefined, createdAt: now });
+    return { success: true, status: args.status };
+  },
+});
+
+export const reviewJobSubmission = mutation({
+  args: { adminSecret: v.string(), jobId: v.id("jobs"), status: v.union(v.literal("open"), v.literal("rejected")), actorDiscordId: v.string(), actorName: v.string(), reason: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const item = await ctx.db.get(args.jobId);
+    if (!item) throw new Error("Job post not found.");
+    if (args.status === "rejected" && (!args.reason?.trim() || args.reason.trim().length > 1000)) throw new Error("Enter a rejection reason.");
+    await ctx.db.patch(args.jobId, { status: args.status, updatedAt: Date.now() });
+    await ctx.db.insert("adminAuditLogs", { actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0,100), action: args.status === "open" ? "job_approved" : "job_rejected", entityType: "job", entityId: args.jobId, reason: args.reason?.trim().slice(0,1000) || undefined, createdAt: Date.now() });
+    return { success: true, status: args.status };
+  },
+});
+
+export const reviewStudioSubmission = mutation({
+  args: { adminSecret: v.string(), studioId: v.id("studios"), status: v.union(v.literal("active"), v.literal("rejected")), actorDiscordId: v.string(), actorName: v.string(), reason: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const item = await ctx.db.get(args.studioId);
+    if (!item) throw new Error("Studio submission not found.");
+    if (args.status === "rejected" && (!args.reason?.trim() || args.reason.trim().length > 1000)) throw new Error("Enter a rejection reason.");
+    await ctx.db.patch(args.studioId, { status: args.status, updatedAt: Date.now() });
+    await ctx.db.insert("adminAuditLogs", { actorDiscordId: args.actorDiscordId, actorName: args.actorName.slice(0,100), action: args.status === "active" ? "studio_approved" : "studio_rejected", entityType: "studio", entityId: args.studioId, reason: args.reason?.trim().slice(0,1000) || undefined, createdAt: Date.now() });
+    return { success: true, status: args.status };
+  },
+});
