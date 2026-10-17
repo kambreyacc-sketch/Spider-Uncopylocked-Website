@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       discordContact: body.discordContact, posterDiscordId: user.id,
       posterName: typeof body.posterName === "string" ? body.posterName : user.displayName,
     });
-    return NextResponse.json({ success: true, jobId: result, status: "open" }, { status: 201, headers: { "Cache-Control": "no-store, max-age=0" } });
+    return NextResponse.json({ success: true, jobId: result, status: "pending" }, { status: 201, headers: { "Cache-Control": "no-store, max-age=0" } });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not post job.";
     return NextResponse.json({ error: message }, { status: message.includes("approved Posting Access") ? 403 : 400 });
