@@ -2601,3 +2601,19 @@ a:hover { text-decoration-color: #a2a2a2; }
 .scam-comments-panel .admin-tool>span:last-child{min-width:0!important;overflow-wrap:anywhere!important}
 .scam-comments-panel .admin-tool p{white-space:pre-wrap!important;overflow-wrap:anywhere!important;line-height:1.7!important}
 @media(max-width:720px){.scam-detail-hero{padding:20px!important}.scam-detail-status{white-space:normal}.scam-detail-stat-grid{grid-template-columns:1fr!important}.scam-detail-stat-grid .admin-stat{padding:14px!important}.scam-detail-meta{display:block!important}.scam-detail-meta span{padding:0 4px}.scam-evidence-privacy{padding:13px!important}}
+
+
+/* Messaging request and safety controls */
+.messages-request-banner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 17px;margin:0 18px 12px;border:1px solid #414146;border-radius:10px;background:linear-gradient(135deg,#202023,#141416);color:#f4f4f5}
+.messages-request-banner strong{font-size:13px}
+.messages-request-banner p{margin:5px 0 0;color:#a7a7af;font-size:12px;line-height:1.6}
+.messages-request-actions{display:flex;gap:8px;flex-shrink:0}
+.messages-request-actions button,.messages-tool-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #48484f;border-radius:7px;background:#242427;color:#ededf0;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer}
+.messages-request-actions button:hover,.messages-tool-button:hover{background:#353539;border-color:#696970}
+.messages-tool-button{width:32px;height:32px;padding:0;margin-left:auto}
+.messages-bubble-actions{display:flex;justify-content:flex-end;gap:5px;margin-top:6px;opacity:.65}
+.messages-bubble-actions:hover,.messages-bubble-actions:focus-within{opacity:1}
+.messages-bubble-actions button{display:inline-flex;align-items:center;justify-content:center;width:25px;height:24px;border:1px solid #424248;border-radius:5px;background:#202023;color:#c9c9ce;cursor:pointer}
+.messages-bubble-actions button:hover{background:#353539;color:#fff}
+.messages-compose-locked{margin:14px 18px;padding:14px;border:1px solid #39393f;border-radius:9px;background:#18181b;color:#a8a8b0;font-size:12px;line-height:1.6}
+@media(max-width:640px){.messages-request-banner{align-items:stretch;flex-direction:column;margin:0 10px 10px}.messages-request-actions{width:100%}.messages-request-actions button{flex:1}.messages-tool-button{flex-shrink:0}}
