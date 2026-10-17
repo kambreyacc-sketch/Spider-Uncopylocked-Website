@@ -207,3 +207,36 @@ export const updateApplicationStatus = mutation({
     return { success: true };
   },
 });
+
+
+// Owner-only lookup: unlike bySlug, this intentionally includes pending/rejected
+// studios so their owner can see the moderation state and manage existing records.
+export const ownerBySlug = query({
+  args: { adminSecret: v.string(), slug: v.string(), ownerDiscordId: v.string() },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const studio = await ctx.db.query("studios")
+      .withIndex("by_slug", q => q.eq("slug", args.slug))
+      .unique();
+    if (!studio || studio.ownerDiscordId !== args.ownerDiscordId) return null;
+    const { _id, _creationTime, ...data } = studio;
+    return { id: _id, ...data };
+  },
+});
+
+// Owner-only role list includes closed roles so owners can reopen them.
+export const rolesForOwner = query({
+  args: { adminSecret: v.string(), studioId: v.id("studios"), ownerDiscordId: v.string() },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const studio = await ctx.db.get(args.studioId);
+    if (!studio || studio.ownerDiscordId !== args.ownerDiscordId) {
+      throw new Error("Only the studio owner can view roles.");
+    }
+    const roles = await ctx.db.query("studioRoles")
+      .withIndex("by_studio_createdAt", q => q.eq("studioId", args.studioId))
+      .order("desc")
+      .take(100);
+    return roles.map(({ _id, _creationTime, ...role }) => ({ id: _id, ...role }));
+  },
+});
