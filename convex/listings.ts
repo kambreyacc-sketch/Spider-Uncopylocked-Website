@@ -44,7 +44,7 @@ export const submitListing = mutation({
     if (!(args.contactDiscord?.trim() || args.contactEmail?.trim() || args.contactPhone?.trim())) throw new Error("Add at least one contact method: Discord, email, or phone.");
     return await ctx.db.insert("listings", {
       ...args,
-      status: "active",
+      status: "pending",
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
