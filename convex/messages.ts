@@ -17,6 +17,33 @@ function isBlockedByEither(blocks: Array<{ blockerDiscordId: string; blockedDisc
     (block.blockerDiscordId === two && block.blockedDiscordId === one));
 }
 
+
+export const upsertMember = mutation({
+  args: { adminSecret: v.string(), discordId: v.string(), username: v.string(), displayName: v.string(), avatar: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    if (!args.discordId || !args.username.trim()) throw new Error("A valid Discord profile is required.");
+    const existing = await ctx.db.query("memberProfiles").withIndex("by_discordId", q => q.eq("discordId", args.discordId)).first();
+    const values = { username: args.username.trim().slice(0, 80), displayName: args.displayName.trim().slice(0, 80) || args.username.trim().slice(0, 80), ...(args.avatar ? { avatar: args.avatar.slice(0, 500) } : {}), updatedAt: Date.now() };
+    if (existing) await ctx.db.patch(existing._id, values);
+    else await ctx.db.insert("memberProfiles", { discordId: args.discordId, ...values });
+    return { success: true };
+  },
+});
+
+export const searchMembers = query({
+  args: { adminSecret: v.string(), discordId: v.string(), search: v.string() },
+  handler: async (ctx, args) => {
+    assertAdminSecret(args.adminSecret);
+    const term = args.search.trim().toLowerCase();
+    if (term.length < 2) return [];
+    const profiles = await ctx.db.query("memberProfiles").withIndex("by_username").take(250);
+    const matches = profiles.filter(profile => profile.discordId !== args.discordId && (profile.username.toLowerCase().includes(term) || profile.displayName.toLowerCase().includes(term))).slice(0, 12);
+    const blocks = await ctx.db.query("messageBlocks").withIndex("by_blocker", q => q.eq("blockerDiscordId", args.discordId)).collect();
+    return matches.filter(profile => !blocks.some(block => block.blockedDiscordId === profile.discordId)).map(profile => ({ discordId: profile.discordId, username: profile.username, displayName: profile.displayName, avatar: profile.avatar }));
+  },
+});
+
 export const listConversations = query({
   args: { adminSecret: v.string(), discordId: v.string() },
   handler: async (ctx, args) => {
@@ -65,8 +92,11 @@ export const startConversation = mutation({
   handler: async (ctx, args) => {
     assertAdminSecret(args.adminSecret);
     if (!args.senderDiscordId || args.senderDiscordId === args.recipientDiscordId) throw new Error("Choose another member to message.");
-    const recipient = await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.recipientDiscordId)).first();
-    if (!recipient || recipient.status !== "approved") throw new Error("This member does not have an active public developer profile yet.");
+    const member = await ctx.db.query("memberProfiles").withIndex("by_discordId", q => q.eq("discordId", args.recipientDiscordId)).first();
+    const developer = member ? null : await ctx.db.query("developers").withIndex("by_discord", q => q.eq("discordId", args.recipientDiscordId)).first();
+    if (!member && (!developer || developer.status !== "approved")) throw new Error("This member has not registered on Spider yet.");
+    const recipientName = member?.displayName || developer?.displayName || developer?.username || "Spider member";
+    const recipientAvatar = member?.avatar || developer?.avatarUrl;
     const [senderBlocks, recipientBlocks] = await Promise.all([
       ctx.db.query("messageBlocks").withIndex("by_blocker", q => q.eq("blockerDiscordId", args.senderDiscordId)).collect(),
       ctx.db.query("messageBlocks").withIndex("by_blocker", q => q.eq("blockerDiscordId", args.recipientDiscordId)).collect(),
@@ -84,14 +114,13 @@ export const startConversation = mutation({
       return { id: existing._id, created: false, requestStatus: existing.requestStatus ?? "accepted" };
     }
     const senderName = args.senderName.trim().slice(0, 80) || "Spider member";
-    const recipientName = recipient.displayName || recipient.username;
     const id = await ctx.db.insert("conversations", {
       participantOne, participantTwo,
       participantOneName: oneFirst ? senderName : recipientName,
       participantTwoName: oneFirst ? recipientName : senderName,
       ...(oneFirst
-        ? { ...(args.senderAvatar ? { participantOneAvatar: args.senderAvatar } : {}), ...(recipient.avatarUrl ? { participantTwoAvatar: recipient.avatarUrl } : {}) }
-        : { ...(recipient.avatarUrl ? { participantOneAvatar: recipient.avatarUrl } : {}), ...(args.senderAvatar ? { participantTwoAvatar: args.senderAvatar } : {}) }),
+        ? { ...(args.senderAvatar ? { participantOneAvatar: args.senderAvatar } : {}), ...(recipientAvatar ? { participantTwoAvatar: recipientAvatar } : {}) }
+        : { ...(recipientAvatar ? { participantOneAvatar: recipientAvatar } : {}), ...(args.senderAvatar ? { participantTwoAvatar: args.senderAvatar } : {}) }),
       ...(args.contextType ? { contextType: args.contextType.slice(0, 32) } : {}),
       ...(args.contextTitle ? { contextTitle: args.contextTitle.trim().slice(0, 120) } : {}),
       requestStatus: "pending", requestedBy: args.senderDiscordId, createdAt: Date.now(), updatedAt: Date.now(),
