@@ -115,6 +115,13 @@ export default defineSchema({
   }).index("by_studio_createdAt", ["studioId", "createdAt"])
     .index("by_role_createdAt", ["roleId", "createdAt"])
     .index("by_applicant_createdAt", ["applicantDiscordId", "createdAt"]),
+  memberProfiles: defineTable({
+    discordId: v.string(),
+    username: v.string(),
+    displayName: v.string(),
+    avatar: v.optional(v.string()),
+    updatedAt: v.number(),
+  }).index("by_discordId", ["discordId"]).index("by_username", ["username"]),
   conversations: defineTable({
     participantOne: v.string(),
     participantTwo: v.string(),
