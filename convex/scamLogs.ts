@@ -53,7 +53,7 @@ export const adminList = query({
     const rows = args.status
       ? await ctx.db.query("scamLogEntries").filter(q=>q.eq(q.field("status"),args.status as any)).order("desc").take(300)
       : await ctx.db.query("scamLogEntries").order("desc").take(300);
-    return rows;
+    return await Promise.all(rows.map(async (row) => ({ ...row, evidenceFiles: await Promise.all(row.evidenceStorageIds.map(async (storageId) => ({ storageId, url: await ctx.storage.getUrl(storageId) }))) })));
   }
 });
 
