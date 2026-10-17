@@ -1,6 +1,5 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-import type { Id } from "./_generated/dataModel";
 
 function assertSecret(secret: string) {
   const expected = process.env.ADMIN_API_SECRET || process.env.REPORT_WRITE_SECRET;
@@ -54,7 +53,7 @@ export const adminList = query({
     const rows = args.status
       ? await ctx.db.query("scamLogEntries").filter(q=>q.eq(q.field("status"),args.status as any)).order("desc").take(300)
       : await ctx.db.query("scamLogEntries").order("desc").take(300);
-    return await Promise.all(rows.map(async (row) => ({ ...row, evidenceFiles: await Promise.all(row.evidenceStorageIds.map(async (storageId: Id<"_storage">) => ({ storageId, url: await ctx.storage.getUrl(storageId) }))) })));
+    return await Promise.all(rows.map(async (row) => ({ ...row, evidenceFiles: await Promise.all(row.evidenceStorageIds.map(async (storageId: (typeof row.evidenceStorageIds)[number]) => ({ storageId, url: await ctx.storage.getUrl(storageId) }))) })));
   }
 });
 
