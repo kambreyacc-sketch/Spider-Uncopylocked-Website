@@ -47,8 +47,8 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
             <p>{page.description}</p>
           </div>
         </header>
-        {section === "publishing" ? (
-          <PublishingModerationPanel />
+        {section === "publishing" || section === "jobs" || section === "studios" ? (
+          <PublishingModerationPanel initialTab={section === "jobs" ? "job" : section === "studios" ? "studio" : "listing"} />
         ) : section === "restrictions" ? (
           <UserRestrictionsPanel />
         ) : section === "community-applications" ? (
