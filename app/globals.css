@@ -2617,3 +2617,12 @@ a:hover { text-decoration-color: #a2a2a2; }
 .messages-bubble-actions button:hover{background:#353539;color:#fff}
 .messages-compose-locked{margin:14px 18px;padding:14px;border:1px solid #39393f;border-radius:9px;background:#18181b;color:#a8a8b0;font-size:12px;line-height:1.6}
 @media(max-width:640px){.messages-request-banner{align-items:stretch;flex-direction:column;margin:0 10px 10px}.messages-request-actions{width:100%}.messages-request-actions button{flex:1}.messages-tool-button{flex-shrink:0}}
+
+.messages-member-results{display:grid;gap:4px;padding:7px;margin-top:-3px;border:1px solid #343439;border-radius:9px;background:#111113}
+.messages-member-results>small{padding:8px;color:#a5a5ad;font-size:11px}
+.messages-member-results>button{display:flex;align-items:center;gap:9px;width:100%;min-width:0;padding:8px;border:1px solid transparent;border-radius:7px;background:transparent;color:#e9e9ec;text-align:left;cursor:pointer}
+.messages-member-results>button:hover{background:#202023;border-color:#39393f}
+.messages-member-results>button>span:nth-child(2){display:grid;gap:3px;flex:1;min-width:0}
+.messages-member-results>button strong{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.messages-member-results>button small{color:#9999a2;font-size:10px}
+.messages-member-results>button>svg{color:#bcbcc3;flex-shrink:0}
