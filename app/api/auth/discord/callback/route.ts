@@ -1,6 +1,8 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { api } from "../../../../convex/_generated/api";
+import { getBillingDb } from "../../../../lib/stripe";
 export const runtime = "nodejs";
 function equal(a: string, b: string) {
   const x = Buffer.from(a),
@@ -70,6 +72,20 @@ export async function GET(request: NextRequest) {
         ? "https://cdn.discordapp.com/avatars/" + p.id + "/" + p.avatar + ".png"
         : "",
     };
+    // Register the authenticated account for username-based member discovery.
+    // Messaging sync must never prevent Discord sign-in if Convex is temporarily unavailable.
+    try {
+      const db = getBillingDb();
+      if (db) await db.client.mutation(api.messages.upsertMember, {
+        adminSecret: db.secret,
+        discordId: profile.id,
+        username: profile.username,
+        displayName: profile.displayName,
+        ...(profile.avatar ? { avatar: profile.avatar } : {}),
+      });
+    } catch (error) {
+      console.error("Spider member profile sync failed:", error);
+    }
     const payload = Buffer.from(
       JSON.stringify({ provider: "discord", profile, issuedAt: Date.now() }),
     ).toString("base64url");
