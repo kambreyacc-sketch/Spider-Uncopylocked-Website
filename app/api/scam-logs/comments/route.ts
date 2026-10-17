@@ -1,0 +1,8 @@
+import { NextResponse } from "next/server";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../../../../convex/_generated/api";
+import { getSpiderProfile } from "../../../../lib/session";
+export const dynamic="force-dynamic";
+function config(){const url=process.env.NEXT_PUBLIC_CONVEX_URL||process.env.CONVEX_URL;const secret=process.env.CONVEX_ADMIN_API_SECRET||process.env.ADMIN_API_SECRET||process.env.REPORT_WRITE_SECRET;return url&&secret?{url,secret}:null}
+export async function GET(request:Request){const cfg=config();const reportId=new URL(request.url).searchParams.get("reportId");if(!cfg||!reportId)return NextResponse.json({error:"Missing report."},{status:400});try{const comments=await new ConvexHttpClient(cfg.url).query(api.scamLogs.publicComments,{reportId:reportId as any});return NextResponse.json({comments},{headers:{"Cache-Control":"no-store"}})}catch{return NextResponse.json({error:"Could not load comments."},{status:400})}}
+export async function POST(request:Request){const user=await getSpiderProfile();if(!user)return NextResponse.json({error:"Sign in with Discord to comment."},{status:401});const cfg=config();if(!cfg)return NextResponse.json({error:"Comments are not configured."},{status:503});try{const b=await request.json();if(typeof b.reportId!=="string"||typeof b.body!=="string")return NextResponse.json({error:"Invalid comment."},{status:400});await new ConvexHttpClient(cfg.url).mutation(api.scamLogs.addComment,{adminSecret:cfg.secret,reportId:b.reportId as any,authorDiscordId:user.id,authorName:user.displayName||user.username,body:b.body});return NextResponse.json({ok:true})}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Could not post comment."},{status:400})}}
