@@ -14,8 +14,8 @@ export async function GET(_request: Request, context: Ctx) {
   const db = getBillingDb();
   if (!db) return NextResponse.json({ error: "Studio storage is unavailable." }, { status: 503 });
   try {
-    const studio = await db.client.query(api.studios.bySlug, { adminSecret: db.secret, slug });
-    if (!studio || studio.ownerDiscordId !== profile.id) return NextResponse.json({ error: "Only the studio owner can view applications." }, { status: 403 });
+    const studio = await db.client.query(api.studios.ownerBySlug, { adminSecret: db.secret, slug, ownerDiscordId: profile.id });
+    if (!studio) return NextResponse.json({ error: "Only the studio owner can view applications." }, { status: 403 });
     const applications = await db.client.query(api.studios.applicationsForOwner, { adminSecret: db.secret, studioId: studio.id, ownerDiscordId: profile.id });
     return NextResponse.json({ applications }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
@@ -57,8 +57,8 @@ export async function PATCH(request: Request, context: Ctx) {
   const db = getBillingDb();
   if (!db) return NextResponse.json({ error: "Studio storage is unavailable." }, { status: 503 });
   try {
-    const studio = await db.client.query(api.studios.bySlug, { adminSecret: db.secret, slug });
-    if (!studio || studio.ownerDiscordId !== profile.id) return NextResponse.json({ error: "Only the studio owner can review applications." }, { status: 403 });
+    const studio = await db.client.query(api.studios.ownerBySlug, { adminSecret: db.secret, slug, ownerDiscordId: profile.id });
+    if (!studio) return NextResponse.json({ error: "Only the studio owner can review applications." }, { status: 403 });
     const body = await request.json();
     if (typeof body.applicationId !== "string" || !["new", "reviewing", "shortlisted", "accepted", "declined"].includes(body.status)) return NextResponse.json({ error: "Invalid application update." }, { status: 400 });
     await db.client.mutation(api.studios.updateApplicationStatus, { adminSecret: db.secret, applicationId: body.applicationId as never, ownerDiscordId: profile.id, status: body.status });

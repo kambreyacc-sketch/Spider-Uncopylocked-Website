@@ -13,13 +13,31 @@ export async function GET(_request: Request, context: Ctx) {
   const db = getBillingDb();
   if (!db) return NextResponse.json({ error: "Studio storage is unavailable." }, { status: 503 });
   try {
+    const profile = await getSpiderProfile();
+
+    // Owners need to see every role (including closed roles) and their studio's
+    // moderation status. Public visitors only receive approved studios/open roles.
+    if (profile) {
+      const ownedStudio = await db.client.query(api.studios.ownerBySlug, {
+        adminSecret: db.secret, slug, ownerDiscordId: profile.id,
+      });
+      if (ownedStudio) {
+        const roles = await db.client.query(api.studios.rolesForOwner, {
+          adminSecret: db.secret, studioId: ownedStudio.id, ownerDiscordId: profile.id,
+        });
+        return NextResponse.json(
+          { studio: ownedStudio, roles, isOwner: true },
+          { headers: { "Cache-Control": "no-store" } },
+        );
+      }
+    }
+
     const [studio, roles] = await Promise.all([
       db.client.query(api.studios.bySlug, { adminSecret: db.secret, slug }),
       db.client.query(api.studios.openRoles, { adminSecret: db.secret, slug }),
     ]);
     if (!studio) return NextResponse.json({ error: "Studio not found." }, { status: 404 });
-    const profile = await getSpiderProfile();
-    return NextResponse.json({ studio, roles, isOwner: !!profile && profile.id === studio.ownerDiscordId }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ studio, roles, isOwner: false }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     console.error("Studio roles lookup failed:", error);
     return NextResponse.json({ error: "Could not load studio roles." }, { status: 502 });
@@ -33,8 +51,9 @@ export async function POST(request: Request, context: Ctx) {
   const db = getBillingDb();
   if (!db) return NextResponse.json({ error: "Studio storage is unavailable." }, { status: 503 });
   try {
-    const studio = await db.client.query(api.studios.bySlug, { adminSecret: db.secret, slug });
-    if (!studio || studio.ownerDiscordId !== profile.id) return NextResponse.json({ error: "Only the studio owner can create roles." }, { status: 403 });
+    const studio = await db.client.query(api.studios.ownerBySlug, { adminSecret: db.secret, slug, ownerDiscordId: profile.id });
+    if (!studio) return NextResponse.json({ error: "Only the studio owner can create roles." }, { status: 403 });
+    if (studio.status !== "active") return NextResponse.json({ error: "Your studio must be approved before you can publish open roles." }, { status: 409 });
     const body = await request.json();
     const roleId = await db.client.mutation(api.studios.createRole, {
       adminSecret: db.secret, studioId: studio.id, ownerDiscordId: profile.id,
@@ -57,8 +76,8 @@ export async function PATCH(request: Request, context: Ctx) {
   const db = getBillingDb();
   if (!db) return NextResponse.json({ error: "Studio storage is unavailable." }, { status: 503 });
   try {
-    const studio = await db.client.query(api.studios.bySlug, { adminSecret: db.secret, slug });
-    if (!studio || studio.ownerDiscordId !== profile.id) return NextResponse.json({ error: "Only the studio owner can manage roles." }, { status: 403 });
+    const studio = await db.client.query(api.studios.ownerBySlug, { adminSecret: db.secret, slug, ownerDiscordId: profile.id });
+    if (!studio) return NextResponse.json({ error: "Only the studio owner can manage roles." }, { status: 403 });
     const body = await request.json();
     if (body.action !== "status" || typeof body.roleId !== "string" || !["open", "closed"].includes(body.status)) return NextResponse.json({ error: "Invalid role update." }, { status: 400 });
     await db.client.mutation(api.studios.manageRole, { adminSecret: db.secret, roleId: body.roleId as never, ownerDiscordId: profile.id, status: body.status });
