@@ -133,7 +133,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unknown message action." }, { status: 400 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Message action failed.";
-    const expected = /Choose another creator|active public developer profile|access to this conversation|Conversation not found|Messages must contain/i.test(message);
+    const expected = /Choose another member|active public developer profile|access to this conversation|Conversation not found|Messages must contain|message request|Accept this message request|You can only edit|Deleted messages|Choose a reason|already reported|Messaging is unavailable|introduction|cannot message/i.test(message);
     console.error("Private message action failed:", message);
     return NextResponse.json({ error: expected ? message : "The message could not be sent. Please try again." }, { status: expected ? 400 : 502 });
   }
