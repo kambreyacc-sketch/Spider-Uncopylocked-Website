@@ -22,7 +22,6 @@ import {
   ShoppingBag,
   LogOut,
   LockKeyhole,
-  CreditCard,
   PanelLeftClose,
   PanelLeftOpen,
   Menu,
@@ -323,40 +322,27 @@ export default function SpiderSidebar() {
             <span className="sidebar-link-label">Support Center / Tickets</span>
           </Link>
           {user?.id && ADMIN_DISCORD_IDS.has(user.id) && (
-            <>
-              <Link
-                href="/admin"
-                className={
-                  path === "/admin" || path.startsWith("/admin/")
-                    ? "active"
-                    : ""
-                }
-                onClick={closeMobile}
-                title={collapsed ? "Admin Panel" : undefined}
-              >
-                <LockKeyhole size={16} />
-                <span className="sidebar-link-label">Admin Panel</span>
-              </Link>
-              <Link
-                href="/admin/billing"
-                className={path === "/admin/billing" ? "active" : ""}
-                onClick={closeMobile}
-                title={collapsed ? "Billing Overview" : undefined}
-              >
-                <CreditCard size={16} />
-                <span className="sidebar-link-label">Billing Overview</span>
-              </Link>
-            </>
+            <Link
+              href="/admin"
+              className={path === "/admin" || path.startsWith("/admin/") ? "active" : ""}
+              onClick={closeMobile}
+              title={collapsed ? "Admin Panel" : undefined}
+            >
+              <LockKeyhole size={16} />
+              <span className="sidebar-link-label">Admin Panel</span>
+            </Link>
           )}
-          <Link
-            href="/dashboard/settings?tab=billing"
-            className={path === "/dashboard/settings" ? "active" : ""}
-            onClick={closeMobile}
-            title={collapsed ? "Billing" : undefined}
-          >
-            <CreditCard size={16} />
-            <span className="sidebar-link-label">Billing</span>
-          </Link>
+          {user?.id === "1404024989208019086" && (
+            <Link
+              href="/publishing-review"
+              className={path === "/publishing-review" ? "active" : ""}
+              onClick={closeMobile}
+              title={collapsed ? "Publishing Review" : undefined}
+            >
+              <ClipboardList size={16} />
+              <span className="sidebar-link-label">Publishing Review</span>
+            </Link>
+          )}
           <Link
             href="/settings"
             className={path === "/settings" ? "active" : ""}
