@@ -125,6 +125,8 @@ export default defineSchema({
     contextType: v.optional(v.string()),
     contextTitle: v.optional(v.string()),
     lastMessageText: v.optional(v.string()),
+    requestStatus: v.optional(v.union(v.literal("pending"), v.literal("accepted"), v.literal("declined"))),
+    requestedBy: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_participantOne_updatedAt", ["participantOne", "updatedAt"])
@@ -136,7 +138,33 @@ export default defineSchema({
     body: v.string(),
     createdAt: v.number(),
     readBy: v.array(v.string()),
+    editedAt: v.optional(v.number()),
+    deletedAt: v.optional(v.number()),
   }).index("by_conversation_createdAt", ["conversationId", "createdAt"]),
+  messageBlocks: defineTable({
+    blockerDiscordId: v.string(),
+    blockedDiscordId: v.string(),
+    createdAt: v.number(),
+  }).index("by_blocker", ["blockerDiscordId"]).index("by_pair", ["blockerDiscordId", "blockedDiscordId"]),
+  messageReports: defineTable({
+    reporterDiscordId: v.string(),
+    messageId: v.id("messages"),
+    conversationId: v.id("conversations"),
+    reason: v.string(),
+    details: v.optional(v.string()),
+    status: v.union(v.literal("open"), v.literal("reviewed"), v.literal("dismissed")),
+    createdAt: v.number(),
+    reviewedAt: v.optional(v.number()),
+    reviewedBy: v.optional(v.string()),
+  }).index("by_status_createdAt", ["status", "createdAt"]).index("by_reporter_createdAt", ["reporterDiscordId", "createdAt"]),
+  messageAuditLogs: defineTable({
+    messageId: v.id("messages"),
+    conversationId: v.id("conversations"),
+    actorDiscordId: v.string(),
+    action: v.union(v.literal("edited"), v.literal("deleted")),
+    previousBody: v.string(),
+    createdAt: v.number(),
+  }).index("by_message_createdAt", ["messageId", "createdAt"]),
 
   supportTickets: defineTable({
     ticketNumber: v.string(),
