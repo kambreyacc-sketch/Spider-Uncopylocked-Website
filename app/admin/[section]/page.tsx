@@ -30,8 +30,9 @@ const pages: Record<string, { title: string; description: string }> = {
 };
 
 export default async function AdminSection({ params }: { params: Promise<{ section: string }> }) {
-  if (!(await isSpiderAdmin())) redirect("/admin");
   const { section } = await params;
+  if (section === "publishing" || section === "jobs" || section === "studios") redirect("/publishing-review");
+  if (!(await isSpiderAdmin())) redirect("/admin");
   const page = pages[section];
   if (!page) notFound();
 

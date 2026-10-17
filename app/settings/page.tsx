@@ -1,6 +1,7 @@
 "use client";
 
 import SpiderSidebar from "../components/SpiderSidebar";
+import BillingSettingsClient from "../dashboard/settings/billing-client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -316,24 +317,54 @@ export default function SettingsPage() {
                   </Link>
                 )}
               </div>
-              <div id="billing" className="settings-link-row">
-                <div className="settings-link-copy">
-                  <CreditCard size={17} />
-                  <span>
-                    <strong>Billing & subscriptions</strong>
-                    <small>
-                      View your current billing settings and available account
-                      options.
-                    </small>
-                  </span>
+            </section>
+
+            <section id="billing" className="settings-section-card">
+              <div className="settings-section-heading">
+                <span className="settings-section-icon">
+                  <CreditCard size={18} />
+                </span>
+                <div>
+                  <h2>Billing & subscriptions</h2>
+                  <p>Manage your plan, payment methods, renewals, and receipts here in Settings.</p>
                 </div>
-                <Link
-                  href="/dashboard/settings"
-                  className="settings-inline-action"
-                >
-                  Open billing <ChevronRight size={14} />
-                </Link>
               </div>
+              {account ? (
+                <BillingSettingsClient
+                  user={{
+                    id: account.id || "",
+                    displayName,
+                    avatar,
+                  }}
+                />
+              ) : (
+                <div className="settings-link-row">
+                  <div className="settings-link-copy">
+                    <CreditCard size={17} />
+                    <span>
+                      <strong>Connect your account to manage billing</strong>
+                      <small>Your billing details are linked to your signed-in Discord account.</small>
+                    </span>
+                  </div>
+                  <Link href="/api/auth/discord/login" className="settings-inline-action">
+                    Sign in with Discord <ChevronRight size={14} />
+                  </Link>
+                </div>
+              )}
+              {account?.id && ["1337293227820322878", "1404024989208019086"].includes(account.id) && (
+                <div className="settings-link-row">
+                  <div className="settings-link-copy">
+                    <LockKeyhole size={17} />
+                    <span>
+                      <strong>Platform billing overview</strong>
+                      <small>Administrator-only Stripe subscription and invoice metadata.</small>
+                    </span>
+                  </div>
+                  <Link href="/admin/billing" className="settings-inline-action">
+                    Open admin billing <ChevronRight size={14} />
+                  </Link>
+                </div>
+              )}
             </section>
 
             <section id="appearance" className="settings-section-card">
