@@ -114,7 +114,7 @@ export default function SpiderAIPage() {
           <Plus size={16} /> New project <span className="spai-shortcut">⌘ K</span>
         </button>
         <div className="spai-sidebar-heading">WORKSPACE</div>
-        <button className="spai-side-link active"><Layers3 size={16} /> AI Workspace</button>
+        <button className="spai-side-link active"><Layers3 size={16} /> Spider Uncopylocked AI</button>
         <button className="spai-side-link" onClick={() => setShowHistory(!showHistory)}><History size={16} /> Recent projects <span className="spai-count">{messages.length ? "1" : "0"}</span></button>
         {showHistory && <button className="spai-history-item" onClick={() => setShowHistory(false)}><FileCode2 size={14}/>{project}</button>}
         <div className="spai-project-empty">
@@ -163,7 +163,7 @@ export default function SpiderAIPage() {
 
         <div className="spai-content">
           {messages.length === 0 ? <div className="spai-welcome">
-            <div className="spai-kicker"><span className="spai-kicker-dot"/> SPIDER UNCOPYLOCKED <span className="spai-kicker-line"/></div>
+            <div className="spai-kicker"><span className="spai-kicker-dot"/> SPIDER UNCOPYLOCKED AI <span className="spai-kicker-line"/></div>
             <h1>What are we<br/><span>building today?</span></h1>
             <p className="spai-subtitle">Describe the Roblox system you want to build. Start with a detailed template or write your own instructions.</p>
             {user ? <form className="spai-composer spai-composer-welcome" onSubmit={sendMessage}>
@@ -183,13 +183,13 @@ export default function SpiderAIPage() {
             <div className="spai-starter-grid">{starterPrompts.map((item) => <button type="button" key={item.title} className="spai-starter" onClick={() => startPrompt(item.prompt)}><span className="spai-starter-icon">{item.icon}</span><span><strong>{item.title}</strong><small>{item.detail}</small></span><ArrowUpRight size={14} className="spai-starter-arrow"/></button>)}</div>
             <div className="spai-build-note"><ShieldCheck size={14}/> Templates include full requirements. Review and edit the prompt before submitting.</div></>}
           </div> : <div className="spai-chat-layout">
-            <div className="spai-chat-header"><div><span className="spai-chat-label">SPIDER UNCOPYLOCKED</span><h2>{messages.find(m=>m.role==="user")?.text || "New conversation"}</h2></div><button className="spai-icon-button" onClick={() => setMessages([])} title="New chat"><MessageSquarePlus size={17}/></button></div>
+            <div className="spai-chat-header"><div><span className="spai-chat-label">SPIDER UNCOPYLOCKED AI</span><h2>{messages.find(m=>m.role==="user")?.text || "New conversation"}</h2></div><button className="spai-icon-button" onClick={() => setMessages([])} title="New chat"><MessageSquarePlus size={17}/></button></div>
             <div className="spai-messages">{messages.map((message, index) => <div className={"spai-message "+message.role} key={index}><div className="spai-message-avatar">{message.role==="assistant"?<img className="spai-message-user-avatar" src="/spider-uncopylocked-pfp.webp" alt="Spider Uncopylocked"/>: user && avatarUrl ? <img className="spai-message-user-avatar" src={avatarUrl} alt=""/> : "?"}</div><div className="spai-message-body"><div className="spai-message-name">{message.role==="assistant"?"Spider Uncopylocked":(user?.displayName || user?.username || "You")}<span>{message.role==="assistant"?"WORKSPACE NOTICE":"JUST NOW"}</span></div><p>{message.text}</p>{message.role==="assistant"&&<div className="spai-preview-box"><div><Code2 size={16}/><span><strong>Roblox Studio connection</strong><small>Plugin connection is a separate next step</small></span></div><span className="spai-status-pill">NOT CONNECTED</span></div>}</div></div>)}</div>
             <form className="spai-composer spai-composer-chat" onSubmit={sendMessage}><textarea value={prompt} onChange={(e)=>setPrompt(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}}} placeholder="Describe the full system you want to build…" rows={2} aria-label="Message Spider Uncopylocked"/><div className="spai-composer-tools"><div className="spai-composer-left"><button type="button" className="spai-tool-button" onClick={()=>window.alert("Attachments will be enabled when the build service is connected.")}><Paperclip size={15}/></button><button type="button" className="spai-model-select" onClick={()=>setShowModelMenu(!showModelMenu)}><Bot size={15}/>{model}<ChevronDown size={13}/></button>{showModelMenu&&<span className="spai-model-inline">Model choice preview</span>}</div><button type="submit" className="spai-send-button" disabled={!prompt.trim() || isGenerating}><ArrowUp size={16}/></button></div></form>
             <div className="spai-chat-foot"><ShieldCheck size={13}/> AI responses use the configured server-side provider. Roblox Studio sync is a separate plugin integration.</div>
           </div>}
         </div>
-        <footer className="spai-footer"><span>SPIDER UNCOPYLOCKED <span className="spai-footer-version">WORKSPACE</span></span><span><CircleHelp size={13}/> Built for Roblox creators <span className="spai-footer-sep">·</span> Studio connection planned</span></footer>
+        <footer className="spai-footer"><span>SPIDER UNCOPYLOCKED AI <span className="spai-footer-version">WORKSPACE</span></span><span><CircleHelp size={13}/> Built for Roblox creators <span className="spai-footer-sep">·</span> Studio connection planned</span></footer>
       </section>
     </main>
   );

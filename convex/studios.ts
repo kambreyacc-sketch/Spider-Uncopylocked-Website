@@ -73,7 +73,7 @@ export const create = mutation({
       ...(args.ownerAvatar ? { ownerAvatar: args.ownerAvatar } : {}),
       ...(args.robloxUrl ? { robloxUrl: args.robloxUrl } : {}),
       ...(args.discordUrl ? { discordUrl: args.discordUrl } : {}),
-      status: "active",
+      status: "pending",
       createdAt: now,
       updatedAt: now,
     });

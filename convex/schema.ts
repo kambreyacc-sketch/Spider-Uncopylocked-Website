@@ -36,7 +36,7 @@ export default defineSchema({
   developerReviews: defineTable({ developerId: v.id("developers"), reviewerDiscordId: v.string(), reviewerName: v.string(), rating: v.number(), comment: v.string(), createdAt: v.number() }).index("by_developer_createdAt", ["developerId", "createdAt"]),
   jobs: defineTable({
     title: v.string(), description: v.string(), craft: v.string(), budgetMin: v.number(), budgetMax: v.number(), deadline: v.optional(v.string()),
-    discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string(), status: v.union(v.literal("open"), v.literal("closed")),
+    discordContact: v.string(), posterDiscordId: v.string(), posterName: v.string(), status: v.union(v.literal("pending"), v.literal("open"), v.literal("closed"), v.literal("rejected")),
     createdAt: v.number(),
   }).index("by_status_createdAt", ["status", "createdAt"]).index("by_poster", ["posterDiscordId"]),
 
@@ -50,7 +50,7 @@ export default defineSchema({
     ownerAvatar: v.optional(v.string()),
     robloxUrl: v.optional(v.string()),
     discordUrl: v.optional(v.string()),
-    status: v.union(v.literal("active"), v.literal("archived")),
+    status: v.union(v.literal("pending"), v.literal("active"), v.literal("archived"), v.literal("rejected")),
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_slug", ["slug"]).index("by_owner", ["ownerDiscordId"]).index("by_status_createdAt", ["status", "createdAt"]),

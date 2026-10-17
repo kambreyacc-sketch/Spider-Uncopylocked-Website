@@ -112,7 +112,7 @@ export const postJob = mutation({
     if (!Number.isFinite(args.budgetMin) || !Number.isFinite(args.budgetMax) || args.budgetMin < 0 || args.budgetMax < args.budgetMin || args.budgetMax > 1000000) throw new Error("Enter a valid budget range.");
     if (!args.discordContact.trim() || args.discordContact.length > 80) throw new Error("Add a Discord contact.");
     if (args.deadline && !/^\d{4}-\d{2}-\d{2}$/.test(args.deadline)) throw new Error("Choose a valid deadline.");
-    return await ctx.db.insert("jobs", { ...jobArgs, title: args.title.trim(), posterName: args.posterName.trim().slice(0, 100), status: "open", createdAt: now });
+    return await ctx.db.insert("jobs", { ...jobArgs, title: args.title.trim(), posterName: args.posterName.trim().slice(0, 100), status: "pending", createdAt: now });
   },
 });
 

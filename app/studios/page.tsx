@@ -36,6 +36,7 @@ type Studio = {
   robloxUrl?: string;
   discordUrl?: string;
   createdAt: number;
+  status?: string;
 };
 
 const starterRoles = [
@@ -59,14 +60,14 @@ function StudioCard({ studio, owned = false }: { studio: Studio; owned?: boolean
           <h3>{studio.name}</h3>
           <span>@{studio.slug}</span>
         </div>
-        {owned && <span className="studios-owner-chip"><BadgeCheck size={13} /> Owner</span>}
+        {owned && <span className="studios-owner-chip"><BadgeCheck size={13} /> Owner</span>}{owned && studio.status === "pending" && <span className="studios-owner-chip">Pending review</span>}{owned && studio.status === "rejected" && <span className="studios-owner-chip">Needs changes</span>}
       </div>
       <p className="studios-directory-description">{studio.description}</p>
       <div className="studios-directory-specialties">
         {studio.specialties.map(tag => <span key={tag}>{tag}</span>)}
       </div>
       <div className="studio-card-actions">
-        <Link href={"/studios/" + encodeURIComponent(studio.slug)} className="studio-card-link">View studio <ArrowRight size={14} /></Link>
+        {studio.status === "active" && <Link href={"/studios/" + encodeURIComponent(studio.slug)} className="studio-card-link">View studio <ArrowRight size={14} /></Link>}{owned && studio.status === "pending" && <span className="studio-card-link">Awaiting staff approval</span>}
         {owned && <Link href={"/studios/manage/" + encodeURIComponent(studio.slug)} className="studio-card-link studio-card-manage">Manage studio <ArrowUpRight size={14} /></Link>}
       </div>
       <div className="studios-directory-footer">
