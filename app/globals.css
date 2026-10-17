@@ -2428,3 +2428,48 @@ a:hover { text-decoration-color: #a2a2a2; }
 .studio-application-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 @media(max-width:850px){.studio-manage-grid{grid-template-columns:1fr}.studio-role-list{grid-template-columns:1fr}.studio-detail-hero{align-items:flex-start;flex-wrap:wrap}.studio-detail-hero>.hire-primary{margin-left:0}}
 @media(max-width:520px){.studio-detail-hero{padding:18px;gap:12px}.studio-detail-avatar{width:52px;height:52px}.studio-detail-main{width:calc(100% - 70px)}.studio-apply-modal{padding:20px}.studio-manage-panel{padding:16px}.studio-application-card header{flex-direction:column}.studio-application-card select{max-width:100%}.studio-manage-role{align-items:flex-start;flex-direction:column}.studio-manage-role .studio-secondary-button{width:100%}}
+
+
+/* Search surfaces: dark glass, scenic backdrop, and clear focus states. */
+.spider-hero-search{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:linear-gradient(100deg,rgba(10,11,13,.91),rgba(28,29,32,.76)),url("https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1400&q=80") center 48%/cover!important;
+  border:1px solid rgba(218,220,224,.42)!important;
+  border-radius:10px!important;
+  color:#dedee2!important;
+  box-shadow:0 12px 38px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  backdrop-filter:blur(14px);
+  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.spider-hero-search:focus-within,.resource-search:focus-within{
+  border-color:rgba(240,240,242,.78)!important;
+  box-shadow:0 0 0 3px rgba(235,235,238,.09),0 16px 42px rgba(0,0,0,.38)!important;
+}
+.spider-hero-search>svg{color:#c8c9cd!important;filter:drop-shadow(0 1px 3px #000)}
+.spider-hero-search input{color:#fff!important;text-shadow:0 1px 3px #000}
+.spider-hero-search input::placeholder{color:#c0c1c6!important}
+.spider-hero-search button{background:#f0f0f2!important;color:#101012!important;border:1px solid rgba(255,255,255,.6)!important;box-shadow:0 4px 14px #0005;transition:background .18s ease,transform .18s ease}
+.spider-hero-search button:hover{background:#fff!important;transform:translateY(-1px)}
+.resource-search{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  height:58px!important;
+  padding:6px 17px!important;
+  background:linear-gradient(100deg,rgba(8,9,11,.91),rgba(20,21,24,.79)),url("https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1400&q=80") center 48%/cover!important;
+  border:1px solid rgba(218,220,224,.42)!important;
+  border-radius:10px!important;
+  color:#d2d3d7!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.07);
+  backdrop-filter:blur(12px);
+  transition:border-color .18s ease,box-shadow .18s ease;
+}
+.resource-search>svg{flex:none;color:#c7c8cc!important}
+.resource-search input{height:100%;color:#fff!important;font-size:12px!important;text-shadow:0 1px 3px #000}
+.resource-search input::placeholder{color:#b7b8bd!important}
+@media(max-width:600px){
+ .spider-hero-search{min-height:52px!important}
+ .resource-search{height:52px!important;padding:5px 12px!important}
+}
