@@ -94,8 +94,8 @@ export default function SellerForm() {
       <label className="sell-field">Phone number<input type="tel" value={draft.contactPhone} onChange={e=>update("contactPhone",e.target.value)} placeholder="Optional phone number" /></label><small>At least one contact method is required. Only share contact details you are comfortable showing to potential buyers.</small>
     </section>
     {error&&<div className="sell-message error"><AlertCircle size={17}/>{error}</div>}
-    {saved&&<div className="sell-message success"><Check size={17}/><span><b>Listing published!</b><br/>Your listing is now live in the marketplace.</span></div>}
+    {saved&&<div className="sell-message success"><Check size={17}/><span><b>Submitted for review</b><br/>Your listing is saved and will appear after staff approval.</span></div>}
     <div className="sell-form-actions"><button type="button" className="sell-secondary" onClick={()=>{setDraft({title:"",type:"Game",robloxUrl:"",price:"",description:"",imageData:"",imageName:"",sellerName:"",sellerRobloxId:"",contactDiscord:"",contactEmail:"",contactPhone:""});setSaved(false);setError("");window.localStorage.removeItem(DRAFT_KEY);}}>Clear form</button><button type="submit" className="sell-secondary">Save draft</button><button className="sell-submit" type="button" onClick={publishListing} disabled={submitting}>{submitting?"Submitting…":"Publish listing"} <ArrowRight size={16}/></button></div>
-    <p className="sell-disclaimer">Listings publish immediately and are not manually reviewed. Roblox ownership is not automatically verified, so buyers should independently verify details before any transfer or payment.</p>
+    <p className="sell-disclaimer">New listings stay private until staff review. Roblox ownership is not automatically verified, so buyers should independently verify details before any transfer or payment.</p>
   </form>;
 }
