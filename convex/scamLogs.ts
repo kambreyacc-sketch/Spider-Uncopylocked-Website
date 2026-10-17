@@ -17,7 +17,7 @@ export const generateUploadUrl = mutation({
 export const publicList = query({
   args: { search: v.optional(v.string()) },
   handler: async (ctx, args) => {
-    const rows = await ctx.db.query("scamLogEntries").withIndex("by_visibility_status_createdAt", q => q.eq("visibility", "public").eq("status", "confirmed")).order("desc").take(200);
+    const rows = await ctx.db.query("scamLogEntries").filter(q => q.and(q.eq(q.field("visibility"), "public"), q.eq(q.field("status"), "confirmed"))).order("desc").take(200);
     const term = (args.search || "").trim().toLowerCase();
     return rows.filter(r => !term || [r.reference,r.discordId,r.discordUsername,r.robloxId,r.robloxUsername,r.reason,r.summary].some(x => x?.toLowerCase().includes(term)))
       .map(({evidenceStorageIds, evidenceLinks, reporterDiscordId, ...safe}) => ({...safe, evidenceCount:evidenceStorageIds.length + evidenceLinks.length}));
@@ -27,7 +27,7 @@ export const publicList = query({
 export const publicGet = query({
   args: { reference: v.string() },
   handler: async (ctx, args) => {
-    const row = await ctx.db.query("scamLogEntries").withIndex("by_reference", q => q.eq("reference", args.reference)).first();
+    const row = await ctx.db.query("scamLogEntries").filter(q => q.eq(q.field("reference"), args.reference)).first();
     if (!row || row.visibility !== "public" || row.status !== "confirmed") return null;
     const {evidenceStorageIds, evidenceLinks, reporterDiscordId, ...safe} = row;
     return {...safe, evidenceCount:evidenceStorageIds.length + evidenceLinks.length};
@@ -51,7 +51,7 @@ export const adminList = query({
   handler: async (ctx,args) => {
     assertSecret(args.adminSecret);
     const rows = args.status
-      ? await ctx.db.query("scamLogEntries").withIndex("by_status_createdAt",q=>q.eq("status",args.status as any)).order("desc").take(300)
+      ? await ctx.db.query("scamLogEntries").filter(q=>q.eq(q.field("status"),args.status as any)).order("desc").take(300)
       : await ctx.db.query("scamLogEntries").order("desc").take(300);
     return rows;
   }
@@ -84,7 +84,7 @@ export const addComment = mutation({
 
 export const publicComments = query({
   args:{reportId:v.id("scamLogEntries")},
-  handler:async(ctx,args)=>await ctx.db.query("scamLogComments").withIndex("by_report_createdAt",q=>q.eq("reportId",args.reportId)).order("asc").take(200).then(rows=>rows.filter(r=>r.status==="visible").map(({authorDiscordId,...r})=>r))
+  handler:async(ctx,args)=>await ctx.db.query("scamLogComments").filter(q=>q.eq(q.field("reportId"),args.reportId)).order("asc").take(200).then(rows=>rows.filter(r=>r.status==="visible").map(({authorDiscordId,...r})=>r))
 });
 
 export const moderateComment = mutation({
