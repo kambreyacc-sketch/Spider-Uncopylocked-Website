@@ -1,8 +1,8 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { api } from "../../../../convex/_generated/api";
-import { getBillingDb } from "../../../../lib/stripe";
+import { api } from "../../../../../convex/_generated/api";
+import { getBillingDb } from "../../../../../lib/stripe";
 export const runtime = "nodejs";
 function equal(a: string, b: string) {
   const x = Buffer.from(a),
