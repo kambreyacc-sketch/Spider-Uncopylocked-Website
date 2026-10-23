@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, type ReactNode } from "react";
 import {
   ArrowDown, ArrowUp, ArrowUpRight, Bot, Check, ChevronDown, CircleHelp,
   Code2, Crown, FileCode2, History, Layers3, LogIn, MessageSquarePlus,
-  MoreHorizontal, PanelLeftClose, PanelLeftOpen, Paperclip, Plus, Settings2, ShieldCheck,
+  MoreHorizontal, PanelLeftClose, PanelLeftOpen, Plus, Settings2, ShieldCheck, Copy, Download,
   Sparkles, WandSparkles, Menu, X
 } from "lucide-react";
 import "./spider-ai.css";
@@ -40,6 +40,65 @@ const starterPrompts = [
   },
 ];
 
+
+function CodeArtifact({ language, filename, code }: { language: string; filename: string; code: string }) {
+  const [copied, setCopied] = useState(false);
+  async function copyCode() {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      window.alert("Clipboard access was blocked by the browser. Select the code and copy it manually.");
+    }
+  }
+  function downloadCode() {
+    const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename.split("/").pop() || "Script.lua";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  }
+  return <section className="spai-code-file">
+    <div className="spai-code-file-head">
+      <span className="spai-code-filename"><FileCode2 size={14}/><strong>{filename}</strong></span>
+      <span className="spai-code-language">{language.toUpperCase()}</span>
+      <div className="spai-code-actions">
+        <button type="button" onClick={copyCode} title="Copy source"><Copy size={13}/>{copied ? "Copied" : "Copy"}</button>
+        <button type="button" onClick={downloadCode} title="Download source file"><Download size={13}/>Download</button>
+      </div>
+    </div>
+    <pre><code>{code.replace(/\n$/, "")}</code></pre>
+  </section>;
+}
+
+function renderAssistantContent(content: string): ReactNode {
+  const fence = new RegExp("\\x60\\x60\\x60([^\\n]*)\\n([\\s\\S]*?)\\x60\\x60\\x60", "g");
+  const blocks: ReactNode[] = [];
+  let cursor = 0;
+  let index = 0;
+  let match: RegExpExecArray | null;
+  while ((match = fence.exec(content)) !== null) {
+    const plain = content.slice(cursor, match.index).trim();
+    if (plain) blocks.push(<p className="spai-response-text" key={"text-" + index}>{plain}</p>);
+    const info = match[1].trim();
+    const language = info.split(/\\s+/)[0] || "lua";
+    const explicitFilename = info.match(/(?:filename|file|path)=["']?([^"'\\s\\x60]+)["']?/i)?.[1];
+    const trailingInfo = info.slice(language.length).trim().replace(/^(?:filename|file|path)=["']?/, "").replace(/["']$/, "");
+    const filename = explicitFilename || (trailingInfo.includes("/") || /\\.(?:lua|luau)$/i.test(trailingInfo) ? trailingInfo : "Script-" + (index + 1) + ".lua");
+    blocks.push(<CodeArtifact key={"code-" + index} language={language} filename={filename} code={match[2]}/>);
+    cursor = match.index + match[0].length;
+    index += 1;
+  }
+  const trailing = content.slice(cursor).trim();
+  if (trailing) blocks.push(<p className="spai-response-text" key="text-tail">{trailing}</p>);
+  return blocks.length ? <div className="spai-response-content">{blocks}</div> : <p className="spai-response-text">{content}</p>;
+}
+
 export default function SpiderAIPage() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -53,12 +112,26 @@ export default function SpiderAIPage() {
   const [user, setUser] = useState<DiscordUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [aiReady, setAiReady] = useState<boolean | null>(null);
 
   useEffect(() => {
     let active = true;
     fetch("/api/auth/discord/me", { cache: "no-store" })
       .then((response) => response.json())
-      .then((data) => { if (active) setUser(data.user ?? null); })
+      .then(async (data) => {
+        if (!active) return;
+        const signedInUser = data.user ?? null;
+        setUser(signedInUser);
+        if (signedInUser) {
+          try {
+            const statusResponse = await fetch("/api/ai/chat", { cache: "no-store" });
+            const status = await statusResponse.json();
+            if (active) setAiReady(Boolean(status.ready));
+          } catch {
+            if (active) setAiReady(false);
+          }
+        }
+      })
       .catch(() => { if (active) setUser(null); })
       .finally(() => { if (active) setAuthLoading(false); });
     return () => { active = false; };
@@ -76,7 +149,7 @@ export default function SpiderAIPage() {
       const response = await fetch("/api/ai/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages.map((message) => ({ role: message.role, content: message.text })) }),
+        body: JSON.stringify({ messages: nextMessages.map((message) => ({ role: message.role, content: message.text })), detail: model }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Spider Uncopylocked AI could not complete the request.");
@@ -127,7 +200,7 @@ export default function SpiderAIPage() {
           <div className="spai-vip-icon"><Crown size={16}/></div>
           <div><strong>VIP Access</strong><small>Spider Uncopylocked</small></div>
           <span className="spai-vip-status">VIP</span>
-          <p>Verified VIP members can access the plugin download and member resources.</p>
+          <p>Access creator perks and member resources from Spider Uncopylocked.</p>
           <Link href="https://www.roblox.com/game-pass/1759776349/VIP-SPIDER-UNCOPYLOCKED" target="_blank" rel="noreferrer">View VIP pass <ArrowUpRight size={14}/></Link>
         </div>
         <div className="spai-sidebar-bottom">
@@ -155,7 +228,7 @@ export default function SpiderAIPage() {
             <span className="spai-unsaved"><span/> Draft</span>
           </div>
           <div className="spai-top-right">
-            <span className="spai-connection"><span/>{user ? "Discord connected" : "Sign in required"}</span>
+            <span className="spai-connection"><span/>{user ? (aiReady === false ? "AI setup required" : aiReady ? "AI ready" : "Discord connected") : "Sign in required"}</span>
             {!user && <Link className="spai-upgrade" href="/api/auth/discord/login"><LogIn size={14}/> Sign in <ArrowUpRight size={14}/></Link>}
             {user && <Link className="spai-upgrade" href="https://www.roblox.com/game-pass/1759776349/VIP-SPIDER-UNCOPYLOCKED" target="_blank" rel="noreferrer"><Sparkles size={14}/> Get VIP <ArrowUpRight size={14}/></Link>}
           </div>
@@ -170,7 +243,7 @@ export default function SpiderAIPage() {
               <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }} placeholder="Describe what you want to build in Roblox Studio…" rows={3} aria-label="Describe what you want to build"/>
               <div className="spai-composer-tools">
                 <div className="spai-composer-left">
-                  <button type="button" className="spai-tool-button" title="Attachments are not available yet" onClick={() => window.alert("Attachments will be enabled when the build service is connected.")}><Paperclip size={15}/><span>Attach</span></button>
+                  <span className="spai-input-note"><Code2 size={14}/> Generates source files you can download</span>
                   <div className="spai-model-wrap">
                     <button type="button" className="spai-model-select" onClick={() => setShowModelMenu(!showModelMenu)}><Bot size={15}/>{model}<ChevronDown size={13}/></button>
                     {showModelMenu && <div className="spai-model-menu">{["Default", "Fast", "Detailed"].map((m) => <button type="button" key={m} onClick={() => {setModel(m);setShowModelMenu(false)}}>{m}{model===m&&<Check size={13}/>}</button>)}</div>}
@@ -181,15 +254,15 @@ export default function SpiderAIPage() {
             </form> : <div className="spai-auth-gate"><div className="spai-auth-glyph"><LogIn size={22}/></div><h3>Sign in to start building</h3><p>Connect your Discord account to use the Spider Uncopylocked workspace and show your profile here.</p><Link href="/api/auth/discord/login"><LogIn size={15}/> Continue with Discord</Link></div>}
             {user && <><div className="spai-suggestions-label"><span>START WITH A BUILD TEMPLATE</span><span className="spai-suggestions-rule"/></div>
             <div className="spai-starter-grid">{starterPrompts.map((item) => <button type="button" key={item.title} className="spai-starter" onClick={() => startPrompt(item.prompt)}><span className="spai-starter-icon">{item.icon}</span><span><strong>{item.title}</strong><small>{item.detail}</small></span><ArrowUpRight size={14} className="spai-starter-arrow"/></button>)}</div>
-            <div className="spai-build-note"><ShieldCheck size={14}/> Templates include full requirements. Review and edit the prompt before submitting.</div></>}
+            <div className="spai-build-note"><ShieldCheck size={14}/> Each generated file includes its Explorer path, copy controls and a direct download.</div>{aiReady === false && <div className="spai-provider-warning"><strong>AI provider setup needed</strong><span>Add AI_GATEWAY_API_KEY to use Vercel AI Gateway, or configure AI_API_KEY and AI_MODEL in this project’s Vercel environment variables.</span></div>}</>}
           </div> : <div className="spai-chat-layout">
             <div className="spai-chat-header"><div><span className="spai-chat-label">SPIDER UNCOPYLOCKED AI</span><h2>{messages.find(m=>m.role==="user")?.text || "New conversation"}</h2></div><button className="spai-icon-button" onClick={() => setMessages([])} title="New chat"><MessageSquarePlus size={17}/></button></div>
-            <div className="spai-messages">{messages.map((message, index) => <div className={"spai-message "+message.role} key={index}><div className="spai-message-avatar">{message.role==="assistant"?<img className="spai-message-user-avatar" src="/spider-uncopylocked-pfp.webp" alt="Spider Uncopylocked"/>: user && avatarUrl ? <img className="spai-message-user-avatar" src={avatarUrl} alt=""/> : "?"}</div><div className="spai-message-body"><div className="spai-message-name">{message.role==="assistant"?"Spider Uncopylocked":(user?.displayName || user?.username || "You")}<span>{message.role==="assistant"?"WORKSPACE NOTICE":"JUST NOW"}</span></div><p>{message.text}</p>{message.role==="assistant"&&<div className="spai-preview-box"><div><Code2 size={16}/><span><strong>Roblox Studio connection</strong><small>Plugin connection is a separate next step</small></span></div><span className="spai-status-pill">NOT CONNECTED</span></div>}</div></div>)}</div>
-            <form className="spai-composer spai-composer-chat" onSubmit={sendMessage}><textarea value={prompt} onChange={(e)=>setPrompt(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}}} placeholder="Describe the full system you want to build…" rows={2} aria-label="Message Spider Uncopylocked"/><div className="spai-composer-tools"><div className="spai-composer-left"><button type="button" className="spai-tool-button" onClick={()=>window.alert("Attachments will be enabled when the build service is connected.")}><Paperclip size={15}/></button><button type="button" className="spai-model-select" onClick={()=>setShowModelMenu(!showModelMenu)}><Bot size={15}/>{model}<ChevronDown size={13}/></button>{showModelMenu&&<span className="spai-model-inline">Model choice preview</span>}</div><button type="submit" className="spai-send-button" disabled={!prompt.trim() || isGenerating}><ArrowUp size={16}/></button></div></form>
-            <div className="spai-chat-foot"><ShieldCheck size={13}/> AI responses use the configured server-side provider. Roblox Studio sync is a separate plugin integration.</div>
+            <div className="spai-messages">{messages.map((message, index) => <div className={"spai-message "+message.role} key={index}><div className="spai-message-avatar">{message.role==="assistant"?<img className="spai-message-user-avatar" src="/spider-uncopylocked-pfp.webp" alt="Spider Uncopylocked"/>: user && avatarUrl ? <img className="spai-message-user-avatar" src={avatarUrl} alt=""/> : "?"}</div><div className="spai-message-body"><div className="spai-message-name">{message.role==="assistant"?"Spider Uncopylocked":(user?.displayName || user?.username || "You")}<span>{message.role==="assistant"?"WORKSPACE NOTICE":"JUST NOW"}</span></div>{message.role === "assistant" ? renderAssistantContent(message.text) : <p className="spai-response-text">{message.text}</p>}{message.role === "assistant" && message.text.includes("```") && <div className="spai-preview-box spai-code-note"><div><FileCode2 size={16}/><span><strong>Source files generated</strong><small>Download a file and place it at the Explorer path shown above.</small></span></div><span className="spai-status-pill">READY TO USE</span></div>}</div></div>)}</div>
+            <form className="spai-composer spai-composer-chat" onSubmit={sendMessage}><textarea value={prompt} onChange={(e)=>setPrompt(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}}} placeholder="Describe the full system you want to build…" rows={2} aria-label="Message Spider Uncopylocked"/><div className="spai-composer-tools"><div className="spai-composer-left"><span className="spai-input-note"><Code2 size={14}/> Code files</span><button type="button" className="spai-model-select" onClick={()=>setShowModelMenu(!showModelMenu)}><Bot size={15}/>{model}<ChevronDown size={13}/></button>{showModelMenu&&<span className="spai-model-inline">Model choice preview</span>}</div><button type="submit" className="spai-send-button" disabled={!prompt.trim() || isGenerating}><ArrowUp size={16}/></button></div></form>
+            <div className="spai-chat-foot"><ShieldCheck size={13}/> Generated scripts stay in this browser workspace. Download them and add them to Roblox Studio using the paths provided.</div>
           </div>}
         </div>
-        <footer className="spai-footer"><span>SPIDER UNCOPYLOCKED AI <span className="spai-footer-version">WORKSPACE</span></span><span><CircleHelp size={13}/> Built for Roblox creators <span className="spai-footer-sep">·</span> Studio connection planned</span></footer>
+        <footer className="spai-footer"><span>SPIDER UNCOPYLOCKED AI <span className="spai-footer-version">WORKSPACE</span></span><span><CircleHelp size={13}/> Built for Roblox creators <span className="spai-footer-sep">·</span> Scripts, modules and UI code</span></footer>
       </section>
     </main>
   );
