@@ -53,7 +53,7 @@ export default function HomeGameShowcase() {
           <Link href="/marketplace">Explore marketplace <ArrowUpRight size={14} /></Link>
         </div>
       )}
-      <div className="spider-game-showcase-foot"><span>PUBLIC LISTING IMAGES</span><span>NO GENERATED ART</span></div>
+      <div className="spider-game-showcase-foot"><span>PUBLIC LISTING IMAGES</span><span>CREATOR LISTINGS</span></div>
     </aside>
   );
 }
