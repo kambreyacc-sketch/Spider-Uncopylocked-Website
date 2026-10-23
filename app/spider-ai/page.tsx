@@ -86,10 +86,10 @@ function renderAssistantContent(content: string): ReactNode {
     const plain = content.slice(cursor, match.index).trim();
     if (plain) blocks.push(<p className="spai-response-text" key={"text-" + index}>{plain}</p>);
     const info = match[1].trim();
-    const language = info.split(/\\s+/)[0] || "lua";
-    const explicitFilename = info.match(/(?:filename|file|path)=["']?([^"'\\s\\x60]+)["']?/i)?.[1];
+    const language = info.split(/\s+/)[0] || "lua";
+    const explicitFilename = info.match(/(?:filename|file|path)=["']?([^"'\s\x60]+)["']?/i)?.[1];
     const trailingInfo = info.slice(language.length).trim().replace(/^(?:filename|file|path)=["']?/, "").replace(/["']$/, "");
-    const filename = explicitFilename || (trailingInfo.includes("/") || /\\.(?:lua|luau)$/i.test(trailingInfo) ? trailingInfo : "Script-" + (index + 1) + ".lua");
+    const filename = explicitFilename || (trailingInfo.includes("/") || /\.(?:lua|luau)$/i.test(trailingInfo) ? trailingInfo : "Script-" + (index + 1) + ".lua");
     blocks.push(<CodeArtifact key={"code-" + index} language={language} filename={filename} code={match[2]}/>);
     cursor = match.index + match[0].length;
     index += 1;
