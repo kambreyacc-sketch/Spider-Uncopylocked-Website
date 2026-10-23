@@ -98,7 +98,7 @@ export const postJob = mutation({
   handler: async (ctx,args) => {
     const expected = process.env.ADMIN_API_SECRET;
     if (!expected || args.adminSecret.length !== expected.length || args.adminSecret !== expected) throw new Error("Unauthorized job posting service request.");
-    if (!/^\\d{5,25}$/.test(args.posterDiscordId)) throw new Error("Sign in with Discord before posting a job.");
+    if (!/^\d{5,25}$/.test(args.posterDiscordId)) throw new Error("Sign in with Discord before posting a job.");
     const activeRestrictions = await ctx.db.query("userRestrictions").withIndex("by_target_status", q => q.eq("targetDiscordId", args.posterDiscordId)).collect();
     const now = Date.now();
     const active = activeRestrictions.filter(r => r.status === "active" && (r.expiresAt === undefined || r.expiresAt > now));
