@@ -25,12 +25,12 @@ button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid #d5d5dc!important;outline-offset:2px}
 img{max-width:100%}
-/* Neutral, solid navigation: no chrome-like shine. */
-.spider-sidebar{background:#0e0e10!important;border-right:1px solid var(--spider-line)!important;box-shadow:none!important;backdrop-filter:none!important}
-.spider-nav,.resource-nav{background:#0b0b0d!important;border-bottom:1px solid var(--spider-line)!important;box-shadow:none!important;backdrop-filter:none!important}
-.spider-sidebar a{border:1px solid transparent!important;border-radius:5px!important;box-shadow:none!important}
-.spider-sidebar a:hover,.spider-sidebar a.active{background:#202023!important;border-color:#36363b!important}
-.spider-wordmark,.spider-logo-mark{box-shadow:none!important;filter:none!important}
+/* Shared glossy silver/charcoal treatment across every route. */
+.spider-sidebar{background:linear-gradient(155deg,#353538 0%,#242427 22%,#111113 70%,#19191c 100%)!important;border-right:1px solid #55555b!important;box-shadow:inset -1px 0 rgba(255,255,255,.08)!important;backdrop-filter:blur(18px)!important}
+.spider-nav,.resource-nav{background:linear-gradient(180deg,rgba(58,58,62,.96),rgba(24,24,27,.97) 55%,rgba(13,13,15,.98))!important;border-bottom:1px solid #55555b!important;box-shadow:inset 0 1px rgba(255,255,255,.12),0 8px 24px rgba(0,0,0,.18)!important;backdrop-filter:blur(18px)!important}
+.spider-sidebar a{border:1px solid rgba(230,230,236,.12)!important;border-radius:7px!important;box-shadow:inset 0 1px rgba(255,255,255,.045)!important;transition:background .18s,border-color .18s!important}
+.spider-sidebar a:hover,.spider-sidebar a.active{background:linear-gradient(180deg,#65656a 0%,#45454a 50%,#303034 100%)!important;border-color:#85858b!important;box-shadow:inset 0 1px rgba(255,255,255,.2),0 3px 9px rgba(0,0,0,.18)!important}
+.spider-wordmark,.spider-logo-mark{box-shadow:inset 0 1px rgba(255,255,255,.18),0 4px 12px rgba(0,0,0,.22)!important;filter:none!important}
 /* Landing page: editorial layout with actual games as the visual anchor. */
 .spider-home{background:#0a0a0b!important;background-image:none!important}
 .spider-home .spider-hero{
@@ -78,19 +78,19 @@ img{max-width:100%}
 .spider-home .spider-home-links>a:hover{background:#111113!important;transform:none!important}
 .spider-home .spider-footer{border-top:1px solid #303034!important;background:#09090a!important}
 /* Site-wide working surfaces: reserve containers for actual grouped content. */
-.resource-page,.market-shell,.marketplace-home,.sell-page,.admin-layout,.admin-denied,.billing-layout,.legal-page,.spai-root{background:#0a0a0b!important;background-image:none!important}
+.resource-page,.market-shell,.marketplace-home,.sell-page,.admin-layout,.admin-denied,.billing-layout,.legal-page,.spai-root{background:radial-gradient(ellipse at 50% -18%,#454549 0%,#29292d 28%,#18181b 62%,#0c0c0e 100%)!important;background-attachment:fixed!important}
 .resource-page,.market-shell,.marketplace-home,.sell-page,.admin-layout,.billing-layout{color:var(--spider-fg)!important}
-.resource-page .resource-nav{background:#0b0b0d!important}
+.resource-page .resource-nav{background:linear-gradient(180deg,#414145 0%,#29292d 38%,#171719 100%)!important}
 .resource-page .resource-content,.resource-content,.market-content,.store-content,.settings-content,.studios-content,.jobs-content{background:transparent!important}
-.resource-page [class*="card"],.market-shell [class*="card"],.marketplace-home [class*="card"],.sell-page [class*="card"]{box-shadow:none!important;backdrop-filter:none!important}
+.resource-page [class*="card"],.market-shell [class*="card"],.marketplace-home [class*="card"],.sell-page [class*="card"]{box-shadow:inset 0 1px rgba(255,255,255,.07),0 8px 22px rgba(0,0,0,.16)!important;backdrop-filter:blur(12px)!important;background-image:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.015) 55%,rgba(0,0,0,.08))!important}
 .resource-page [class*="card"],.market-shell [class*="card"],.marketplace-home [class*="card"],.sell-page [class*="card"]{border-color:#303034!important}
-.resource-page [class*="card"]:hover,.market-shell [class*="card"]:hover,.marketplace-home [class*="card"]:hover,.sell-page [class*="card"]:hover{box-shadow:none!important}
-.admin-layout [class*="stat"],.admin-layout [class*="panel"],.admin-layout [class*="card"],.admin-layout [class*="tool"],.billing-layout [class*="card"]{box-shadow:none!important;backdrop-filter:none!important;border-color:#303034!important}
-input,select,textarea,.resource-search,.spider-hero-search{background:#141416!important;color:#ededf0!important;border:1px solid #36363b!important;border-radius:5px!important;box-shadow:none!important;backdrop-filter:none!important}
+.resource-page [class*="card"]:hover,.market-shell [class*="card"]:hover,.marketplace-home [class*="card"]:hover,.sell-page [class*="card"]:hover{box-shadow:inset 0 1px rgba(255,255,255,.12),0 12px 28px rgba(0,0,0,.24)!important}
+.admin-layout [class*="stat"],.admin-layout [class*="panel"],.admin-layout [class*="card"],.admin-layout [class*="tool"],.billing-layout [class*="card"]{box-shadow:inset 0 1px rgba(255,255,255,.07),0 8px 22px rgba(0,0,0,.16)!important;backdrop-filter:blur(12px)!important;border-color:#48484e!important;background-image:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.012) 58%,rgba(0,0,0,.08))!important}
+input,select,textarea,.resource-search,.spider-hero-search{background:linear-gradient(180deg,#39393e 0%,#29292e 48%,#1d1d21 100%)!important;color:#ededf0!important;border:1px solid #57575e!important;border-radius:7px!important;box-shadow:inset 0 1px rgba(255,255,255,.13),0 3px 9px rgba(0,0,0,.14)!important;backdrop-filter:blur(12px)!important}
 input::placeholder,textarea::placeholder{color:#77777f!important}
 input:focus,select:focus,textarea:focus{border-color:#9a9aa1!important;box-shadow:0 0 0 2px #ffffff0c!important}
-button,.button,.button-dark,.button-white,.button-glass{box-shadow:none!important;text-shadow:none!important;filter:none!important}
-.button-glass{backdrop-filter:none!important}
+button,.button,.button-dark,.button-white,.button-glass{box-shadow:inset 0 1px rgba(255,255,255,.1),0 4px 12px rgba(0,0,0,.16)!important;text-shadow:none!important;filter:none!important}
+.button-glass{backdrop-filter:blur(14px)!important}
 @media(max-width:900px){
  .spider-home .spider-hero{grid-template-columns:minmax(0,1fr) minmax(270px,.8fr)!important;gap:22px!important;padding:34px 24px 52px!important}
  .spider-home .spider-hero-content h1{font-size:clamp(38px,5.4vw,54px)!important}
