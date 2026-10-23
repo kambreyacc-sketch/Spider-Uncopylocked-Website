@@ -111,3 +111,69 @@ button,.button,.button-dark,.button-white,.button-glass{box-shadow:inset 0 1px r
  .spider-home .spider-home-links>a+a{border-left:0!important}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* Marketplace intro: keep the eyebrow, title and description in a clean
+   vertical stack. Avoid inherited fixed heights and overlapping borders. */
+.marketplace-home .marketplace-intro {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 28px clamp(18px, 2.4vw, 36px) 24px !important;
+  padding: 24px clamp(18px, 2vw, 30px) 26px !important;
+  gap: 0 !important;
+  overflow: visible !important;
+  border: 1px solid #5b5b61 !important;
+  border-radius: 12px !important;
+  background: linear-gradient(145deg, rgba(94,94,100,.72) 0%, rgba(54,54,59,.88) 32%, rgba(28,28,32,.96) 76%, rgba(21,21,24,.98) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.3), 0 10px 26px rgba(0,0,0,.18) !important;
+}
+.marketplace-home .marketplace-intro .spider-eyebrow {
+  display: block !important;
+  position: static !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  line-height: 1.4 !important;
+  font-size: 10px !important;
+  letter-spacing: .16em !important;
+  color: #d1d1d6 !important;
+}
+.marketplace-home .marketplace-intro h1 {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 0 10px !important;
+  padding: 0 !important;
+  font-size: clamp(27px, 3vw, 40px) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.045em !important;
+  font-weight: 700 !important;
+  color: #f4f4f6 !important;
+  overflow-wrap: anywhere;
+}
+.marketplace-home .marketplace-intro p {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  max-width: 720px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.65 !important;
+  color: #c1c1c7 !important;
+}
+@media (max-width: 680px) {
+  .marketplace-home .marketplace-intro {
+    margin: 18px 12px 16px !important;
+    padding: 20px 16px 22px !important;
+    border-radius: 9px !important;
+  }
+}
