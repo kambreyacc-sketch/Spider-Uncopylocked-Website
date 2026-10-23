@@ -1,0 +1,113 @@
+/* Spider Uncopylocked — unified product design system.
+   Real product UI: strong hierarchy, restrained surfaces, real content, useful states.
+   Loaded last so legacy visual experiments cannot fight each other. */
+:root{
+  color-scheme:dark;
+  --spider-bg:#09090a;
+  --spider-surface:#111113;
+  --spider-surface-2:#171719;
+  --spider-surface-3:#202023;
+  --spider-line:#303034;
+  --spider-line-strong:#48484e;
+  --spider-fg:#f0f0f2;
+  --spider-muted:#a2a2a9;
+  --spider-dim:#77777f;
+  --spider-white:#f2f2f4;
+  --spider-black:#101012;
+  --spider-radius:7px;
+  --spider-radius-sm:5px;
+}
+html,body{background:var(--spider-bg)!important;color:var(--spider-fg)}
+body{font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+::selection{background:#e7e7eb;color:#111113}
+a{ text-decoration:none}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid #d5d5dc!important;outline-offset:2px}
+img{max-width:100%}
+/* Neutral, solid navigation: no chrome-like shine. */
+.spider-sidebar{background:#0e0e10!important;border-right:1px solid var(--spider-line)!important;box-shadow:none!important;backdrop-filter:none!important}
+.spider-nav,.resource-nav{background:#0b0b0d!important;border-bottom:1px solid var(--spider-line)!important;box-shadow:none!important;backdrop-filter:none!important}
+.spider-sidebar a{border:1px solid transparent!important;border-radius:5px!important;box-shadow:none!important}
+.spider-sidebar a:hover,.spider-sidebar a.active{background:#202023!important;border-color:#36363b!important}
+.spider-wordmark,.spider-logo-mark{box-shadow:none!important;filter:none!important}
+/* Landing page: editorial layout with actual games as the visual anchor. */
+.spider-home{background:#0a0a0b!important;background-image:none!important}
+.spider-home .spider-hero{
+  min-height:560px!important;grid-template-columns:minmax(0,1.05fr) minmax(330px,.82fr)!important;
+  gap:clamp(28px,4vw,64px)!important;padding:50px clamp(26px,4.2vw,64px) 66px!important;
+  background:#0b0b0d!important;border-bottom:1px solid #252529!important;
+}
+.spider-home .spider-hero-shade{background:linear-gradient(90deg,rgba(8,8,9,.96),rgba(8,8,9,.82) 56%,rgba(8,8,9,.55))!important}
+.spider-home .spider-hero-content{max-width:670px!important;padding:14px 0!important}
+.spider-home .spider-eyebrow{color:#a0a0a7!important;font-size:10px!important;letter-spacing:.11em!important;font-weight:650!important}
+.spider-home .spider-hero-content h1{font-size:clamp(40px,4.4vw,65px)!important;line-height:1.02!important;letter-spacing:-.065em!important;font-weight:720!important;margin:22px 0 18px!important;max-width:680px!important;text-wrap:balance}
+.spider-home .spider-hero-content h1 span{color:#929299!important}
+.spider-home .spider-hero-content>p{font-size:14px!important;line-height:1.8!important;color:#b7b7bd!important;max-width:485px!important;margin-bottom:24px!important}
+.spider-home .spider-game-showcase{max-width:500px!important;width:100%!important;justify-self:end!important;padding:15px!important;border:1px solid #343438!important;border-radius:8px!important;background:#111113!important;box-shadow:none!important;backdrop-filter:none!important}
+.spider-home .spider-game-showcase-heading{margin-bottom:12px!important}
+.spider-home .spider-game-preview{border-radius:5px!important;border:1px solid #333337!important;box-shadow:none!important;overflow:hidden}
+.spider-home .spider-game-preview:hover{transform:none!important;border-color:#77777f!important}
+.spider-home .spider-game-preview-info{background:linear-gradient(180deg,transparent,rgba(0,0,0,.82))!important}
+.spider-home .spider-hero-search{border:1px solid #3b3b40!important;border-radius:6px!important;background:#151517!important;box-shadow:none!important;backdrop-filter:none!important}
+.spider-home .spider-hero-search:focus-within{border-color:#a4a4aa!important;box-shadow:0 0 0 2px #ffffff10!important}
+.spider-home .spider-hero-search input{text-shadow:none!important}
+.spider-home .spider-hero-search button,.spider-home .spider-button-primary{background:#e9e9ec!important;color:#111113!important;border:1px solid #e9e9ec!important;border-radius:5px!important;box-shadow:none!important;text-shadow:none!important}
+.spider-home .spider-hero-search button:hover,.spider-home .spider-button-primary:hover{background:#fff!important;transform:none!important}
+.spider-home .spider-button-secondary{background:#171719!important;color:#ededf0!important;border:1px solid #414146!important;border-radius:5px!important;box-shadow:none!important}
+.spider-home .spider-button-secondary:hover{background:#242427!important;transform:none!important}
+.spider-home .spider-hero-proof{color:#a0a0a7!important}
+.spider-home .spider-category-section,.spider-home .spider-upload-banner,.spider-home .spider-hiring-banner,.spider-home .spider-home-links{background:#0a0a0b!important}
+.spider-home .spider-category-section{padding:46px clamp(24px,4.2vw,64px)!important}
+.spider-home .spider-section-heading{margin-bottom:20px!important}
+.spider-home .spider-section-heading h2,.spider-home .spider-upload-banner h2,.spider-home .spider-hiring-banner h2{letter-spacing:-.045em!important;font-weight:680!important}
+.spider-home .spider-category-grid{gap:0!important;border-top:1px solid #2b2b2f!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.spider-home .spider-category-card{position:relative!important;min-height:105px!important;padding:18px 42px 18px 4px!important;background:transparent!important;border:0!important;border-bottom:1px solid #2b2b2f!important;border-radius:0!important;box-shadow:none!important;transform:none!important}
+.spider-home .spider-category-card:nth-child(3n+2),.spider-home .spider-category-card:nth-child(3n+3){padding-left:20px!important;border-left:1px solid #2b2b2f!important}
+.spider-home .spider-category-card>div{display:flex!important;flex-direction:column!important;gap:5px!important}
+.spider-home .spider-category-card>div>span{font-size:14px!important;font-weight:650!important;color:#ededf0!important}
+.spider-home .spider-category-card small{font-size:11px!important;color:#929299!important;line-height:1.5!important}
+.spider-home .spider-category-card .spider-category-icon{width:25px!important;height:25px!important;position:absolute!important;right:12px!important;top:20px!important;color:#898990!important;opacity:.9!important}
+.spider-home .spider-category-card .spider-category-arrow{right:10px!important;bottom:15px!important;color:#929299!important}
+.spider-home .spider-category-card:hover{background:#111113!important;padding-top:18px!important;transform:none!important}
+.spider-home .spider-upload-banner,.spider-home .spider-hiring-banner{margin:0 clamp(24px,4.2vw,64px) 24px!important;padding:26px!important;border:1px solid #303034!important;border-radius:7px!important;box-shadow:none!important}
+.spider-home .spider-upload-icon{background:#1d1d20!important;color:#dedee2!important;box-shadow:none!important}
+.spider-home .spider-home-links{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;padding:0 clamp(24px,4.2vw,64px) 36px!important}
+.spider-home .spider-home-links>a{padding:18px 14px!important;background:transparent!important;border:0!important;border-top:1px solid #303034!important;border-radius:0!important;box-shadow:none!important}
+.spider-home .spider-home-links>a+a{border-left:1px solid #303034!important}
+.spider-home .spider-home-links>a:hover{background:#111113!important;transform:none!important}
+.spider-home .spider-footer{border-top:1px solid #303034!important;background:#09090a!important}
+/* Site-wide working surfaces: reserve containers for actual grouped content. */
+.resource-page,.market-shell,.marketplace-home,.sell-page,.admin-layout,.admin-denied,.billing-layout,.legal-page,.spai-root{background:#0a0a0b!important;background-image:none!important}
+.resource-page,.market-shell,.marketplace-home,.sell-page,.admin-layout,.billing-layout{color:var(--spider-fg)!important}
+.resource-page .resource-nav{background:#0b0b0d!important}
+.resource-page .resource-content,.resource-content,.market-content,.store-content,.settings-content,.studios-content,.jobs-content{background:transparent!important}
+.resource-page [class*="card"],.market-shell [class*="card"],.marketplace-home [class*="card"],.sell-page [class*="card"]{box-shadow:none!important;backdrop-filter:none!important}
+.resource-page [class*="card"],.market-shell [class*="card"],.marketplace-home [class*="card"],.sell-page [class*="card"]{border-color:#303034!important}
+.resource-page [class*="card"]:hover,.market-shell [class*="card"]:hover,.marketplace-home [class*="card"]:hover,.sell-page [class*="card"]:hover{box-shadow:none!important}
+.admin-layout [class*="stat"],.admin-layout [class*="panel"],.admin-layout [class*="card"],.admin-layout [class*="tool"],.billing-layout [class*="card"]{box-shadow:none!important;backdrop-filter:none!important;border-color:#303034!important}
+input,select,textarea,.resource-search,.spider-hero-search{background:#141416!important;color:#ededf0!important;border:1px solid #36363b!important;border-radius:5px!important;box-shadow:none!important;backdrop-filter:none!important}
+input::placeholder,textarea::placeholder{color:#77777f!important}
+input:focus,select:focus,textarea:focus{border-color:#9a9aa1!important;box-shadow:0 0 0 2px #ffffff0c!important}
+button,.button,.button-dark,.button-white,.button-glass{box-shadow:none!important;text-shadow:none!important;filter:none!important}
+.button-glass{backdrop-filter:none!important}
+@media(max-width:900px){
+ .spider-home .spider-hero{grid-template-columns:minmax(0,1fr) minmax(270px,.8fr)!important;gap:22px!important;padding:34px 24px 52px!important}
+ .spider-home .spider-hero-content h1{font-size:clamp(38px,5.4vw,54px)!important}
+ .spider-home .spider-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .spider-home .spider-category-card:nth-child(n){padding-left:4px!important;border-left:0!important}
+ .spider-home .spider-category-card:nth-child(2n){padding-left:16px!important;border-left:1px solid #2b2b2f!important}
+}
+@media(max-width:680px){
+ .spider-home .spider-hero{display:flex!important;flex-direction:column!important;align-items:stretch!important;padding:28px 18px 42px!important;gap:22px!important}
+ .spider-home .spider-hero-content{padding:8px 0!important}
+ .spider-home .spider-hero-content h1{font-size:clamp(36px,10vw,50px)!important}
+ .spider-home .spider-game-showcase{max-width:none!important}
+ .spider-home .spider-category-section{padding:32px 18px!important}
+ .spider-home .spider-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .spider-home .spider-category-card{min-height:92px!important;padding-right:30px!important}
+ .spider-home .spider-upload-banner,.spider-home .spider-hiring-banner{margin:0 18px 18px!important;padding:20px!important}
+ .spider-home .spider-home-links{grid-template-columns:1fr!important;padding:0 18px 28px!important}
+ .spider-home .spider-home-links>a+a{border-left:0!important}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
