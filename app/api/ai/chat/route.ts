@@ -31,8 +31,9 @@ export async function GET() {
   if (!secret) return NextResponse.json({ ready: false, reason: "missing_session_secret" }, { status: 503 });
   const user = getSession((await cookies()).get("spider_session")?.value, secret);
   if (!user) return NextResponse.json({ ready: false, reason: "discord_sign_in_required" }, { status: 401 });
+  const hasFreeRouterKey = Boolean(process.env.OPENROUTER_API_KEY);
   const hasGatewayKey = Boolean(process.env.AI_GATEWAY_API_KEY);
-  const ready = Boolean((process.env.AI_API_KEY || process.env.OPENAI_API_KEY || hasGatewayKey) && (process.env.AI_MODEL || hasGatewayKey));
+  const ready = Boolean((process.env.AI_API_KEY || process.env.OPENAI_API_KEY || hasFreeRouterKey || hasGatewayKey) && (process.env.AI_MODEL || hasFreeRouterKey || hasGatewayKey));
   return NextResponse.json({ ready, provider: process.env.AI_PROVIDER_LABEL || "Spider Uncopylocked AI" });
 }
 
@@ -42,13 +43,15 @@ export async function POST(request: Request) {
   const user = getSession((await cookies()).get("spider_session")?.value, secret);
   if (!user) return NextResponse.json({ error: "Sign in with Discord to use Spider Uncopylocked AI." }, { status: 401 });
 
+  const openRouterKey = process.env.OPENROUTER_API_KEY;
   const gatewayKey = process.env.AI_GATEWAY_API_KEY;
-  const apiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY || gatewayKey;
-  const usingGateway = Boolean(gatewayKey && !process.env.AI_API_KEY && !process.env.OPENAI_API_KEY);
-  const model = process.env.AI_MODEL || (usingGateway ? "openai/gpt-4.1-mini" : "");
+  const apiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY || openRouterKey || gatewayKey;
+  const usingOpenRouter = Boolean(openRouterKey && !process.env.AI_API_KEY && !process.env.OPENAI_API_KEY);
+  const usingGateway = Boolean(!usingOpenRouter && gatewayKey && !process.env.AI_API_KEY && !process.env.OPENAI_API_KEY);
+  const model = process.env.AI_MODEL || (usingOpenRouter ? "openrouter/free" : usingGateway ? "openai/gpt-4.1-mini" : "");
   if (!apiKey || !model) {
     return NextResponse.json({
-      error: "The AI provider is not configured yet. Add AI_GATEWAY_API_KEY to use Vercel AI Gateway, or configure AI_API_KEY and AI_MODEL in the Vercel project environment variables. Keep all API keys server-side."
+      error: "The AI provider is not configured yet. Add OPENROUTER_API_KEY to use free OpenRouter models, or configure AI_API_KEY and AI_MODEL. Keep all API keys server-side."
     }, { status: 503 });
   }
 
@@ -71,7 +74,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "The latest message must be from the user." }, { status: 400 });
   }
 
-  const endpoint = (process.env.AI_API_BASE_URL || (usingGateway ? "https://ai-gateway.vercel.sh/v1" : "https://api.openai.com/v1")).replace(/\/+$/, "");
+  const endpoint = (process.env.AI_API_BASE_URL || (usingOpenRouter ? "https://openrouter.ai/api/v1" : usingGateway ? "https://ai-gateway.vercel.sh/v1" : "https://api.openai.com/v1")).replace(/\/+$/, "");
   const detail = body.detail === "Fast" || body.detail === "Detailed" ? body.detail : "Default";
   const detailInstruction = detail === "Fast"
     ? "Build mode: Fast. Give the smallest complete, working solution; still include full source for every file and essential setup steps."
