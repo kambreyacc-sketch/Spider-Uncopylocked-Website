@@ -1,0 +1,179 @@
+/* Route-safe shared UI fixes: keep navigation and search controls readable
+   after client-side route transitions. */
+:root {
+  --spider-bg: #09090a;
+  --spider-surface: #111113;
+  --spider-surface-2: #171719;
+  --spider-line: #303034;
+  --spider-fg: #f0f0f2;
+  --spider-muted: #a2a2a9;
+}
+
+/* The global sidebar must not inherit page-specific black/white styles. */
+aside.spider-sidebar,
+aside.spider-sidebar *,
+.spider-sidebar .sidebar-head,
+.spider-sidebar .sidebar-scroll-area,
+.spider-sidebar .sidebar-group,
+.spider-sidebar .sidebar-group nav,
+.spider-sidebar .sidebar-user,
+.spider-sidebar .sidebar-brand,
+.spider-sidebar .sidebar-account-cta {
+  color: #ededf0;
+}
+aside.spider-sidebar {
+  background: #101012 !important;
+  color: #ededf0 !important;
+  border-right: 1px solid #303034 !important;
+  isolation: isolate;
+}
+.spider-sidebar .sidebar-head,
+.spider-sidebar .sidebar-scroll-area {
+  background: #101012 !important;
+}
+.spider-sidebar .sidebar-section-label,
+.spider-sidebar .sidebar-user small,
+.spider-sidebar .sidebar-brand small {
+  color: #929299 !important;
+}
+.spider-sidebar a {
+  color: #c7c7cc !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+.spider-sidebar a:hover,
+.spider-sidebar a.active,
+.spider-sidebar a[aria-current="page"] {
+  color: #fff !important;
+  background: #242427 !important;
+  border-color: #39393f !important;
+}
+.spider-sidebar button {
+  color: #dedee2 !important;
+  background-color: #19191c !important;
+  border: 1px solid #36363b !important;
+}
+.spider-sidebar .sidebar-mobile-trigger,
+.spider-sidebar .sidebar-mobile-close {
+  color: #ededf0 !important;
+}
+
+/* Marketplace filter bar: separate each control so the search field doesn't
+   visually run into the tabs and sort selector. */
+.rq-app {
+  color: #ededf0;
+  background: #09090a;
+}
+.rq-main,
+.rq-content {
+  min-width: 0;
+  background: #09090a !important;
+}
+.rq-topbar {
+  background: #0d0d0f !important;
+  border-bottom: 1px solid #303034 !important;
+}
+.rq-content .rq-controls,
+.rq-content .rq-toolbar,
+.rq-content .rq-filter-bar,
+.rq-content .rq-search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px !important;
+  flex-wrap: wrap;
+  padding: 10px !important;
+  background: #111113 !important;
+  border: 1px solid #303034 !important;
+  border-radius: 8px !important;
+}
+.rq-content input[type="search"],
+.rq-content input[type="text"],
+.rq-content .rq-search,
+.rq-content .rq-search-input,
+.rq-content .rq-search-box {
+  min-width: 0;
+  width: 100%;
+  color: #f0f0f2 !important;
+  background: #0b0b0d !important;
+  border: 1px solid #3a3a40 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+.rq-content input::placeholder,
+.rq-content textarea::placeholder {
+  color: #8d8d95 !important;
+  opacity: 1;
+}
+.rq-content input:focus,
+.rq-content input:focus-visible,
+.rq-content select:focus,
+.rq-content button:focus-visible {
+  outline: 2px solid #a7a7ae !important;
+  outline-offset: 1px;
+}
+.rq-content select,
+.rq-content .rq-sort,
+.rq-content .rq-tab,
+.rq-content .rq-tabs,
+.rq-content button {
+  color: #e7e7eb;
+}
+.rq-content select,
+.rq-content .rq-sort {
+  background: #19191c !important;
+  border: 1px solid #3a3a40 !important;
+  border-radius: 6px !important;
+}
+.rq-content .rq-tabs {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  padding: 3px;
+  background: #0b0b0d !important;
+  border: 1px solid #35353a !important;
+  border-radius: 6px !important;
+}
+.rq-content .rq-tabs button,
+.rq-content .rq-tab {
+  border: 1px solid transparent !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+}
+.rq-content .rq-tabs button[aria-pressed="true"],
+.rq-content .rq-tabs button[aria-selected="true"],
+.rq-content .rq-tab.active {
+  background: #29292d !important;
+  border-color: #414147 !important;
+}
+.rq-listing-card {
+  background: #111113 !important;
+  border: 1px solid #303034 !important;
+  border-radius: 7px !important;
+  box-shadow: none !important;
+}
+.rq-listing-content {
+  background: #111113 !important;
+}
+.rq-offer-button {
+  background: #e8e8eb !important;
+  color: #111113 !important;
+  border: 1px solid #e8e8eb !important;
+  border-radius: 6px !important;
+}
+.rq-offer-button:hover {
+  background: #fff !important;
+}
+@media (max-width: 760px) {
+  .rq-content .rq-controls,
+  .rq-content .rq-toolbar,
+  .rq-content .rq-filter-bar,
+  .rq-content .rq-search-row {
+    align-items: stretch;
+  }
+  .rq-content .rq-tabs {
+    width: 100%;
+  }
+  .rq-content .rq-tabs button {
+    flex: 1;
+  }
+}
