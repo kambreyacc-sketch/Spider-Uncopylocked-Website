@@ -2702,3 +2702,109 @@ a:hover { text-decoration-color: #a2a2a2; }
  .spider-home .spider-hero-content h1{font-size:clamp(38px,10vw,54px)!important}
  .spider-home .spider-game-showcase{max-width:none!important;justify-self:stretch!important}
 }
+
+
+/* SITE-WIDE DESIGN CLEANUP — consistent surfaces, restrained effects, less template chrome. */
+:root{
+  --spider-bg:#09090a;
+  --spider-surface:#111113;
+  --spider-raised:#18181a;
+  --spider-border:#343438;
+  --spider-text:#f2f2f4;
+  --spider-muted:#a4a4aa;
+  --spider-accent:#ededf0;
+  --spider-accent-contrast:#111113;
+}
+html,body{background:#09090a;color:#ededf0}
+::selection{background:#ededf0;color:#111113}
+/* Remove decorative gradients and glass layers that made pages feel synthetic. */
+.spider-home .spider-hero-shade,
+.spider-sidebar,
+.spider-nav,
+.admin-welcome,.admin-stat,.admin-tool,.admin-group,.admin-panel,
+.hire-form,.form-page,.rq-app,.rq-main,.rq-sidebar,
+.rq-main section,.rq-main article,.rq-main .rq-panel,.rq-main .rq-card,
+.rq-main .rq-listings,.rq-main .rq-listing-card{
+  backdrop-filter:none!important;
+}
+.spider-home .spider-hero-shade{
+  background:linear-gradient(90deg,rgba(8,8,9,.94),rgba(8,8,9,.78) 65%,rgba(8,8,9,.48))!important;
+}
+.spider-sidebar{
+  background:#101012!important;border-right:1px solid #303034!important;
+  box-shadow:none!important;
+}
+.spider-nav{
+  background:#0b0b0d!important;border-bottom:1px solid #303034!important;
+  box-shadow:none!important;
+}
+.spider-nav a,.spider-sidebar a{transition:background-color .14s ease,color .14s ease,border-color .14s ease!important}
+.spider-sidebar a:hover,.spider-sidebar a.active{
+  background:#242427!important;border-color:#414146!important;box-shadow:none!important;
+}
+.spider-nav a:hover{color:#fff!important}
+/* One restrained corner system, no floating-glass-card look. */
+.spider-category-card,.spider-upload-banner,.spider-hiring-banner,
+.spider-game-showcase,.spider-game-preview,.spider-home-links>a,
+.admin-stat,.admin-tool,.admin-welcome,.admin-group,.admin-panel,
+.admin-notice,.hire-form,.form-page .hire-form,.rq-main section,
+.rq-main article,.rq-main .rq-panel,.rq-main .rq-card,
+.rq-main .rq-listings,.rq-main .rq-listing-card,
+.scam-detail-hero,.scam-detail-panel,.scam-comments-panel{
+  border-radius:8px!important;
+  box-shadow:none!important;
+}
+.spider-category-card,.spider-upload-banner,.spider-hiring-banner,
+.spider-home-links>a,.admin-stat,.admin-tool,.admin-welcome,.admin-group,
+.admin-panel,.admin-notice,.hire-form,.form-page .hire-form,
+.rq-main section,.rq-main article,.rq-main .rq-panel,.rq-main .rq-card,
+.rq-main .rq-listings,.rq-main .rq-listing-card{
+  background:#121214!important;
+  border:1px solid #323236!important;
+}
+.spider-category-card:hover,.spider-home-links>a:hover,
+.admin-tool:hover,.admin-stat:hover,.rq-main .rq-card:hover{
+  background:#19191c!important;border-color:#56565c!important;
+  transform:translateY(-1px)!important;box-shadow:none!important;
+}
+/* Buttons: plain, readable, predictable. */
+.spider-button-primary,.spider-button-secondary,.spider-upload-nav,
+.spider-signin,.button,.button-dark,.button-white,.button-glass,
+.admin-main button,.hire-form button,.rq-main button{
+  border-radius:6px!important;box-shadow:none!important;
+  text-shadow:none!important;filter:none!important;
+}
+.spider-button-primary,.spider-upload-nav,.spider-signin,.button-dark,
+.button-white{
+  background:#ededf0!important;color:#111113!important;border:1px solid #ededf0!important;
+}
+.spider-button-primary:hover,.spider-upload-nav:hover,.spider-signin:hover,
+.button-dark:hover,.button-white:hover{
+  background:#fff!important;border-color:#fff!important;transform:none!important;
+}
+.spider-button-secondary,.button-glass{
+  background:#171719!important;color:#ededf0!important;border:1px solid #424247!important;
+}
+.spider-button-secondary:hover,.button-glass:hover{
+  background:#242427!important;border-color:#66666d!important;transform:none!important;
+}
+/* Inputs should read as working tools, not decorative mockups. */
+input,select,textarea,.spider-hero-search,.resource-search,
+.rq-main input,.rq-main select,.rq-main textarea{
+  border-radius:6px!important;box-shadow:none!important;backdrop-filter:none!important;
+}
+input:focus,select:focus,textarea:focus{
+  outline-color:#bdbdc4!important;box-shadow:0 0 0 2px #ffffff12!important;
+}
+/* Keep icons quiet and monochrome; no colored faux-feature treatments. */
+.feature-icon,.mini-icon,.resource-row-icon,.spider-upload-icon{
+  box-shadow:none!important;filter:none!important;
+}
+/* Reduce generic oversized marketing typography and excessive tracking on app screens. */
+.admin-main h1,.admin-main h2,.admin-panel h2,
+.rq-main h1,.rq-main h2,.rq-main h3{
+  letter-spacing:-.035em;
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
