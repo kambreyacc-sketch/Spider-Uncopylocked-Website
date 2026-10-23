@@ -177,3 +177,68 @@ aside.spider-sidebar {
     flex: 1;
   }
 }
+
+
+/* Viewport sizing: keep the sidebar footer visible and let only its menu scroll. */
+aside.spider-sidebar {
+  position: fixed !important;
+  inset: 0 auto 0 0 !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  z-index: 80 !important;
+}
+.spider-sidebar .sidebar-head { flex: 0 0 auto !important; }
+.spider-sidebar .sidebar-scroll-area {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: #45454b #101012;
+}
+.spider-sidebar .sidebar-bottom {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  bottom: auto !important;
+  margin-top: auto !important;
+  background: #151517 !important;
+  border-top: 1px solid #303034 !important;
+  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+}
+.spider-sidebar .sidebar-user-footer { background: #151517 !important; }
+
+/* Messaging workspace should fit the viewport instead of being clipped below it. */
+.messages-page,
+.spider-messages,
+.messages-shell,
+.messages-layout,
+.messaging-layout,
+.workspace-messages {
+  min-width: 0;
+  max-width: 100%;
+}
+.messages-layout,
+.messaging-layout,
+.workspace-messages {
+  min-height: 0;
+}
+@media (min-width: 761px) {
+  .messages-page,
+  .spider-messages,
+  .messages-shell,
+  .messages-layout,
+  .messaging-layout,
+  .workspace-messages {
+    box-sizing: border-box;
+    padding-bottom: 24px;
+  }
+}
+@media (max-height: 760px) {
+  .spider-sidebar .sidebar-group { margin-bottom: 8px !important; }
+  .spider-sidebar .sidebar-section-label { margin-top: 8px !important; }
+  .spider-sidebar .sidebar-group nav a { min-height: 34px !important; }
+}
