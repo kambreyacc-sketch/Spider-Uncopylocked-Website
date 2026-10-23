@@ -62,7 +62,6 @@ const creatorTools: NavigationItem[] = [
     Icon: UserRoundPlus,
   },
   { href: "/match", label: "Developer Match", Icon: Sparkles },
-  { href: "/spider-ai", label: "Spider Uncopylocked AI", Icon: Sparkles },
 ];
 const safety: NavigationItem[] = [
   { href: "/scam-logs", label: "Scam Logs", Icon: ShieldCheck },
