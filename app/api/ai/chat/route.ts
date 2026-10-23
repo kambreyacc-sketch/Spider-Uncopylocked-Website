@@ -31,7 +31,8 @@ export async function GET() {
   if (!secret) return NextResponse.json({ ready: false, reason: "missing_session_secret" }, { status: 503 });
   const user = getSession((await cookies()).get("spider_session")?.value, secret);
   if (!user) return NextResponse.json({ ready: false, reason: "discord_sign_in_required" }, { status: 401 });
-  const ready = Boolean(process.env.AI_API_KEY && process.env.AI_MODEL);
+  const hasGatewayKey = Boolean(process.env.AI_GATEWAY_API_KEY);
+  const ready = Boolean((process.env.AI_API_KEY || process.env.OPENAI_API_KEY || hasGatewayKey) && (process.env.AI_MODEL || hasGatewayKey));
   return NextResponse.json({ ready, provider: process.env.AI_PROVIDER_LABEL || "Spider Uncopylocked AI" });
 }
 
@@ -41,15 +42,17 @@ export async function POST(request: Request) {
   const user = getSession((await cookies()).get("spider_session")?.value, secret);
   if (!user) return NextResponse.json({ error: "Sign in with Discord to use Spider Uncopylocked AI." }, { status: 401 });
 
-  const apiKey = process.env.AI_API_KEY;
-  const model = process.env.AI_MODEL;
+  const gatewayKey = process.env.AI_GATEWAY_API_KEY;
+  const apiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY || gatewayKey;
+  const usingGateway = Boolean(gatewayKey && !process.env.AI_API_KEY && !process.env.OPENAI_API_KEY);
+  const model = process.env.AI_MODEL || (usingGateway ? "openai/gpt-4.1-mini" : "");
   if (!apiKey || !model) {
     return NextResponse.json({
-      error: "The AI provider is not configured yet. Add AI_API_KEY and AI_MODEL to the Vercel project environment variables; keep the API key server-side."
+      error: "The AI provider is not configured yet. Add AI_GATEWAY_API_KEY to use Vercel AI Gateway, or configure AI_API_KEY and AI_MODEL in the Vercel project environment variables. Keep all API keys server-side."
     }, { status: 503 });
   }
 
-  let body: { messages?: ChatMessage[]; model?: string };
+  let body: { messages?: ChatMessage[]; model?: string; detail?: string };
   try { body = await request.json(); } catch {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
@@ -68,14 +71,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "The latest message must be from the user." }, { status: 400 });
   }
 
-  const endpoint = (process.env.AI_API_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
+  const endpoint = (process.env.AI_API_BASE_URL || (usingGateway ? "https://ai-gateway.vercel.sh/v1" : "https://api.openai.com/v1")).replace(/\/+$/, "");
+  const detail = body.detail === "Fast" || body.detail === "Detailed" ? body.detail : "Default";
+  const detailInstruction = detail === "Fast"
+    ? "Build mode: Fast. Give the smallest complete, working solution; still include full source for every file and essential setup steps."
+    : detail === "Detailed"
+      ? "Build mode: Detailed. Provide a robust multi-file implementation, important edge cases, security validation, exact Explorer paths, and a practical test checklist."
+      : "Build mode: Default. Balance a complete implementation with clear, direct setup instructions."; 
   const system = [
     "You are the Roblox development assistant for Spider Uncopylocked.",
-    "Help build complete, secure Roblox systems using Luau. Give full implementations rather than vague summaries.",
+    "Help build complete, secure Roblox systems using Luau. Give working implementations, not vague summaries.",
+    "This is a browser-based AI code workspace. Never reference or depend on a Roblox Studio plugin, plugin download, plugin connection, websocket plugin, or automatic Studio sync. Explain how to manually place downloaded scripts in Studio.",
+    "When generating code, put every complete source file in its own fenced code block and label it with a filename attribute, e.g. ```lua filename=\"ServerScriptService/Combat.server.lua\". Use the exact Roblox Explorer path as the filename. Use one block per file, never combine multiple files into one block, and do not omit sections of code.",
+    "Put setup instructions and the Explorer hierarchy outside the code blocks. Use .server.lua for server Scripts, .client.lua for LocalScripts, and .lua for ModuleScripts when that makes the role clear. Keep file names safe and simple.",
+    detailInstruction,
     "When writing code, state the exact Roblox Studio Explorer path for every Script, LocalScript, ModuleScript, RemoteEvent, and UI object.",
     "Keep currency, purchases, permissions, data persistence, and damage authoritative on the server. Validate all client requests and explain exploit prevention.",
-    "First ask for existing project context when needed; never claim to have inspected or modified a Roblox project unless the user actually supplied that context and a connected tool performed the operation.",
-    "Do not claim code was installed, tested, or executed in Studio unless a connected tool actually did so. Present proposed file changes clearly and ask for approval before destructive changes."
+    "Ask for existing project context when it materially affects the solution. Never claim to have inspected or modified a Roblox project, run code in Studio, or installed files unless the user supplied that context and a connected tool actually performed the operation.",
+    "Do not claim code was installed, tested, or executed in Studio unless a connected tool actually did so. Present file changes clearly and explain any required manual setup. Never suggest that scripts have been installed or synced automatically."
   ].join("\n");
   try {
     const upstream = await fetch(endpoint + "/chat/completions", {
